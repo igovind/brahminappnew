@@ -486,12 +486,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
             : AppBar(
                 toolbarHeight: 120,
                 leading: IconButton(
-                  icon: Icon(Icons.logout),
+                  icon: Icon(Icons.logout),color: Colors.white,
                   onPressed: () {
                     _confirmSignOut(context);
                   },
                 ),
-                title: Text('Create profile'),
+                title: Text('Create profile',style: TextStyle(color: Colors.white),),
                 centerTitle: true,
                 actions: <Widget>[
                   // buildSubmit(),
@@ -630,7 +630,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               SizedBox(
                                 height: 20,
                               ),
-                              ProfileButtons(
+                              /*ProfileButtons(
                                 icon: Icon(Icons.account_balance),
                                 child: StreamBuilder<DocumentSnapshot>(
                                     stream: FireStoreDatabase(uid: widget.uid)
@@ -699,7 +699,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       );
                                     }),
                                 title: 'Adhaar details',
-                              ),
+                              ),*/
                               SizedBox(
                                 height: 20,
                               ),

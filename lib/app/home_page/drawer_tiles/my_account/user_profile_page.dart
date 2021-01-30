@@ -4,9 +4,7 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'edit_profile_page.dart';
 
 class UserProfilePage extends StatelessWidget {
   final uid;

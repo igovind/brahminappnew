@@ -1,4 +1,4 @@
-import 'package:brahminapp/app/home_page/drawer_tiles/my_account/edit_profile_page.dart';
+import 'package:brahminapp/app/home_page/drawer_tiles/my_account/create_profile_page.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/new_edit_profile_page.dart';
 import 'package:brahminapp/app/home_page/home_page.dart';
 import 'package:brahminapp/services/auth.dart';

@@ -57,7 +57,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
             'puja': _name,
             'price': _rate + 0.1,
             'Benefit': _benefits,
-            'swastik':0,
+            'swastik': 0,
             //'The significance or benefits of performing Lakshmi pooja are as given below: Family life becomes more harmonious– To each & every person in the world, their families are the most treasured people. Performing Lakshmi pooja with all the family members creates a sense of harmony & ensures a peaceful environment at home',
             'PanditD': _additionalDisctription,
             //'2 pandit will come .One will be purohit and one will be in practice pandit',
@@ -196,8 +196,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
       ),
       TextFormField(
         initialValue: _time,
-        decoration:
-            InputDecoration(labelText: 'Duration in min'),
+        decoration: InputDecoration(labelText: 'Duration in min'),
         validator: (value) =>
             value.isNotEmpty ? null : 'Duration can\'t be empty',
         onSaved: (value) => _time = value, // = int.tryParse(value) ?? 0,
@@ -224,44 +223,51 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
         validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
         onSaved: (value) => _additionalDisctription = value,
       ),
+      SizedBox(height: 20,),
       widget.docSnap != null
           ? SizedBox()
-          : Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
+          : Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black54,width: 1.0,style: BorderStyle.solid)
+        ),
+            child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
                     "Choose Category",
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
-                ),
-                SizedBox(width: 15),
-                DropdownButton<String>(
-                  hint: Text("$puja"),
-                  items: trendingPujaNameList.map((String dropDownStringItem) {
-                    return DropdownMenuItem<String>(
-                      value: dropDownStringItem,
-                      child: Text(dropDownStringItem),
-                    );
-                  }).toList(),
-                  onChanged: (String value) {
-                    setState(() {
-                      puja = value;
-                      if (value == "Others") {
-                        setState(() {
-                          other = true;
-                        });
-                      } else {
-                        setState(() {
-                          _samagri = samMap[value];
-                          keyword = keymap[value];
-                          other = false;
-                        });
-                      }
-                    });
-                  },
-                ),
-              ],
-            ),
+                  SizedBox(width: 25),
+                  DropdownButton<String>(
+                    hint: Text("$puja"),
+                    items:
+                        trendingPujaNameList.map((String dropDownStringItem) {
+                      return DropdownMenuItem<String>(
+                        value: dropDownStringItem,
+                        child: Text(dropDownStringItem),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      setState(() {
+                        puja = value;
+                        if (value == "Others") {
+                          setState(() {
+                            other = true;
+                          });
+                        } else {
+                          setState(() {
+                            _samagri = samMap[value];
+                            keyword = keymap[value];
+                            other = false;
+                          });
+                        }
+                      });
+                    },
+                  )
+                ],
+              ),
+          ),
       SizedBox(
         height: 50,
       ),
