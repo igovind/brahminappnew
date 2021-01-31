@@ -17,6 +17,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'drawer_tiles/astrology/astrology_sec.dart';
 import 'drawer_tiles/my_account/user_profile_page.dart';
 import 'drawer_tiles/puja_offering/puja_page.dart';
 
@@ -204,6 +205,17 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => PujaPage(
                     uid: user.uid,
                   ),
+                ));
+              }),
+          Divider(
+            thickness: 0.5,
+          ),
+          _listTile(
+              title: 'Astrology',
+              icon: Icon(Icons.all_inclusive_sharp),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AstrologySection()
                 ));
               }),
           Divider(

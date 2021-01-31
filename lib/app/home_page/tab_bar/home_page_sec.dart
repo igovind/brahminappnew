@@ -58,24 +58,28 @@ class _HomePageSecState extends State<HomePageSec> {
                                 child: Text(
                                   'Trending pooja',
                                   style: TextStyle(
-                                      color: Colors.black54, fontSize: 20),
+                                      color: Colors.black54, fontSize: 15),
                                 )),
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Container(
-                          height: 150,
+                          height: MediaQuery.of(context).size.height*0.25,
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
                               return Container(
-                                height: 100,
+                                height: 80,
                                 width: 200,
-                                //color: Colors.black54,
+                               decoration: BoxDecoration(
+                                 color: Colors.deepOrange[50],
+                                 borderRadius: BorderRadius.circular(10)
+                               ),
+
                                 child: Stack(
                                   children: [
                                     Positioned(
@@ -272,7 +276,9 @@ class _HomePageSecState extends State<HomePageSec> {
                                 return SizedBox();
                               }
                               return Container(
-                                height: 500,
+                                
+                                padding: EdgeInsets.all(8),
+                                height: MediaQuery.of(context).size.height*0.4,
                                 child: ListView.builder(
                                     itemCount: snapshot.data.size,
                                     itemBuilder: (context, index) {
@@ -300,6 +306,11 @@ class _HomePageSecState extends State<HomePageSec> {
                                         description: description,
                                       );
                                     }),
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrange[50],
+                                  borderRadius: BorderRadius.circular(5)
+                                  //border: Border.all(color: Colors.deepOrange,width: 1.0,style: BorderStyle.solid),borderRadius: BorderRadius.circular(10)
+                                ),
                               );
                             })
                       ],

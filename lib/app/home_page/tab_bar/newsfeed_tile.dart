@@ -21,7 +21,7 @@ class NewsFeedTile extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width*0.75,
           decoration: BoxDecoration(
               color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.all(16),
@@ -32,7 +32,7 @@ class NewsFeedTile extends StatelessWidget {
                   : Text(
                       title,
                       style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
               subtitle == null
                   ? SizedBox()
@@ -46,7 +46,7 @@ class NewsFeedTile extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Text(
                         subtitle,
-                        style: TextStyle(fontSize: 20, color: Colors.black54),
+                        style: TextStyle(fontSize: 14, color: Colors.black54),
                       ),
                     ),
               description == null
@@ -77,13 +77,15 @@ class NewsFeedTile extends StatelessWidget {
                       alignment: Alignment.bottomRight,
                       child: Text(
                         date,
-                        style: TextStyle(fontSize: 15, color: Colors.black54),
+                        style: TextStyle(fontSize: 10, color: Colors.black54),
                       ),
                     ),
             ],
           ),
         ),
-        SizedBox(height: 10,)
+        SizedBox(
+          height: 10,
+        )
       ],
     );
   }

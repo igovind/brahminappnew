@@ -24,7 +24,7 @@ String fName = '';
 String lName = '';
 String aboutYou = '';
 String punditType = 'Pundit type';
-String state = '';
+String state = 'state';
 String profilePicUrl;
 String pujaPicUrl = 'url';
 bool verified = false;
@@ -396,7 +396,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildState() {
+/*  Widget _buildState() {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -420,8 +420,54 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
     );
-  }
+  }*/
+  Widget _buildNewState() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        height: 100,
+        color: Colors.white,
+        child: StreamBuilder<DocumentSnapshot>(
+            stream: FireStoreDatabase(uid: widget.uid).getStates,
+            builder: (context, snapshot) {
+              if (snapshot.data == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<dynamic> statesArray = snapshot.data.data()['states'];
+              print(
+                  'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
+              print('statesArray.... ......... $statesArray');
+              List<DropdownMenuItem<String>> statesList = [];
+              for(int i=0;i<statesArray.length;i++){
+                String name = statesArray[i];
+                statesList.add(DropdownMenuItem(
+                  value: name,
+                  child: Text(name),
+                ));
+              }
 
+              return DropdownButton<String>(
+                hint: Text("$state"),
+                items: statesList,
+                /*[
+                      DropdownMenuItem(
+                          value: "Banarasi", child: Text('Banarasi')),
+                      DropdownMenuItem(
+                          value: "Maithali", child: Text('Maithali'))
+                    ],*/
+                onChanged: (String value) {
+                  setState(() {
+                    state = value;
+                  });
+                },
+              );
+            }),
+      ),
+    );
+  }
   Widget _buildType() {
     return Card(
       child: Container(
@@ -623,7 +669,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               _buildNumber(),
                               _buildAboutYou(),
                               _buildType(),
-                              _buildState(),
+                              //_buildState(),
+                              _buildNewState(),
                               SizedBox(
                                 height: 20,
                               ),

@@ -176,7 +176,11 @@ class FireStoreDatabase implements DatabaseL {
         .doc('punditUsers/$uid/user_profile/user_adhaar_details')
         .snapshots();
   }
-
+  Stream<DocumentSnapshot> get getStates {
+    return fireStore
+        .doc('inventories/state')
+        .snapshots();
+  }
   @override
   Stream<QuerySnapshot> get getPujaOfferingList {
     return fireStore.collection('punditUsers/$uid/puja_offering').snapshots();

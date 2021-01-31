@@ -32,7 +32,7 @@ File pujaPicFile;
 String coverPicUrl;
 double swastika;
 File coverPicFile;
-String number=' ';
+String number = ' ';
 bool loadingCvr = false;
 bool loadingProfile = false;
 DateTime dateOfBirth;
@@ -81,7 +81,6 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
     }
     return currentLocation;
   }
-
 
   addGeoPoint() {
     if (userLocation == null) {
@@ -364,6 +363,54 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
     );
   }
 
+  Widget _buildNewState() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        height: 100,
+        color: Colors.white,
+        child: StreamBuilder<DocumentSnapshot>(
+            stream: FireStoreDatabase(uid: widget.uid).getStates,
+            builder: (context, snapshot) {
+              if (snapshot.data == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<dynamic> statesArray = snapshot.data.data()['states'];
+              print(
+                  'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
+              print('statesArray.... ......... $statesArray');
+              List<DropdownMenuItem<String>> statesList = [];
+              for (int i = 0; i < statesArray.length; i++) {
+                String name = statesArray[i];
+                statesList.add(DropdownMenuItem(
+                  value: name,
+                  child: Text(name),
+                ));
+              }
+
+              return DropdownButton<String>(
+                hint: Text("State"),
+                items: statesList,
+                /*[
+                      DropdownMenuItem(
+                          value: "Banarasi", child: Text('Banarasi')),
+                      DropdownMenuItem(
+                          value: "Maithali", child: Text('Maithali'))
+                    ],*/
+                onChanged: (String value) {
+                  setState(() {
+                    state = value;
+                  });
+                },
+              );
+            }),
+      ),
+    );
+  }
+
   Widget _buildState() {
     return Card(
       child: Container(
@@ -398,7 +445,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                   )
                 ],
               )
-            : TextFormField(
+            : /*TextFormField(
                 initialValue: state,
                 decoration: InputDecoration(labelText: 'State'),
                 validator: (String value) {
@@ -413,6 +460,58 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                     state = value;
                   });
                 },
+              ),*/
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("State"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: FireStoreDatabase(uid: widget.uid).getStates,
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        List<dynamic> statesArray =
+                            snapshot.data.data()['states'];
+                        print(
+                            'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
+                        print('statesArray.... ......... $statesArray');
+                        List<DropdownMenuItem<String>> statesList = [];
+                        for (int i = 0; i < statesArray.length; i++) {
+                          String name = statesArray[i];
+                          statesList.add(DropdownMenuItem(
+                            value: name,
+                            child: Text(name),
+                          ));
+                        }
+
+                        return DropdownButton<String>(
+                          hint: Text("$state"),
+                          items: statesList,
+                          /*[
+                  DropdownMenuItem(
+                      value: "Banarasi", child: Text('Banarasi')),
+                  DropdownMenuItem(
+                      value: "Maithali", child: Text('Maithali'))
+                ],*/
+                          onChanged: (String value) {
+                            print("##################################XOXOXOXOXOXOXOXO $value");
+                            print("##################################OWWOWOWOWOWO $state");
+                            //setState(() {
+                              state = value;
+                              print("##################################HOHOHOHOHOHOHO $state");
+                            //});
+                            print("##################################POPOPOPOPOPOPOP $state");
+                          },
+                        );
+                      }),
+                ],
               ),
       ),
     );
@@ -421,75 +520,85 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
   Widget _buildType() {
     return Card(
       child: Container(
-        padding: EdgeInsets.all(10),
-        width: 400,
-        height: 100,
-        color: Colors.white,
-        child: !infoEdit
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Text(
-                      'Pundit type  ',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange),
+          padding: EdgeInsets.all(10),
+          width: 400,
+          height: 100,
+          color: Colors.white,
+          child: !infoEdit
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Text(
+                        'Pundit type  ',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange),
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text(
-                      '$punditType',
-                     // overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black54),
+                    Flexible(
+                      flex: 1,
+                      child: Text(
+                        '$punditType',
+                        // overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54),
+                      ),
+                    )
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Pundit type"),
+                    SizedBox(
+                      height: 10,
                     ),
-                  )
-                ],
-              )
-            : StreamBuilder<DocumentSnapshot>(
-                stream: FireStoreDatabase(uid: widget.uid).getPunditTypes,
-                builder: (context, snapshot) {
-                  if (snapshot.data == null) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  int total = snapshot.data.data()['total'];
-                  print(
-                      'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
-                  print('total ......... $total');
-                  List<DropdownMenuItem<String>> listItem = [];
-                  for (int i = 1; i <= total; i++) {
-                    String name = snapshot.data.data()['$i'];
-                    listItem.add(DropdownMenuItem(
-                      value: name,
-                      child: Text(name),
-                    ));
-                    print('ghhgghghghghghghghghghgh $name');
-                  }
-                  return DropdownButton<String>(
-                    hint: Text("$punditType"),
-                    items: listItem,
-                    /*[
+                    StreamBuilder<DocumentSnapshot>(
+                        stream:
+                            FireStoreDatabase(uid: widget.uid).getPunditTypes,
+                        builder: (context, snapshot) {
+                          if (snapshot.data == null) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          int total = snapshot.data.data()['total'];
+                          print(
+                              'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
+                          print('total ......... $total');
+                          List<DropdownMenuItem<String>> listItem = [];
+                          for (int i = 1; i <= total; i++) {
+                            String name = snapshot.data.data()['$i'];
+                            listItem.add(DropdownMenuItem(
+                              value: name,
+                              child: Text(name),
+                            ));
+                            print('ghhgghghghghghghghghghgh $name');
+                          }
+                          return DropdownButton<String>(
+                            hint: Text("$punditType"),
+                            items: listItem,
+                            /*[
                       DropdownMenuItem(
                           value: "Banarasi", child: Text('Banarasi')),
                       DropdownMenuItem(
                           value: "Maithali", child: Text('Maithali'))
                     ],*/
-                    onChanged: (String value) {
-                      setState(() {
-                        punditType = value;
-                      });
-                    },
-                  );
-                }),
-      ),
+                            onChanged: (String value) {
+                              setState(() {
+                                punditType = value;
+                              });
+                            },
+                          );
+                        }),
+                  ],
+                )),
     );
   }
 
@@ -622,7 +731,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
               number = snapshot.data.data()['number'];
             }
             if (snapshot.data.data() == null) {
-             /* setState(() {
+              /* setState(() {
                 infoEdit = !infoEdit;
               });*/
             }
@@ -937,8 +1046,8 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                                         _buildLastName(),
                                         _buildNumber(),
                                         _buildAboutYou(),
-                                        _buildType(),
-                                        _buildState(),
+                                        //_buildType(),
+                                        //_buildState(),
                                       ],
                                     ),
                                   ),
@@ -965,7 +1074,10 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                     Opacity(
                       opacity: infoEdit ? 0.5 : 1,
                       child: ProfileButtons(
-                        icon: Icon(Icons.insert_drive_file,color: Colors.white,),
+                        icon: Icon(
+                          Icons.insert_drive_file,
+                          color: Colors.white,
+                        ),
                         child: StreamBuilder<DocumentSnapshot>(
                             stream: FireStoreDatabase(uid: widget.uid)
                                 .getAdhaarDetails,
@@ -1012,7 +1124,10 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                     Opacity(
                       opacity: infoEdit ? 0.5 : 1,
                       child: ProfileButtons(
-                        icon: Icon(Icons.account_balance,color: Colors.white,),
+                        icon: Icon(
+                          Icons.account_balance,
+                          color: Colors.white,
+                        ),
                         child: StreamBuilder<DocumentSnapshot>(
                             stream: FireStoreDatabase(uid: widget.uid)
                                 .getBankDetails,

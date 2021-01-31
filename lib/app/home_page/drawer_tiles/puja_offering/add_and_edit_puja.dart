@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/puja_offering/catagories.dart';
 import 'package:brahminapp/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:brahminapp/services/database.dart';
@@ -120,8 +121,13 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             onPressed: () {
-              _submit();
-              Navigator.of(context).pop();
+              if (_validateAndSaveForm() && keyword != null) {
+                _submit();
+                Navigator.of(context).pop();
+              }
+              if (keyword == null) {
+                BotToast.showText(text: "Keyword can\'t empty");
+              }
             },
           ),
         ],
@@ -192,6 +198,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
           signed: false,
           decimal: false,
         ),
+        validator: (value) => value.isNotEmpty ? null : 'Rate can\'t be empty',
         onSaved: (value) => _rate = double.tryParse(value) ?? 0,
       ),
       TextFormField(
@@ -220,19 +227,24 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
       TextFormField(
         decoration: InputDecoration(labelText: 'Additional Description'),
         initialValue: _additionalDisctription,
-        validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
+        validator: (value) => value.isNotEmpty ? null : 'Description can\'t be empty',
         onSaved: (value) => _additionalDisctription = value,
       ),
-      SizedBox(height: 20,),
+      SizedBox(
+        height: 20,
+      ),
       widget.docSnap != null
           ? SizedBox()
           : Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black54,width: 1.0,style: BorderStyle.solid)
-        ),
-            child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Colors.black54,
+                      width: 1.0,
+                      style: BorderStyle.solid)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
                     "Choose Category",
@@ -267,7 +279,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                   )
                 ],
               ),
-          ),
+            ),
       SizedBox(
         height: 50,
       ),
