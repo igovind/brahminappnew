@@ -103,6 +103,19 @@ class FireStoreDatabase implements DatabaseL {
     await reference1.delete();
   }
 
+  Future<void> deleteAstro(String keyword) async {
+    fireStore
+        .doc('punditUsers/$uid/astro_offering/$keyword')
+        .delete()
+        .whenComplete(() {
+      fireStore.doc('/Avaliable_pundit/$uid/astro/$keyword').delete();
+    }).whenComplete(() {
+      fireStore.doc('Avaliable_pundit/$uid').update({
+        'PujaKeywords': FieldValue.arrayRemove(['$keyword'])
+      });
+    });
+  }
+
   @override
   Future<void> setUserUid({
     @required Map<String, dynamic> data,
@@ -176,11 +189,15 @@ class FireStoreDatabase implements DatabaseL {
         .doc('punditUsers/$uid/user_profile/user_adhaar_details')
         .snapshots();
   }
-  Stream<DocumentSnapshot> get getStates {
-    return fireStore
-        .doc('inventories/state')
-        .snapshots();
+
+  Stream<QuerySnapshot> get getAstroList {
+    return fireStore.collection('punditUsers/$uid/astro_offering').snapshots();
   }
+
+  Stream<DocumentSnapshot> get getStates {
+    return fireStore.doc('inventories/state').snapshots();
+  }
+
   @override
   Stream<QuerySnapshot> get getPujaOfferingList {
     return fireStore.collection('punditUsers/$uid/puja_offering').snapshots();
@@ -208,6 +225,39 @@ class FireStoreDatabase implements DatabaseL {
     fireStore
         .doc('punditUsers/$uid/upComingPuja/$bookingId')
         .update({'puja_status': true}).whenComplete(() => print("oh yes"));
+  }
+
+  setAstrology(
+      {String details,
+      String description,
+      String keyword,
+      String price,
+      String imageUrl,
+      String duration,
+      String name}) {
+    fireStore.doc('Avaliable_pundit/$uid/astro/$keyword').set({
+      'name': name,
+      'price': price,
+      'offer': description,
+      'keyword': keyword,
+      'detail': details,
+      'image': imageUrl,
+      'Duration': duration,
+    }).whenComplete(() {
+      fireStore.doc('Avaliable_pundit/$uid').update({
+        'PujaKeywords': FieldValue.arrayUnion([keyword])
+      });
+    }).whenComplete(() {
+      fireStore.doc('punditUsers/$uid/astro_offering/$keyword').set({
+        'name': name,
+        'price': price,
+        'offer': description,
+        'keyword': keyword,
+        'detail': details,
+        'image': imageUrl,
+        'Duration': duration,
+      });
+    });
   }
 
   setHistory(String bookingId) {
@@ -263,6 +313,7 @@ class FireStoreDatabase implements DatabaseL {
           .set(event.data());
     });
   }
+
 //update
   Stream<QuerySnapshot> get getHistory {
     return fireStore

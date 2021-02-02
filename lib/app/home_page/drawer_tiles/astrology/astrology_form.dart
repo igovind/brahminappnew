@@ -20,13 +20,16 @@ String imageUrl1;
 String offer1;
 
 class AstrologyForm extends StatelessWidget {
+  final String uid;
+
+  const AstrologyForm({Key key, @required this.uid}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
         title: Text('Add Astrology Service'),
-
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -115,6 +118,7 @@ class AstrologyForm extends StatelessWidget {
                                                         showDialog(
                                                             context: context,
                                                             child: AstroSelect(
+                                                              uid: uid,
                                                               imageUrl: snapshot1
                                                                       .data
                                                                       .docs[index]

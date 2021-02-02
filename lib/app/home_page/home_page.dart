@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.all_inclusive_sharp),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AstrologySection()
+                  builder: (context) => AstrologySection(uid: user.uid,)
                 ));
               }),
           Divider(
