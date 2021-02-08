@@ -15,6 +15,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import '../edit_bank_details.dart';
 
 bool inProcess = false;
@@ -441,7 +442,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
               print('statesArray.... ......... $statesArray');
               List<DropdownMenuItem<String>> statesList = [];
-              for(int i=0;i<statesArray.length;i++){
+              for (int i = 0; i < statesArray.length; i++) {
                 String name = statesArray[i];
                 statesList.add(DropdownMenuItem(
                   value: name,
@@ -449,9 +450,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ));
               }
 
-              return DropdownButton<String>(
+              return SearchableDropdown.single(
                 hint: Text("$state"),
                 items: statesList,
+                displayClearIcon: false,
+                isExpanded: true,
                 /*[
                       DropdownMenuItem(
                           value: "Banarasi", child: Text('Banarasi')),
@@ -468,6 +471,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+
   Widget _buildType() {
     return Card(
       child: Container(
@@ -477,28 +481,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: Colors.white,
         child: StreamBuilder<DocumentSnapshot>(
             stream: FireStoreDatabase(uid: widget.uid).getPunditTypes,
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
+            builder: (context, snapshot1) {
+              if (snapshot1.data == null) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              int total = snapshot.data.data()['total'];
-              print(
-                  'now showing ${snapshot.data.data()['1']} ${snapshot.data.data()['2']} ${snapshot.data.data()['3']}');
-              print('total ......... $total');
+              List<dynamic> typeArray = snapshot1.data.data()['punditTypes'];
               List<DropdownMenuItem<String>> listItem = [];
-              for (int i = 1; i <= total; i++) {
-                String name = snapshot.data.data()['$i'];
+              for (int i = 0; i < typeArray.length; i++) {
+                String name = typeArray[i];
                 listItem.add(DropdownMenuItem(
                   value: name,
                   child: Text(name),
                 ));
                 print('ghhgghghghghghghghghghgh $name');
               }
-              return DropdownButton<String>(
+              return SearchableDropdown.single(
                 hint: Text("$punditType"),
+                isExpanded: true,
                 items: listItem,
+                displayClearIcon: false,
                 /*[
                       DropdownMenuItem(
                           value: "Banarasi", child: Text('Banarasi')),
@@ -528,22 +531,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
       },
       child: Scaffold(
         backgroundColor: Colors.grey[100],
-        appBar
-            : AppBar(
-                toolbarHeight: 120,
-                leading: IconButton(
-                  icon: Icon(Icons.logout),color: Colors.white,
-                  onPressed: () {
-                    _confirmSignOut(context);
-                  },
-                ),
-                title: Text('Create profile',style: TextStyle(color: Colors.white),),
-                centerTitle: true,
-                actions: <Widget>[
-                  // buildSubmit(),
-                  loading ? SizedBox() : _finalSubmit()
-                ],
-              ),
+        appBar: AppBar(
+          toolbarHeight: 120,
+          leading: IconButton(
+            icon: Icon(Icons.logout),
+            color: Colors.white,
+            onPressed: () {
+              _confirmSignOut(context);
+            },
+          ),
+          title: Text(
+            'Create profile',
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            // buildSubmit(),
+            loading ? SizedBox() : _finalSubmit()
+          ],
+        ),
         body: StreamBuilder<DocumentSnapshot>(
           stream: FireStoreDatabase(uid: widget.uid).getUserData,
           builder: (context, snapshot) {

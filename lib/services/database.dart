@@ -52,7 +52,7 @@ abstract class DatabaseL {
 
   Stream<DocumentSnapshot> get getUserData;
 
-  Future<void> deletepuja(String id);
+  Future<void> deletepuja(String id, String keyword);
 
   Stream<QuerySnapshot> get getUsers;
 }
@@ -94,16 +94,20 @@ class FireStoreDatabase implements DatabaseL {
       path: APIPath.readChatlist(uid),
       builder: (data) => ChatListModal.fromMap(data));
 
-  Future<void> deletepuja(String pid) async {
+  Future<void> deletepuja(String pid, String keyword) async {
     String path1 = 'Avaliable_pundit/$uid/puja_offering/$pid';
     String path = 'punditUsers/$uid/puja_offering/$pid';
     final reference1 = fireStore.doc(path1);
     final reference = fireStore.doc(path);
     await reference.delete();
     await reference1.delete();
+    fireStore.doc('Avaliable_pundit/$uid').update({
+      'PujaKeywords': FieldValue.arrayRemove(['$keyword'])
+    });
   }
 
   Future<void> deleteAstro(String keyword) async {
+
     fireStore
         .doc('punditUsers/$uid/astro_offering/$keyword')
         .delete()
@@ -208,7 +212,7 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   Stream<DocumentSnapshot> get getPunditTypes {
-    return fireStore.doc('inventories/punditTypes').snapshots();
+    return fireStore.doc('inventories/typesOfPundit').snapshots();
   }
 
   Stream<QuerySnapshot> get getOrderdPujaOfferingListBySubscriber {

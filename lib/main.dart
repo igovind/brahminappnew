@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/services/Splash_Screen.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,14 +16,14 @@ void main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(MyApp());
-  });
-  /*runApp( DevicePreview(
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+  //     .then((_) { 
+  //   runApp(MyApp());
+  // });
+  runApp( DevicePreview(
     enabled: true,
     builder: (context) => MyApp(),
-  ),);*/
+  ),);
 
 }
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-      //builder: DevicePreview.appBuilder,
+      builder: DevicePreview.appBuilder,
       title: 'Purohit dashboard',
       theme: ThemeData(
         primaryColor: Color(0XFFffbd59),
@@ -48,8 +49,8 @@ class MyApp extends StatelessWidget {
                 child: MaterialApp(
                   debugShowCheckedModeBanner: false,
                   //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-                  //builder: DevicePreview.appBuilder,
-                  builder: BotToastInit(),
+                  builder: DevicePreview.appBuilder,
+                 // builder: BotToastInit(),
                   navigatorObservers: [BotToastNavigatorObserver()],
                   title: 'Purohit dashboard',
                   theme: ThemeData(

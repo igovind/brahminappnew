@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 List<Category> trendingPujaList = [];
 List<String> trendingPujaNameList = [];
@@ -251,8 +252,11 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   SizedBox(width: 25),
-                  DropdownButton<String>(
-                    hint: Text("$puja"),
+
+                  SearchableDropdown.single(
+                    hint: Text("Puja type"),
+                    isExpanded: true,
+                    displayClearIcon: false,
                     items:
                         trendingPujaNameList.map((String dropDownStringItem) {
                       return DropdownMenuItem<String>(
@@ -276,7 +280,8 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                         }
                       });
                     },
-                  )
+                  ),
+                  Text('*Select this field very carefully as this field will decide pujan samagri*',style: TextStyle(color: Colors.red),),
                 ],
               ),
             ),

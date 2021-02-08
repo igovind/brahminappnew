@@ -43,6 +43,29 @@ class AstrologySection extends StatelessWidget {
                     String additional =
                         snapshot.data.docs[index].data()['offer'];
                     return Dismissible(
+                      confirmDismiss: (DismissDirection direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Confirm"),
+                              content: const Text(
+                                  "Are you sure you wish to delete this service?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                    child: const Text("DELETE")),
+                                FlatButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text("CANCEL"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       key: UniqueKey(),
                       direction: DismissDirection.endToStart,
                       background: Container(
@@ -71,8 +94,7 @@ class AstrologySection extends StatelessWidget {
                       onDismissed: (direction) {
                         direction.index.toString();
                         FireStoreDatabase(uid: uid).deleteAstro(keyword);
-                        BotToast.showText(
-                            text: "Deleted Successfully");
+                        BotToast.showText(text: "Deleted Successfully");
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

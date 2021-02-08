@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ));
               }),
-          Divider(
+         /* Divider(
             thickness: 0.5,
           ),
           _listTile(
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => AstrologySection(uid: user.uid,)
                 ));
-              }),
+              }),*/
           Divider(
             thickness: 0.5,
           ),

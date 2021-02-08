@@ -130,6 +130,7 @@ class AstroSelect extends StatelessWidget {
                     child: TextFormField(
                       decoration: InputDecoration(labelText: 'Your Price'),
                       initialValue: offer == null ? '' : '$rate',
+                      keyboardType: TextInputType.number,
                       validator: (value) =>
                           value.isNotEmpty ? null : 'Price can\'t be empty',
                       onSaved: (value) => yourRate = value,

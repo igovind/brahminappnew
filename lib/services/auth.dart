@@ -29,9 +29,11 @@ abstract class AuthBase {
 
   Future<UserId> signInWithGoogle();
 
-  Future<String> updateUser(String name,String photo);
+  Future<String> updateUser(String name, String photo);
 
   Future<String> updateUserphoto(String photoUrl);
+
+  Future<String> updateUserName(String name);
 
   Future<void> signOut();
 }
@@ -50,10 +52,17 @@ class Auth implements AuthBase {
         userEmail: user.email);
   }
 
-  Future<String> updateUser(String name,photo) async {
+  Future<String> updateUser(String name, photo) async {
     final user = _firebaseAuth.currentUser;
     await user.updateProfile(displayName: name);
     await user.updateProfile(photoURL: photo);
+    await user.reload();
+    return user.uid;
+  }
+
+  Future<String> updateUserName(String name) async {
+    final user = _firebaseAuth.currentUser;
+    await user.updateProfile(displayName: name);
     await user.reload();
     return user.uid;
   }

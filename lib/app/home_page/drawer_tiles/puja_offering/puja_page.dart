@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,36 +37,84 @@ class _PujaPageState extends State<PujaPage> {
               centerTitle: true,
               title: Text('Services'),
             ),
-            body: ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  pujaName = snapshot.data.docs[index].data()['puja'];
-                  rate = snapshot.data.docs[index].data()['price'];
-                  String id = snapshot.data.docs[index].id;
-                  DocumentSnapshot docSnap = snapshot.data.docs[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => AddAndEditPuja(
-                                  docSnap: docSnap,
-                                  uid: widget.uid,
-                                )),
-                      );
-                    },
-                    child: Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.endToStart,
-                        background: Container(
-                          color: Colors.red,
-                        ),
-                        onDismissed: (direction) {
-                          direction.index.toString();
-                          FireStoreDatabase(uid: widget.uid).deletepuja(id);
-                        },
-                        child: _buildTile(pujaName, rate)),
-                  );
-                }),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    pujaName = snapshot.data.docs[index].data()['puja'];
+                    rate = snapshot.data.docs[index].data()['price'];
+                    String id = snapshot.data.docs[index].id;
+                    DocumentSnapshot docSnap = snapshot.data.docs[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => AddAndEditPuja(
+                                    docSnap: docSnap,
+                                    uid: widget.uid,
+                                  )),
+                        );
+                      },
+                      child: Dismissible(
+                          confirmDismiss: (DismissDirection direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirm"),
+                                  content: const Text(
+                                      "Are you sure you wish to delete this service?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text("DELETE")),
+                                    FlatButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text("CANCEL"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          key: UniqueKey(),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            color: Colors.red,
+                            child: Center(
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "DELETE ",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                          size: 25,
+                                        )
+                                      ],
+                                    ))),
+                          ),
+                          onDismissed: (direction) {
+                            direction.index.toString();
+                            FireStoreDatabase(uid: widget.uid).deletepuja(
+                                id, snapshot.data.docs[index].data()['keyword']);
+                            BotToast.showText(text: "Deleted Successfully");
+                          },
+                          child: _buildTile(pujaName, rate)),
+                    );
+                  }),
+            ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.deepOrange,
               onPressed: () {
@@ -84,6 +133,8 @@ class _PujaPageState extends State<PujaPage> {
 
 Widget _buildTile(String name, double rate) {
   return Container(
+    decoration: BoxDecoration(
+        color: Colors.deepOrange[50], borderRadius: BorderRadius.circular(10)),
     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +149,7 @@ Widget _buildTile(String name, double rate) {
         Flexible(
           flex: 1,
           child: Text(
-            '  ₹ $rate',
+            ' $rate ₹',
             style: TextStyle(color: Colors.green, fontSize: 20),
           ),
         ),
