@@ -71,7 +71,7 @@ class SignInPage extends StatelessWidget {
           builder: (context, snapshot) {
             return _buildContent(context, snapshot.data);
           }),
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
     );
   }
 
@@ -127,10 +127,20 @@ class SignInPage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
-        Container(
-            height: height,
-            width: width,
-            child: FlareActor("assets/flare/Background.flr", alignment:Alignment.center, fit:BoxFit.fill, animation:"Blue")),
+        Padding(
+          padding:  EdgeInsets.only(left:width*0.6,top:height*0.05,bottom:height*0.56),
+          child: Container(
+              height: height,
+              width: width,
+              child: Image.asset("assets/0.png", alignment:Alignment.center, fit:BoxFit.fill,)),
+        ),
+        Padding(
+          padding:  EdgeInsets.only(top:height*0.5),
+          child: Container(
+              height: height,
+              width: width,
+              child: FlareActor("assets/flare/Background.flr", alignment:Alignment.center, fit:BoxFit.fill, animation:"Blue")),
+        ),
         /*Align(
           alignment: Alignment.topCenter,
           child: Container(
@@ -156,8 +166,8 @@ class SignInPage extends StatelessWidget {
           padding: EdgeInsets.only(left: width*0.05,top: height*0.3),
           child: Column(
             children: [
-              Text("नमस्ते पुरोहित जी !",style: GoogleFonts.anton(color: Colors.white,fontSize: 24,fontWeight: FontWeight.w600)),
-              Text("Proceed Login",style: GoogleFonts.anton(color: Colors.white,fontSize: 28,fontWeight: FontWeight.w800))
+              Text("नमस्ते पुरोहित जी !",style: GoogleFonts.anton(color: Colors.black54,fontSize: 24,fontWeight: FontWeight.w600)),
+              Text("Proceed Login",style: GoogleFonts.anton(color: Colors.black54,fontSize: 28,fontWeight: FontWeight.w800))
             ],
           ),
         ),

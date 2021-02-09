@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
       contentPadding: EdgeInsets.all(4),
       leading: IconButton(
         iconSize: 30,
-        color: Colors.deepOrange,
+        color: Color(0XFFffbd59),
         icon: icon,
         onPressed: () {},
       ),
@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fill)),
                   ),
             decoration: BoxDecoration(
-              color: Colors.deepOrange,
+              color: Color(0XFFffbd59),
             ),
           ),
           _listTile(
@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
       debugShowCheckedModeBanner: false,
       title: 'Purohit dashboard',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.orange,
         fontFamily: 'Montserrat',
       ),
       home: DefaultTabController(
@@ -301,7 +301,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.grey[200],
           appBar: AppBar(
             toolbarHeight: 150,
-            iconTheme: new IconThemeData(color: Colors.deepOrange),
+            iconTheme: new IconThemeData(color: Color(0XFFffbd59)),
             backgroundColor: Colors.white,
             elevation: 0.5,
             centerTitle: true,
@@ -309,14 +309,14 @@ class _HomePageState extends State<HomePage> {
               'Puja Purohit',
               style: TextStyle(
                   fontSize: 23,
-                  color: Colors.deepOrange,
+                  color: Color(0XFFffbd59),
                   fontWeight: FontWeight.w700),
             ),
             bottom: TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
-              unselectedLabelColor: Colors.deepOrange[100],
-              indicatorColor: Colors.deepOrange,
-              labelColor: Colors.deepOrange,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Color(0XFFffbd59),
+              labelColor: Color(0XFFffbd59),
               isScrollable: true,
               tabs: choices.map<Widget>((Choice choice) {
                 return Tab(

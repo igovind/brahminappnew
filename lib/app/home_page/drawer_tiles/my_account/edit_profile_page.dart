@@ -224,7 +224,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         if (userCoverPicFile != null) {
           submitCoverPic();
         }
-        Auth().updateUserName('$nUserFirstName $nUserLastName');
+        Auth().updateUserName('$nUserFirstName');
         //print('Chutiya hu mai : $state');
         FireStoreDatabase(uid: widget.uid).updateData(data: {
           'firstName': nUserFirstName,
@@ -246,7 +246,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepOrange[50],
+      //backgroundColor: Colors.deepOrange[50],
       appBar: AppBar(
         toolbarHeight: 100,
         title: Text('Edit Your Profile'),
@@ -462,30 +462,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                       ),
                       ////////////////////LAST NAME/////////////
-                      Card(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          width: 400,
-                          height: 100,
-                          color: Colors.white,
-                          child: TextFormField(
-                            initialValue: nUserLastName,
-                            decoration: InputDecoration(labelText: 'Last name'),
-                            maxLength: 20,
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Last name is Required';
-                              }
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              setState(() {
-                                nUserLastName = value;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+         
                       ////////////////CONTACT NUMBER//////////////
                       Card(
                         child: Container(
@@ -600,6 +577,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                       )),
+                                   Card(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: 400,
+                          height: 100,
+                          color: Colors.white,
+                          child: TextFormField(
+                            initialValue: nUserLastName,
+                            decoration: InputDecoration(labelText: 'City'),
+                            maxLength: 20,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'City is Required';
+                              }
+                              return null;
+                            },
+                            onSaved: (String value) {
+                              setState(() {
+                                nUserLastName = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
                       Card(
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -24,7 +24,7 @@ class _ChatState extends State<Chat> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.5,
-       title: Text('Chats',style: TextStyle(color: Colors.deepOrange),),
+       title: Text('Chats',style: TextStyle(color: Color(0XFFffbd59)),),
           centerTitle: true,
           backgroundColor: Colors.white,
         ),

@@ -143,7 +143,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             print(
                 'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
           }).whenComplete(() async {
-            Auth().updateUser(fName + lName, profilePicUrl);
+            Auth().updateUser(fName , profilePicUrl);
           }).whenComplete(() async {
             StorageReference reference = FirebaseStorage.instance
                 .ref()
@@ -326,7 +326,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: Colors.white,
         child: TextFormField(
           initialValue: number,
-          decoration: InputDecoration(labelText: 'Contact number'),
+          decoration: InputDecoration(labelText: 'Contact number',prefixText: '+91'),
           maxLength: 10,
           keyboardType: TextInputType.number,
           validator: (String value) {
@@ -353,11 +353,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: Colors.white,
         child: TextFormField(
           initialValue: lName,
-          decoration: InputDecoration(labelText: 'Last name'),
-          maxLength: 20,
+          decoration: InputDecoration(labelText: 'City'),
+          maxLength: 10,
           validator: (String value) {
             if (value.isEmpty) {
-              return 'Last name is Required';
+              return 'City is Required';
             }
             return null;
           },
@@ -379,6 +379,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: Colors.white,
         child: TextFormField(
           initialValue: aboutYou,
+          maxLength: 100,
           decoration: InputDecoration(labelText: 'About You'),
           validator: (String value) {
             if (value.isEmpty) {
@@ -462,9 +463,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           value: "Maithali", child: Text('Maithali'))
                     ],*/
                 onChanged: (String value) {
-                  setState(() {
+                  if(value!=null){
+                    setState(() {
                     state = value;
                   });
+                  }
+                  
                 },
               );
             }),
@@ -509,9 +513,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           value: "Maithali", child: Text('Maithali'))
                     ],*/
                 onChanged: (String value) {
-                  setState(() {
+                  if(value!=null){
+                    setState(() {
                     punditType = value;
                   });
+                  }
                 },
               );
             }),
@@ -603,7 +609,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   Positioned(
                                     child: Container(
                                       //padding: EdgeInsets.all(),
-                                      color: Colors.deepOrange,
+                                      color: Color(0XFFffbd59),
                                       child: IconButton(
                                           color: Colors.white,
                                           icon: Icon(Icons.edit),
@@ -644,7 +650,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                               IconButton(
                                                   icon: Icon(Icons.camera),
                                                   iconSize: 30,
-                                                  color: Colors.deepOrange,
+                                                  color: Color(0XFFffbd59),
                                                   onPressed: () =>
                                                       getProfilePic(
                                                         source:
@@ -653,7 +659,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                               IconButton(
                                                   icon: Icon(Icons.photo),
                                                   iconSize: 30,
-                                                  color: Colors.deepOrange,
+                                                  color: Color(0XFFffbd59),
                                                   onPressed: () =>
                                                       getProfilePic(
                                                         source:
@@ -671,12 +677,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 ],
                               ),
                               _buildFirstName(),
-                              _buildLastName(),
                               _buildNumber(),
                               _buildAboutYou(),
                               _buildType(),
                               //_buildState(),
                               _buildNewState(),
+                              _buildLastName(),
                               SizedBox(
                                 height: 20,
                               ),

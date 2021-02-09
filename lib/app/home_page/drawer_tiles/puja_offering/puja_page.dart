@@ -83,7 +83,7 @@ class _PujaPageState extends State<PujaPage> {
                           key: UniqueKey(),
                           direction: DismissDirection.endToStart,
                           background: Container(
-                            color: Colors.red,
+                            color: Color(0XFFffbd59),
                             child: Center(
                                 child: Align(
                                     alignment: Alignment.centerRight,
@@ -116,7 +116,7 @@ class _PujaPageState extends State<PujaPage> {
                   }),
             ),
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.deepOrange,
+              backgroundColor: Color(0XFFffbd59),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AddAndEditPuja(

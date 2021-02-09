@@ -163,7 +163,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange),
+                          color: Color(0XFFffbd59)),
                     ),
                   ),
                   Flexible(
@@ -218,7 +218,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange),
+                          color: Color(0XFFffbd59)),
                     ),
                   ),
                   Flexible(
@@ -269,11 +269,11 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                   Flexible(
                     flex: 1,
                     child: Text(
-                      'Last Name  ',
+                      'City',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange),
+                          color: Color(0XFFffbd59)),
                     ),
                   ),
                   Flexible(
@@ -291,11 +291,11 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
               )
             : TextFormField(
                 initialValue: lName,
-                decoration: InputDecoration(labelText: 'Last name'),
+                decoration: InputDecoration(labelText: 'City'),
                 maxLength: 18,
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'Last name is Required';
+                    return 'City is Required';
                   }
                   return null;
                 },
@@ -327,7 +327,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange),
+                          color: Color(0XFFffbd59)),
                     ),
                   ),
                   Flexible(
@@ -382,7 +382,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
         'type': punditType,
         'searchKey': fName[0].toString(),
       }).whenComplete(() {
-        Auth().updateUser(fName + lName, profilePicUrl);
+        Auth().updateUser(fName, profilePicUrl);
       }).whenComplete(() {
         setState(() {
           infoEdit = !infoEdit;
@@ -572,7 +572,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                                             padding: EdgeInsets.all(5),
                                             color: Colors.white,
                                             child: IconButton(
-                                                color: Colors.deepOrange,
+                                                color: Color(0XFFffbd59),
                                                 icon: Icon(Icons.edit),
                                                 onPressed: () {
                                                   getCoverPic(

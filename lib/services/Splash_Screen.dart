@@ -36,10 +36,10 @@ class SplashScreenState extends State<SplashScreen> {
       //backgroundColor: Color(0XFFffbd59),
       body: Stack(
         children: [
-          Container(
+         /* Container(
               height: height,
               width: width,
-              child: FlareActor("assets/flare/Background.flr", alignment:Alignment.center, fit:BoxFit.fill, animation:"Blue")),
+              child: Image.asset('0.png',fit: BoxFit.fill,)),*/
           Center(
             child: Container(
               padding: EdgeInsets.all(40),
@@ -60,7 +60,7 @@ class SplashScreenState extends State<SplashScreen> {
 
               children: [
                 Center(child: Theme(
-                  data: Theme.of(context).copyWith(accentColor: Colors.white),
+                  data: Theme.of(context).copyWith(accentColor: Colors.orangeAccent),
                   child: new CircularProgressIndicator(),
                 ))
               ],
@@ -73,8 +73,8 @@ class SplashScreenState extends State<SplashScreen> {
               MainAxisAlignment.end,
 
               children: [
-                Center(child: Text('from',style: TextStyle(color: Colors.white),)),
-                Center(child: Text('Puja Purohit',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                Center(child: Text('from',style: TextStyle(color: Colors.black54),)),
+                Center(child: Text('Puja Purohit',style: TextStyle(color: Colors.black54,fontWeight: FontWeight.bold),)),
               ],
             ),
           ),

@@ -152,7 +152,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                         ),
                         CustomRaisedButton(
                           borderRadius: 10,
-                          color: Colors.deepOrange,
+                          color: Color(0XFFffbd59),
                           child: Text(
                             widget.name == null ? 'Submit' : 'Update',
                             style: TextStyle(fontSize: 18, color: Colors.white),

@@ -43,7 +43,7 @@ class _PaymentState extends State<Payment> {
                         'Payments',
                         style: TextStyle(
                             textBaseline: TextBaseline.alphabetic,
-                            color: payment ? Colors.deepOrange : Colors.black54,
+                            color: payment ? Color(0XFFffbd59) : Colors.black54,
                             fontWeight: payment ? FontWeight.bold : null),
                       )),
                   FlatButton(
@@ -56,14 +56,14 @@ class _PaymentState extends State<Payment> {
                       child: Text(
                         'Rewards',
                         style: TextStyle(
-                            color: rewards ? Colors.deepOrange : Colors.black54,
+                            color: rewards ? Color(0XFFffbd59) : Colors.black54,
                             fontWeight: rewards ? FontWeight.bold : null),
                       ))
                 ],
               ),
               Divider(
                 thickness: 1,
-                color: Colors.deepOrange,
+                color: Color(0XFFffbd59),
               ),
               payment
                   ? Expanded(
@@ -112,7 +112,7 @@ class _PaymentState extends State<Payment> {
                                         Icon(
                                           Icons.check_box,
                                           size: 30,
-                                          color: Colors.deepOrange,
+                                          color: Color(0XFFffbd59),
                                         ),
                                         SizedBox(
                                           width: 30,
@@ -148,7 +148,7 @@ class _PaymentState extends State<Payment> {
                                             Text(
                                               '$service',
                                               style: TextStyle(
-                                                  color: Colors.deepOrange,
+                                                  color: Color(0XFFffbd59),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w700),
                                             ),
@@ -163,7 +163,7 @@ class _PaymentState extends State<Payment> {
                                     ),
                                     Divider(
                                       thickness: 0.5,
-                                      color: Colors.deepOrange,
+                                      color: Color(0XFFffbd59),
                                     ),
                                   ],
                                 ),
@@ -209,9 +209,9 @@ class _PaymentState extends State<Payment> {
                                           elevation: 5,
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: Colors.deepOrange,
+                                              color: Color(0XFFffbd59),
                                               border: Border.all(
-                                                  color: Colors.deepOrange,
+                                                  color: Color(0XFFffbd59),
                                                   width: 1),
                                             ),
                                             child: Image.asset(

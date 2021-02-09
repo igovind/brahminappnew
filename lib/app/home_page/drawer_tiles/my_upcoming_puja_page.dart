@@ -34,13 +34,12 @@ class Schedule extends StatelessWidget {
           return Scaffold(
 
             appBar: AppBar(
-              toolbarHeight: 120,
-              iconTheme: new IconThemeData(color: Colors.deepOrange),
+              
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
                 'Upcoming puja',
-                style: TextStyle(color: Colors.deepOrange),
+                style: TextStyle(color: Color(0XFFffbd59)),
               ),
               centerTitle: true,
             ),
@@ -99,7 +98,7 @@ class Schedule extends StatelessWidget {
                                   child: Image.network(pic),
                                   borderWidth: 1,
                                   radius: 45,
-                                  borderColor: Colors.deepOrange,
+                                  borderColor: Color(0XFFffbd59),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -160,7 +159,7 @@ class Schedule extends StatelessWidget {
                           ),
                           Divider(
                             thickness: 0.5,
-                            color: Colors.deepOrange,
+                            color: Color(0XFFffbd59),
                           ),
                         ],
                       ),

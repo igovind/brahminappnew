@@ -16,14 +16,14 @@ void main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-  //     .then((_) { 
-  //   runApp(MyApp());
-  // });
-  runApp( DevicePreview(
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+     .then((_) { 
+   runApp(MyApp());
+  });
+  /*runApp( DevicePreview(
     enabled: true,
     builder: (context) => MyApp(),
-  ),);
+  ),);*/
 
 }
 
@@ -49,8 +49,8 @@ class MyApp extends StatelessWidget {
                 child: MaterialApp(
                   debugShowCheckedModeBanner: false,
                   //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-                  builder: DevicePreview.appBuilder,
-                 // builder: BotToastInit(),
+                 // builder: DevicePreview.appBuilder,
+                 builder: BotToastInit(),
                   navigatorObservers: [BotToastNavigatorObserver()],
                   title: 'Purohit dashboard',
                   theme: ThemeData(

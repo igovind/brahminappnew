@@ -40,7 +40,7 @@ class UserProfilePage extends StatelessWidget {
                   builder: (contex) => EditProfilePage(
                       uid: uid,
                       userFirstName: _firstName,
-                      userLastName: _lastName,
+                      //userLastName: _lastName,
                       userState: _state,
                       userContactNumber: _number,
                       userBio: _aboutYou,
@@ -55,7 +55,7 @@ class UserProfilePage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepOrange[50],
+      //backgroundColor: Colors.deepOrange[50],
       appBar: _buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -70,7 +70,7 @@ class UserProfilePage extends StatelessWidget {
                 );
               }
               _firstName = snapshot.data.data()['firstName'];
-              _lastName = snapshot.data.data()['lastName'];
+             // _lastName = snapshot.data.data()['lastName'];
               _profilePicUrl = snapshot.data.data()['profilePicUrl'];
               _aboutYou = snapshot.data.data()['aboutYou'];
               _swastik = snapshot.data.data()['swastik'].toDouble();
@@ -187,7 +187,7 @@ class UserProfilePage extends StatelessWidget {
                                   _verified
                                       ? Icon(
                                           Icons.verified,
-                                          color: Colors.deepOrange,
+                                          color: Color(0XFFffbd59),
                                         )
                                       : SizedBox(),
                                 ],
@@ -218,7 +218,7 @@ class UserProfilePage extends StatelessWidget {
                                   children: <Widget>[
                                     Icon(
                                       Icons.location_on,
-                                      color: Colors.black54,
+                                      color: Color(0XFFffbd59),
                                     ),
                                     Text(
                                       '$_state',
@@ -242,7 +242,7 @@ class UserProfilePage extends StatelessWidget {
                                               0.05),
                                     ),
                                     Icon(Icons.favorite,
-                                        color: Colors.black54,
+                                        color: Color(0XFFffbd59),
                                         size:
                                             MediaQuery.of(context).size.height *
                                                 0.03),

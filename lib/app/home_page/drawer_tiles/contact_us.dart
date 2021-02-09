@@ -104,6 +104,7 @@ class ContactUsPage extends StatelessWidget {
             );
           }),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0XFFffbd59),
         child: Icon(Icons.add),
         onPressed: () {
           showDialog(

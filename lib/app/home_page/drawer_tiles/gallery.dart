@@ -23,7 +23,7 @@ class _GalleryState extends State<Gallery> {
         title: Text('My gallery'),
         toolbarHeight: 100,
       ),
-      backgroundColor: Colors.deepOrange[50],
+      //backgroundColor: Colors.deepOrange[50],
       body: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .doc('punditUsers/${widget.uid}/user_profile/galleryPic')

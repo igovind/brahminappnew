@@ -51,7 +51,7 @@ class _HomePageSecState extends State<HomePageSec> {
                             ),
                             Icon(
                               Icons.local_fire_department_outlined,
-                              color: Colors.deepOrange,
+                              color: Color(0XFFffbd59),
                             ),
                             Align(
                                 alignment: Alignment.topLeft,
@@ -76,7 +76,7 @@ class _HomePageSecState extends State<HomePageSec> {
                                 height: 80,
                                 width: 200,
                                decoration: BoxDecoration(
-                                 color: Colors.deepOrange[50],
+                                 color: Colors.transparent,
                                  borderRadius: BorderRadius.circular(10)
                                ),
 
@@ -94,6 +94,8 @@ class _HomePageSecState extends State<HomePageSec> {
                                         snapshot.data.docs[index]
                                             .data()['image'],
                                         height: 150,
+                                        width: 180,
+                                        fit: BoxFit.fill,
                                       ),
                                       top: 0,
                                     ),
@@ -103,11 +105,12 @@ class _HomePageSecState extends State<HomePageSec> {
                                         child: Text(
                                           '${snapshot.data.docs[index].data()['name']}',
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.pink,
+                                              fontSize: 14,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.bold
                                              ),
                                         ),
-                                        color: Colors.white,
+                                        color: Colors.transparent,
                                       ),
                                       bottom: 5,
                                       left: 3,
@@ -129,7 +132,7 @@ class _HomePageSecState extends State<HomePageSec> {
                           padding: const EdgeInsets.all(8.0),
                           child: Divider(
                             thickness: 0.5,
-                            color: Colors.deepOrange,
+                            color: Color(0XFFffbd59),
                           ),
                         ),
                         reward==null?Container(
@@ -144,18 +147,18 @@ class _HomePageSecState extends State<HomePageSec> {
                                 SizedBox(width: 5,),
                                 Icon(
                                   Icons.local_offer_sharp,
-                                  color: Colors.deepOrange,
+                                  color: Color(0XFFffbd59),
                                 ),
                                 SizedBox(width: 5,),
                                 Text(
                                   'Complete 7 puja and claim your reward',
-                                  style: TextStyle(color: Colors.green,fontSize: 12),
+                                  style: TextStyle(color: Color(0XFFffbd59),fontSize: 12),
                                 ),
                               ],
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: Colors.deepOrange[50],
+                              color: Colors.transparent,
                               borderRadius:
                               BorderRadius.all(Radius.circular(8))),
                         ):reward >= 7
@@ -171,7 +174,7 @@ class _HomePageSecState extends State<HomePageSec> {
                                 SizedBox(width: 5,),
                                 Icon(
                                   Icons.local_offer_sharp,
-                                  color: Colors.deepOrange,
+                                  color: Color(0XFFffbd59),
                                 ),
                                 SizedBox(width: 5,),
                                 Text(
@@ -231,7 +234,7 @@ class _HomePageSecState extends State<HomePageSec> {
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: Colors.deepOrange[50],
+                              color: Colors.transparent,
                               borderRadius:
                               BorderRadius.all(Radius.circular(8))),
                         )
@@ -247,20 +250,33 @@ class _HomePageSecState extends State<HomePageSec> {
                                 SizedBox(width: 5,),
                                 Icon(
                                   Icons.local_offer_sharp,
-                                  color: Colors.deepOrange,
+                                  color: Color(0XFFffbd59),
                                 ),
                                 SizedBox(width: 5,),
                                 Text(
                                   'Complete 7 puja and claim your reward',
-                                  style: TextStyle(color: Colors.green,fontSize: 12),
+                                  style: TextStyle(color:Colors.black54,fontSize: 12,fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: Colors.deepOrange[50],
+                              color: Colors.transparent,
                               borderRadius:
                               BorderRadius.all(Radius.circular(8))),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left:12.0),
+                          child: Row(
+                            children: [
+                              Text('Notifications',style: TextStyle(color:Colors.black54,fontWeight:FontWeight.bold),),
+                              SizedBox(width:10),
+                              Icon(Icons.notification_important,color: Color(0XFFffbd59),)
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 20,
@@ -307,7 +323,7 @@ class _HomePageSecState extends State<HomePageSec> {
                                       );
                                     }),
                                 decoration: BoxDecoration(
-                                  color: Colors.deepOrange[50],
+                                  color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(5)
                                   //border: Border.all(color: Colors.deepOrange,width: 1.0,style: BorderStyle.solid),borderRadius: BorderRadius.circular(10)
                                 ),
