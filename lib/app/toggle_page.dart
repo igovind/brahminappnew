@@ -1,6 +1,7 @@
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/create_profile_page.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/new_edit_profile_page.dart';
 import 'package:brahminapp/app/home_page/home_page.dart';
+import 'package:brahminapp/calls/video_call.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,8 +33,7 @@ class TogglePage extends StatelessWidget {
             child: Provider<DatabaseL>(
               create: (BuildContext context) =>
                   FireStoreDatabase(uid: user.uid),
-              child: //NewEditProfilePgae(uid: user.uid),
-             HomePage(
+              child: HomePage(
                 user: user,
               ),
             ),

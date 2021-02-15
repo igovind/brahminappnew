@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/edit_adhaar_details.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/profile_buttons.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
@@ -20,6 +21,8 @@ import '../edit_bank_details.dart';
 
 bool inProcess = false;
 bool working = false;
+bool astro=false;
+String descp='';
 File profilePicFile;
 String fName = '';
 String lName = '';
@@ -38,6 +41,9 @@ bool _added;
 DateTime dateOfBirth;
 Geoflutterfire geo = Geoflutterfire();
 GeolocatorPlatform geoLocator = GeolocatorPlatform.instance;
+String exp;
+String lang;
+String expert;
 final FirebaseMessaging _messaging = FirebaseMessaging();
 
 Position userLocation;
@@ -98,7 +104,9 @@ addGeoPoint() {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   bool loading = false;
-
+  String chat;
+  String video;
+  String call;
   @override
   void initState() {
     super.initState();
@@ -117,124 +125,148 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool bankSub = false;
 
   Widget _finalSubmit() {
-    return FlatButton(
-      child: Text(
-        'Submit',
-        style: TextStyle(color: Colors.white, fontSize: 18),
-      ),
-      onPressed: () {
-        if (_formKeyE.currentState.validate() &&
-            (profilePicFile != null) &&
-            (coverPicFile != null) &&
-            punditType != 'Pundit type') {
-          _formKeyE.currentState.save();
-          setState(() {
-            loading = true;
-          });
-          _getLocation().whenComplete(() async {
-            StorageReference reference = FirebaseStorage.instance
-                .ref()
-                .child('Users/${widget.uid}/ProfilePic');
-            StorageUploadTask uploadTask = reference.putFile(profilePicFile);
-            var downloadUrl =
-                await (await uploadTask.onComplete).ref.getDownloadURL();
-            var url = downloadUrl.toString();
-            profilePicUrl = url;
-            print(
-                'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
-          }).whenComplete(() async {
-            Auth().updateUser(fName , profilePicUrl);
-          }).whenComplete(() async {
-            StorageReference reference = FirebaseStorage.instance
-                .ref()
-                .child('Users/${widget.uid}/coverPicFile');
-            StorageUploadTask uploadTask = reference.putFile(coverPicFile);
-            var downloadUrl =
-                await (await uploadTask.onComplete).ref.getDownloadURL();
-            var url = downloadUrl.toString();
-            coverPicUrl = url;
-            print(
-                'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
-          }).whenComplete(() {
-            FireStoreDatabase(uid: widget.uid).setData(data: {
-              'firstName': fName,
-              'location': addGeoPoint(),
-              'token': tokens,
-              'setReward': 0,
-              'setPrice': 0.0,
-              'lastName': lName,
-              'aboutYou': aboutYou,
-              'profilePicUrl': profilePicUrl,
-              'pujaPicUrl': pujaPicUrl,
-              'uid': widget.uid,
-              'coverpic': coverPicUrl,
-              'state': state,
-              'dateOfBirth': 'no',
-              'type': punditType,
-              'swastik': 0.0,
-              'verified': verified,
-              'searchKey': fName[0].toString(),
-              'number': number,
-              'PujaKeywords': '#'
-            });
-          });
+   return FlatButton(
+     child: Text(
+       'Submit',
+       style: TextStyle(color: Colors.white, fontSize: 18),
+     ),
+     onPressed: () {
+       if (_formKeyE.currentState.validate() &&
+           (profilePicFile != null) &&
+           (coverPicFile != null) &&
+           punditType != 'Pundit type') {
+         _formKeyE.currentState.save();
+         setState(() {
+           loading = true;
+         });
+         _getLocation().whenComplete(() async {
+           StorageReference reference = FirebaseStorage.instance
+               .ref()
+               .child('Users/${widget.uid}/ProfilePic');
+           StorageUploadTask uploadTask = reference.putFile(profilePicFile);
+           var downloadUrl =
+           await (await uploadTask.onComplete).ref.getDownloadURL();
+           var url = downloadUrl.toString();
+           profilePicUrl = url;
+           print(
+               'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
+         }).whenComplete(() async {
+           Auth().updateUser(fName , profilePicUrl);
+         }).whenComplete(() async {
+           StorageReference reference = FirebaseStorage.instance
+               .ref()
+               .child('Users/${widget.uid}/coverPicFile');
+           StorageUploadTask uploadTask = reference.putFile(coverPicFile);
+           var downloadUrl =
+           await (await uploadTask.onComplete).ref.getDownloadURL();
+           var url = downloadUrl.toString();
+           coverPicUrl = url;
+           print(
+               'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
+         }).whenComplete(() {
+           FireStoreDatabase(uid: widget.uid).setData(data: {
+             'experience':exp,
+             'expertise':expert,
+             'language':lang,
+             'call':call??'0.1',
+             'video':video??'0.1',
+             'chat':chat??'0.1',
+             'astrologer':astro,
+             'firstName': fName,
+             'location': addGeoPoint(),
+             'token': tokens,
+             'setReward': 0,
+             'setPrice': 0.0,
+             'lastName': lName,
+             'aboutYou': aboutYou,
+             'profilePicUrl': profilePicUrl,
+             'pujaPicUrl': pujaPicUrl,
+             'uid': widget.uid,
+             'coverpic': coverPicUrl,
+             'state': state,
+             'dateOfBirth': 'no',
+             'type': punditType,
+             'swastik': 0.0,
+             'verified': verified,
+             'searchKey': fName[0].toString(),
+             'number': number,
+             'PujaKeywords': '#'
+           });
+         }).whenComplete(()async{
+         await  FirebaseFirestore.instance.collection('Avaliable_pundit/${widget.uid}/astro').doc('#astro').set({
+             'detail':descp??'Not Available',
+             'name':'Astrology',
+             'offer':descp??'Not Available',
+             'keyword':'#astro',
+             'image':'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
+           });
+         });
 
-          print(
-              'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
-          print(
-              'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
-          print(
-              'linkes................///////////112324r43t54........... $pujaPicUrl ,$profilePicUrl ,$coverPicUrl');
+         print(
+             'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
+         print(
+             'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
+         print(
+             'linkes................///////////112324r43t54........... $pujaPicUrl ,$profilePicUrl ,$coverPicUrl');
 
-          setState(() {
-            loading = true;
-          });
+         setState(() {
+           loading = true;
+         });
 
-          FirebaseFirestore.instance
-              .doc('punditUsers/${widget.uid}/newsFeed/initialNotification')
-              .set({
-            'title': 'Gallery Update',
-            'subtitle': 'Please update your gallery',
-            'date': FieldValue.serverTimestamp(),
-          });
-          FirebaseFirestore.instance
-              .doc('punditUsers/${widget.uid}/newsFeed/initialNotification2')
-              .set({
-            'title': 'Profile verification',
-            'subtitle': 'Please wait for your profile verification',
-            'description':
-                'Our employees will verify you and will call uh on your contact number after this process you will be verified profile in puja purohit ',
-            'date': FieldValue.serverTimestamp(),
-          });
-        } else {
-          if (profilePicFile == null) {
-            showDialog(
-                context: context,
-                child: AlertDialog(
-                  title: Text('Incomplete details'),
-                  content: Text('Please upload your profile picture'),
-                ));
-          }
-          if (coverPicFile == null) {
-            showDialog(
-                context: context,
-                child: AlertDialog(
-                  title: Text('Incomplete details'),
-                  content: Text('Please upload your Cover pic'),
-                ));
-          }
+         FirebaseFirestore.instance
+             .doc('punditUsers/${widget.uid}/newsFeed/initialNotification')
+             .set({
+           'title': 'Gallery Update',
+           'subtitle': 'Please update your gallery',
+           'date': FieldValue.serverTimestamp(),
+         });
+         FirebaseFirestore.instance
+             .doc('punditUsers/${widget.uid}/newsFeed/initialNotification2')
+             .set({
+           'title': 'Profile verification',
+           'subtitle': 'Please wait for your profile verification',
+           'description':
+           'Our employees will verify you and will call uh on your contact number after this process you will be verified profile in puja purohit ',
+           'date': FieldValue.serverTimestamp(),
+         });
+       } else {
+         if(astro ==true && chat==null && call==null && video==null){
+           showDialog(
+               context: context,
+               child: AlertDialog(
+                 title: Text('Astrology'),
+                 content: Text('Kindly fill your rates in astrology section'),
+               ));
+         }
+         if (profilePicFile == null) {
+           showDialog(
+               context: context,
+               child: AlertDialog(
+                 title: Text('Incomplete details'),
+                 content: Text('Please upload your profile picture'),
+               ));
+         }
+         if (coverPicFile == null) {
+           showDialog(
+               context: context,
+               child: AlertDialog(
+                 title: Text('Incomplete details'),
+                 content: Text('Please upload your Cover pic'),
+               ));
+         }
 
-          if (punditType == 'Pundit type') {
-            showDialog(
-                context: context,
-                child: AlertDialog(
-                  title: Text('Incomplete details'),
-                  content: Text('Please provide your type'),
-                ));
-          }
-        }
-      },
-    );
+         if (punditType == 'Pundit type') {
+           showDialog(
+               context: context,
+               child: AlertDialog(
+                 title: Text('Incomplete details'),
+                 content: Text('Please provide your type'),
+               ));
+         }
+
+       }
+     },
+   );
   }
 
   getProfilePic({ImageSource source}) async {
@@ -344,8 +376,95 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+Widget _buildastro(){
+    return Card(
+    child: Container(
+      padding: EdgeInsets.all(10),
+      width: 400,
+      color: Colors.white,
+      child: CheckboxListTile(title: Text('Are you an Astrologer '),value: astro, onChanged: (value){
+        setState(() {
+          astro=value;
+        });
+        }
+      )
+    ),
+  );
+}
+  Widget _builcall(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: DropdownButton<String>(
+          elevation: 5,
+          isExpanded: true,
+          value: call,
+          hint: call == null ? Text('Select how much you charge for call per minute',style: TextStyle(fontSize: 10)):
+          Text(call,style: TextStyle(fontSize: 10)),
+          items: <String>['3', '5', '7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              call=value;
+            });
+          },
+        )
+    );
+  }
+  Widget _builchat(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: DropdownButton<String>(
+          value: chat,
+          isExpanded: true,
+          hint: chat == null?Text('Select how much you charge for 10 text',style: TextStyle(fontSize: 10)):
+          Text(chat,style: TextStyle(fontSize: 10)),
+          items: <String>['3', '5', '7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              chat=value;
+            });
+          },
+        )
+    );
+  }
+  Widget _buildvideo(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
 
-  Widget _buildLastName() {
+        child: DropdownButton<String>(
+          value: video,
+          isExpanded: true,
+          hint: Text('Select how much you charge for video call per minute',style: TextStyle(fontSize: 10),),
+          items: <String>['3', '5', '7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              video=value;
+            });
+          },
+        )
+    );
+  }
+ Widget _buildLastName() {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -370,7 +489,100 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+  Widget _buildexp() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: TextFormField(
+          initialValue: lName,
+          decoration: InputDecoration(labelText: 'Experience'),
+          maxLength: 10,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Experience is Required';
+            }
+            return null;
+          },
+          onSaved: (String value) {
+            setState(() {
+              exp= value;
+            });
+          },
+        ),
+      ),
+    );
+  }
+  Widget _buildlang() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: TextFormField(
+          initialValue: lName,
+          decoration: InputDecoration(labelText: 'Language'),
+          maxLength: 10,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Language is Required';
+            }
+            return null;
+          },
+          onSaved: (String value) {
+            setState(() {
+              lang = value;
+            });
+          },
+        ),
+      ),
+    );
+  }
+  Widget _buildexpert() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: TextFormField(
+          initialValue: lName,
+          decoration: InputDecoration(labelText: 'Expertise'),
+          maxLength: 10,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Expertise is Required';
+            }
+            return null;
+          },
+          onSaved: (String value) {
+            setState(() {
+              expert = value;
+            });
+          },
+        ),
+      ),
+    );
+  }
+  Widget _builddesc() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: TextFormField(
 
+          decoration: InputDecoration(labelText: 'Give some description about description and feature you offer to your client'),
+          maxLength: 100,
+          onSaved: (String value) {
+            setState(() {
+              descp = value;
+            });
+          },
+        ),
+      ),
+    );
+  }
   Widget _buildAboutYou() {
     return Card(
       child: Container(
@@ -468,7 +680,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     state = value;
                   });
                   }
-                  
+
                 },
               );
             }),
@@ -683,6 +895,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               //_buildState(),
                               _buildNewState(),
                               _buildLastName(),
+                              _buildastro(),
+                              astro?_builchat():SizedBox(),
+                              astro?_builcall():SizedBox(),
+                              astro?_buildvideo():SizedBox(),
+                              astro?_buildexp():SizedBox(),
+                              astro?_buildlang():SizedBox(),
+                              astro?_buildexpert():SizedBox(),
+                              astro?_builddesc():SizedBox(),
                               SizedBox(
                                 height: 20,
                               ),

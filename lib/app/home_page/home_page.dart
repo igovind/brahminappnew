@@ -1,3 +1,4 @@
+//import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/Chat/View/ChatListPageView.dart';
 import 'package:brahminapp/app/home_page/drawer_tiles/bank_details.dart';
@@ -9,6 +10,8 @@ import 'package:brahminapp/app/home_page/drawer_tiles/my_upcoming_puja_page.dart
 import 'package:brahminapp/app/home_page/tab_bar/dashboard/model_class.dart';
 import 'package:brahminapp/app/home_page/tab_bar/home_page_sec.dart';
 import 'package:brahminapp/app/home_page/tab_bar/payment.dart';
+import 'package:brahminapp/calls/index.dart';
+import 'package:brahminapp/calls/video_call.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -60,24 +63,43 @@ class _HomePageState extends State<HomePage> {
         print("onMessage: $message");
         final notification = message['notification'];
         final notificationa = message['data'];
-        BotToast.showSimpleNotification(
-          onTap: () {
-           // final database = Provider.of<DatabaseL>(context, listen: false);
-            switch (notificationa['type']) {
-              case 'Booking':
+
+        switch (notificationa['type']){
+          case 'Booking':
+            BotToast.showSimpleNotification(
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyBookingRequestPage()));
-                break;
-            }
-          },
-          animationDuration: Duration(seconds: 2),
-          hideCloseButton: true,
-          title: notification['title'],
-          subTitle: notification['body'],
-          duration: Duration(seconds: 5),
-        );
+                    builder: (context) => MyBookingRequestPage()));
+              },
+              animationDuration: Duration(seconds: 2),
+              hideCloseButton: true,
+              title: notification['title'],
+              subTitle: notification['body'],
+              duration: Duration(seconds: 5),
+            );
+            break;
+          case 'VCall':
+            BotToast.showSimpleNotification(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => IndexPage(
+                          
+                          channelName: notificationa['channel'],
+                        )));
+              },
+              animationDuration: Duration(seconds: 2),
+              hideCloseButton: true,
+              title: notification['title'],
+              subTitle: notification['body'],
+              duration: Duration(seconds: 10),
+            );
+
+        }
+
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -100,6 +122,13 @@ class _HomePageState extends State<HomePage> {
       case 'Booking':
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => MyBookingRequestPage()));
+        break;
+      case 'VCall':
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => IndexPage(
+              channelName: notification['channel'],
+              
+            )));
         break;
     }
   }

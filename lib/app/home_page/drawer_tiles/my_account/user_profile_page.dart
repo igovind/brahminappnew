@@ -22,6 +22,10 @@ class UserProfilePage extends StatelessWidget {
     String _coverPicUrl;
     bool _verified = false;
     String _number = ' ';
+    bool astro;
+    String chat = ' ';
+    String call = ' ';
+    String video = ' ';
     Widget _buildAppBar(context) {
       return AppBar(
         toolbarHeight: 120,
@@ -38,6 +42,10 @@ class UserProfilePage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (contex) => EditProfilePage(
+                      astro:astro,
+                      call:call,
+                      chat:chat,
+                      video:video,
                       uid: uid,
                       userFirstName: _firstName,
                       //userLastName: _lastName,
@@ -80,6 +88,10 @@ class UserProfilePage extends StatelessWidget {
               _name = _firstName + ' ' + _lastName;
               _verified = snapshot.data.data()['verified'];
               _number = snapshot.data.data()['number'];
+              astro = snapshot.data.data()['astrologer'];
+              call=snapshot.data.data()['call'];
+              video=snapshot.data.data()['video'];
+              chat=snapshot.data.data()['chat'];
               return SingleChildScrollView(
                 child: Container(
                   // height: MediaQuery.of(context).size.height,

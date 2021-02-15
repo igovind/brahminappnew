@@ -19,6 +19,7 @@ import 'package:searchable_dropdown/searchable_dropdown.dart';
 import '../edit_bank_details.dart';
 import 'edit_adhaar_details.dart';
 
+bool _astro=false;
 class EditProfilePage extends StatefulWidget {
   final uid;
   final String userFirstName;
@@ -29,6 +30,10 @@ class EditProfilePage extends StatefulWidget {
   final String userType;
   final String userProfilePicUrl;
   final String userCoverPicUrl;
+  final bool astro;
+  final String call;
+  final String chat;
+  final String video;
 
   const EditProfilePage(
       {Key key,
@@ -40,7 +45,7 @@ class EditProfilePage extends StatefulWidget {
       @required this.userType,
       @required this.userProfilePicUrl,
       @required this.userCoverPicUrl,
-      this.uid})
+      this.uid, this.astro, this.call, this.chat, this.video})
       : super(key: key);
 
   @override
@@ -50,6 +55,10 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String state;
   String type;
+  String call;
+  String chat;
+  String video;
+
   File userProfilePicFile;
   File userCoverPicFile;
   bool inProcess = false;
@@ -62,6 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void initState() {
     super.initState();
+
     state = widget.userState;
     type = widget.userType;
     _getLocation().then((position) {
@@ -171,6 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+
     String nUserFirstName = widget.userFirstName;
     String nUserLastName = widget.userLastName;
     //String nUserState = widget.userState;
@@ -229,11 +240,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         FireStoreDatabase(uid: widget.uid).updateData(data: {
           'firstName': nUserFirstName,
           'location': addGeoPoint(),
-          'lastName': nUserLastName,
+          //'lastName': nUserLastName,
           'aboutYou': nUserBio,
           'number': nUserContactNumber,
           'state': state,
           'type': type,
+          'call':call??widget.call,
+          'chat':chat??widget.chat,
+          'video':video??widget.video,
           'searchKey': nUserFirstName[0].toString(),
         }).whenComplete(() {
           setState(() {
@@ -243,6 +257,111 @@ class _EditProfilePageState extends State<EditProfilePage> {
           BotToast.showText(text: "Your Profile has updated");
         });
       }
+    }
+    Widget _buildastro(bool astrologer){
+      return Card(
+        child: Container(
+            padding: EdgeInsets.all(10),
+            width: 400,
+            color: Colors.white,
+            child: widget.astro?Text('Update your Astrology Rates',style: TextStyle(color: Colors.red),):CheckboxListTile(title: Text('Are you an Astrologer'),value: widget.astro,
+                onChanged: (value){
+              setState(() {
+                _astro=value;
+                print('Astro is aaaaaaaaaaaaaaaaa $_astro');
+              });
+            }
+            )
+        ),
+      );
+    }
+    Widget _builcall(){
+      return Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: DropdownButton<String>(
+            elevation: 5,
+            isExpanded: true,
+            value: call,
+            hint: widget.call == null ?Text('Select how much you charge for call per minute',style: TextStyle(fontSize: 10)):
+            Column(
+              children: [
+                Text('Call rate per min',style: TextStyle(fontSize: 10,color: Colors.green)),
+                Text(widget.call,style: TextStyle(fontSize: 10)),
+              ],
+            ),
+            items: <String>['3', '5', '7',].map((String value) {
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                call=value;
+              });
+            },
+          )
+      );
+    }
+    Widget _builchat(){
+      return Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: DropdownButton<String>(
+            value: chat,
+            isExpanded: true,
+            hint: widget.chat == null?Text('Select how much you charge for 10 text',style: TextStyle(fontSize: 10)):
+            Column(
+              children: [
+                Text('Text rate on 10 message',style: TextStyle(fontSize: 10,color: Colors.green)),
+                Text(widget.chat,style: TextStyle(fontSize: 10)),
+              ],
+            ),
+            items: <String>['3', '5', '7',].map((String value) {
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                chat=value;
+              });
+            },
+          )
+      );
+    }
+    Widget _buildvideo(){
+      return Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+
+          child: DropdownButton<String>(
+            value: video,
+            isExpanded: true,
+            hint:widget.video==null?Text('Select how much you charge for video call per minute',style: TextStyle(fontSize: 10),):Column(
+              children: [
+                Text('Video call rate on per min',style: TextStyle(fontSize: 10,color: Colors.green)),
+                Text('${widget.video}',style: TextStyle(fontSize: 10),)
+              ],
+            ),
+            items: <String>['3', '5', '7',].map((String value) {
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                video=value;
+              });
+            },
+          )
+      );
     }
 
     return Scaffold(
@@ -577,7 +696,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                       )),
-                                   Card(
+                     /* Card(
                         child: Container(
                           padding: EdgeInsets.all(10),
                           width: 400,
@@ -600,7 +719,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             },
                           ),
                         ),
-                      ),
+                      ),*/
                       Card(
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -660,8 +779,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                       )),
+                     _buildastro(_astro),
+                     widget.astro?_builchat():SizedBox(),
+                      widget.astro?_builcall():SizedBox(),
+                      widget.astro?_buildvideo():SizedBox(),
                       Text(
-                          'Adhaar details are required in order toverify your account to protect our community from spams.'),
+                          'Adhaar details are required in order to verify your account to protect our community from spams.'),
                       SizedBox(
                         height: 15,
                       ),

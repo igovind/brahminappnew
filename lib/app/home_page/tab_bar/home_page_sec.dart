@@ -49,9 +49,14 @@ class _HomePageSecState extends State<HomePageSec> {
                             SizedBox(
                               width: 20,
                             ),
-                            Icon(
-                              Icons.local_fire_department_outlined,
-                              color: Color(0XFFffbd59),
+                            InkWell(
+                              onTap: (){
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>Call))
+                              },
+                              child: Icon(
+                                Icons.local_fire_department_outlined,
+                                color: Color(0XFFffbd59),
+                              ),
                             ),
                             Align(
                                 alignment: Alignment.topLeft,

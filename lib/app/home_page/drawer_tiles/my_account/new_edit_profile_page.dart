@@ -33,6 +33,10 @@ String coverPicUrl;
 double swastika;
 File coverPicFile;
 String number = ' ';
+bool astro;
+String chat = ' ';
+String call = ' ';
+String video = ' ';
 bool loadingCvr = false;
 bool loadingProfile = false;
 DateTime dateOfBirth;
@@ -255,7 +259,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
     );
   }
 
-  Widget _buildLastName() {
+ /* Widget _buildLastName() {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -307,7 +311,7 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
               ),
       ),
     );
-  }
+  }*/
 
   Widget _buildAboutYou() {
     return Card(
@@ -360,6 +364,95 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                 },
               ),
       ),
+    );
+  }
+
+  Widget _buildastro(bool astrologer){
+    return Card(
+      child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: astrologer?Text('Update your rates'):CheckboxListTile(title: Text('Are you an Astrologer '),value: astro, onChanged: (value){
+            setState(() {
+              astro=value;
+            });
+          }
+          )
+      ),
+    );
+  }
+  Widget _builcall(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: DropdownButton<String>(
+          elevation: 5,
+          isExpanded: true,
+          value: call,
+          hint: call == null ? Text('Select how much you charge for call per minute',style: TextStyle(fontSize: 10)):
+          Text(call,style: TextStyle(fontSize: 10)),
+          items: <String>['\₹ 3', '\₹ 5', '\₹ 7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              call=value;
+            });
+          },
+        )
+    );
+  }
+  Widget _builchat(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+        child: DropdownButton<String>(
+          value: chat,
+          isExpanded: true,
+          hint: chat == null?Text('Select how much you charge for 10 text',style: TextStyle(fontSize: 10)):
+          Text(chat,style: TextStyle(fontSize: 10)),
+          items: <String>['\₹ 3', '\₹ 5', '\₹ 7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              chat=value;
+            });
+          },
+        )
+    );
+  }
+  Widget _buildvideo(){
+    return Container(
+        padding: EdgeInsets.all(10),
+        width: 400,
+        color: Colors.white,
+
+        child: DropdownButton<String>(
+          value: video,
+          isExpanded: true,
+          hint: Text('Select how much you charge for video call per minute',style: TextStyle(fontSize: 10),),
+          items: <String>['\₹ 3', '\₹ 5', '\₹ 7',].map((String value) {
+            return new DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              video=value;
+            });
+          },
+        )
     );
   }
 
@@ -490,6 +583,10 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
               coverPicUrl = snapshot.data.data()['coverpic'];
               verified = snapshot.data.data()['verified'];
               number = snapshot.data.data()['number'];
+              astro = snapshot.data.data()['astrologer'];
+              call=snapshot.data.data()['call'];
+              video=snapshot.data.data()['video'];
+              chat=snapshot.data.data()['chat'];
             }
             if (snapshot.data.data() == null) {
               /* setState(() {
@@ -804,9 +901,13 @@ class _NewEditProfilePgaeState extends State<NewEditProfilePgae> {
                                     child: Column(
                                       children: [
                                         _buildFirstName(),
-                                        _buildLastName(),
+                                        //_buildLastName(),
                                         _buildNumber(),
                                         _buildAboutYou(),
+                                        _buildastro(astro),
+                                        _builchat(),
+                                        _builcall(),
+                                        _buildvideo()
                                         //_buildType(),
                                         //_buildState(),
                                       ],
