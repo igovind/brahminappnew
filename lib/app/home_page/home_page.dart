@@ -64,14 +64,14 @@ class _HomePageState extends State<HomePage> {
         final notification = message['notification'];
         final notificationa = message['data'];
 
-        switch (notificationa['type']){
+        switch (notificationa['type']) {
           case 'Booking':
             BotToast.showSimpleNotification(
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => MyBookingRequestPage()));
+                        builder: (context) => MyBookingRequestPage()));
               },
               animationDuration: Duration(seconds: 2),
               hideCloseButton: true,
@@ -87,9 +87,8 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => IndexPage(
-                          
-                          channelName: notificationa['channel'],
-                        )));
+                              channelName: notificationa['channel'],
+                            )));
               },
               animationDuration: Duration(seconds: 2),
               hideCloseButton: true,
@@ -97,9 +96,7 @@ class _HomePageState extends State<HomePage> {
               subTitle: notification['body'],
               duration: Duration(seconds: 10),
             );
-
         }
-
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -124,11 +121,12 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => MyBookingRequestPage()));
         break;
       case 'VCall':
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => IndexPage(
-              channelName: notification['channel'],
-              
-            )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => IndexPage(
+                      channelName: notification['channel'],
+                    )));
         break;
     }
   }
@@ -161,7 +159,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName:
-               Text(user.displayName == null ? ' ' : user.displayName),
+                Text(user.displayName == null ? ' ' : user.displayName),
             accountEmail: Text(user.userEmail == null ? ' ' : user.userEmail),
             currentAccountPicture: user.photoUrl != null
                 ? Container(
@@ -235,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ));
               }),
-         /* Divider(
+          /* Divider(
             thickness: 0.5,
           ),
           _listTile(
@@ -332,7 +330,7 @@ class _HomePageState extends State<HomePage> {
             toolbarHeight: 150,
             iconTheme: new IconThemeData(color: Color(0XFFffbd59)),
             backgroundColor: Colors.white,
-            elevation: 0.5,
+            elevation: 0,
             centerTitle: true,
             title: const Text(
               'Puja Purohit',
@@ -349,7 +347,7 @@ class _HomePageState extends State<HomePage> {
               isScrollable: true,
               tabs: choices.map<Widget>((Choice choice) {
                 return Tab(
-                  iconMargin: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                  iconMargin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   text: choice.title,
                   icon: Icon(choice.icon),
                 );
@@ -373,57 +371,49 @@ class _HomePageState extends State<HomePage> {
                 return TabBarView(
                   children: choices.map((Choice choice) {
                     if (choice.title == 'Chats') {
-                      return Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Card(
-                            child: Provider<DatabaseL>(
-                                create: (context) =>
-                                    FireStoreDatabase(uid: user.uid),
-                                child: Chat(
-                                  databaseL: null,
-                                  user: user,
-                                )),
-                          ));
+                      return Container(
+                        color: Colors.white,
+                        child: Provider<DatabaseL>(
+                            create: (context) =>
+                                FireStoreDatabase(uid: user.uid),
+                            child: Chat(
+                              databaseL: null,
+                              user: user,
+                            )),
+                      );
                     }
                     if (choice.title == 'Dashboard') {
-                      return Padding(
-                          padding: EdgeInsets.all(2),
-                          child: Card(
-                            child: Provider<DatabaseL>(
-                                create: (context) =>
-                                    FireStoreDatabase(uid: user.uid),
-                                child: ModelClass(
-                                  uid: user.uid,
-                                )),
-                          ));
+                      return Container(
+                        color: Colors.white,
+                        child: Provider<DatabaseL>(
+                            create: (context) =>
+                                FireStoreDatabase(uid: user.uid),
+                            child: ModelClass(
+                              uid: user.uid,
+                            )),
+                      );
                     }
                     if (choice.title == 'Payments') {
-                      return Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Card(
-                            child: Payment(
-                              uid: user.uid,
-                            ),
-                          ));
+                      return Container(
+                        color: Colors.white,
+                        child: Payment(
+                          uid: user.uid,
+                        ),
+                      );
                     }
                     if (choice.title == 'Home') {
-                      return Padding(
-                          padding: EdgeInsets.all(1),
-                          child: Card(
-                            color: Colors.deepOrange[20],
-                            elevation: 0.5,
-                            child: HomePageSec(
-                              num: number,
-                              net: net,
-                              uid: user.uid,
-                            ),
-                          ));
+                      return Container(
+                        color: Colors.white,
+                        child: HomePageSec(
+                          num: number,
+                          net: net,
+                          uid: user.uid,
+                        ),
+                      );
                     }
-                    return Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: ChoicePage(
-                        choice: choice,
-                      ),
+
+                    return ChoicePage(
+                      choice: choice,
                     );
                   }).toList(),
                 );
@@ -443,6 +433,7 @@ class Choice {
 
 const List<Choice> choices = <Choice>[
   Choice(title: 'Home', icon: Icons.home),
+  Choice(title: 'Pandit', icon: Icons.people),
   Choice(title: 'Chats', icon: Icons.chat),
   Choice(title: 'Dashboard', icon: Icons.dashboard),
   Choice(title: 'Payments', icon: Icons.payment),
@@ -456,9 +447,8 @@ class ChoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
-    return Card(
+    return Container(
       color: Colors.white,
-      elevation: 0.5,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -52,45 +52,45 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
   Future<void> _submit() async {
     // if (_validateAndSaveForm()&&keyword!=null) {
     try {
-      if (widget.docSnap == null) {
-        if (_validateAndSaveForm() && keyword != null) {
-          final String serviceId = DateTime.now().toIso8601String();
-          FireStoreDatabase(uid: widget.uid).setPujaOffering(data: {
-            'puja': _name,
-            'price': _rate + 0.1,
-            'Benefit': _benefits,
-            'swastik': 0,
-            //'The significance or benefits of performing Lakshmi pooja are as given below: Family life becomes more harmonious– To each & every person in the world, their families are the most treasured people. Performing Lakshmi pooja with all the family members creates a sense of harmony & ensures a peaceful environment at home',
-            'PanditD': _additionalDisctription,
-            //'2 pandit will come .One will be purohit and one will be in practice pandit',
-            'Pujan Samagri': _samagri,
-            // 'दिवाली पूजा के लिए रोली यानी टीका, चावल (अक्षत), पान-सुपारी, लौंग, इलायची, धूप, कपूर, घी, तेल, दीपक, कलावा, नारियल, गंगाजल, फल, फूल, मिठाई, दूर्वा, चंदन, मेवे, खील, बताशे, चौकी, कलश, फूलों की माला, शंख, लक्ष्मी-गणेश की मूर्ति, थाली, चांदी का सिक्का, 11 दिए और इससे ज्यादा दिये अपनी श्रृद्धानुसार एकत्रित कर लें।',
-            'time': _time,
-            'keyword': keyword == null ? '#' + _name + '/' : keyword,
-            'subscriber': 0,
-            'profit': 0.1,
-            'serviceId': serviceId,
-          }, pid: serviceId).whenComplete(
-              () => FireStoreDatabase(uid: widget.uid).updateKeyword(
-                    keyword == null ? '#' + _name + '/' : keyword,
-                  ));
-        }
-      } else {
-        if (_validateAndSaveForm()) {
-          FireStoreDatabase(uid: widget.uid).updatePujaOffering(data: {
-            'puja': _name,
-            'price': _rate,
-            'Benefit': _benefits,
-            'PanditD': _additionalDisctription,
-            'Pujan Samagri': _samagri,
-            'time': _time,
-            // 'keyword': keyword == null ? '#' + _name + '/' : keyword,
-          }, pid: widget.docSnap.id).whenComplete(
-              () => FireStoreDatabase(uid: widget.uid).updateKeyword(
-                    keyword == null ? '#' + _name + '/' : keyword,
-                  ));
-        }
-      }
+      final String serviceId = DateTime.now().toIso8601String();
+      FireStoreDatabase(uid: widget.uid).setPujaOffering(data: {
+        'puja': _name,
+        'price': _rate + 0.1,
+        'Benefit': _benefits,
+        'swastik': 0,
+        //'The significance or benefits of performing Lakshmi pooja are as given below: Family life becomes more harmonious– To each & every person in the world, their families are the most treasured people. Performing Lakshmi pooja with all the family members creates a sense of harmony & ensures a peaceful environment at home',
+        'PanditD': _additionalDisctription,
+        //'2 pandit will come .One will be purohit and one will be in practice pandit',
+        'Pujan Samagri': _samagri,
+        // 'दिवाली पूजा के लिए रोली यानी टीका, चावल (अक्षत), पान-सुपारी, लौंग, इलायची, धूप, कपूर, घी, तेल, दीपक, कलावा, नारियल, गंगाजल, फल, फूल, मिठाई, दूर्वा, चंदन, मेवे, खील, बताशे, चौकी, कलश, फूलों की माला, शंख, लक्ष्मी-गणेश की मूर्ति, थाली, चांदी का सिक्का, 11 दिए और इससे ज्यादा दिये अपनी श्रृद्धानुसार एकत्रित कर लें।',
+        'time': _time,
+        'keyword': keyword == null ? '#' + _name + '/' : keyword,
+        'subscriber': 0,
+        'profit': 0.1,
+        'serviceId': serviceId,
+      }, pid: serviceId).whenComplete(
+          () => FireStoreDatabase(uid: widget.uid).updateKeyword(
+                keyword == null ? '#' + _name + '/' : keyword,
+              ));
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: 'Operation failed',
+        exception: e,
+      ).show(context);
+    }
+  }
+
+  Future<void> _submit1() async {
+    // if (_validateAndSaveForm()&&keyword!=null) {
+    try {
+      final String serviceId = DateTime.now().toIso8601String();
+      FireStoreDatabase(uid: widget.uid).updatePujaOffering(data: {
+        'puja': _name,
+        'price': _rate + 0.1,
+        'Benefit': _benefits,
+        'PanditD': _additionalDisctription,
+        'time': _time,
+      }, pid: widget.docSnap.id);
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -122,12 +122,18 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             onPressed: () {
-              if (_validateAndSaveForm() && keyword != null) {
-                _submit();
-                Navigator.of(context).pop();
-              }
-              if (keyword == null) {
-                BotToast.showText(text: "Keyword can\'t empty");
+              if (widget.docSnap == null) {
+                if (_validateAndSaveForm() && keyword != null) {
+                  _submit();
+                  Navigator.of(context).pop();
+                }
+                if (keyword == null) {
+                  BotToast.showText(text: "Keyword can\'t empty");
+                }
+              } else {
+                if (_validateAndSaveForm()) {
+                  _submit1();
+                }
               }
             },
           ),
@@ -228,7 +234,8 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
       TextFormField(
         decoration: InputDecoration(labelText: 'Additional Description'),
         initialValue: _additionalDisctription,
-        validator: (value) => value.isNotEmpty ? null : 'Description can\'t be empty',
+        validator: (value) =>
+            value.isNotEmpty ? null : 'Description can\'t be empty',
         onSaved: (value) => _additionalDisctription = value,
       ),
       SizedBox(
@@ -252,7 +259,6 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   SizedBox(width: 25),
-
                   SearchableDropdown.single(
                     hint: Text("Puja type"),
                     isExpanded: true,
@@ -281,7 +287,10 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                       });
                     },
                   ),
-                  Text('*Select this field very carefully as this field will decide pujan samagri*',style: TextStyle(color: Colors.red),),
+                  Text(
+                    '*Select this field very carefully as this field will decide pujan samagri*',
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ],
               ),
             ),

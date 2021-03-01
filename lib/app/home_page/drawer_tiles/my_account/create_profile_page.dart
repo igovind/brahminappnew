@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/app/home_page/drawer_tiles/my_account/edit_adhaar_details.dart';
-import 'package:brahminapp/app/home_page/drawer_tiles/my_account/profile_buttons.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -17,12 +15,13 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
-import '../edit_bank_details.dart';
+
+String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
 bool inProcess = false;
 bool working = false;
-bool astro=false;
-String descp='';
+bool astro = false;
+String descp = '';
 File profilePicFile;
 String fName = '';
 String lName = '';
@@ -107,6 +106,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String chat;
   String video;
   String call;
+
   @override
   void initState() {
     super.initState();
@@ -124,149 +124,166 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool adharSub = false;
   bool bankSub = false;
 
+  int validatingAstro() {
+    if (astro) {
+      if (chat != null && call != null && video != null) {
+        return 1;
+      } else {
+        BotToast.showText(text: 'Please fill all sections of astrology');
+        return 2;
+      }
+    }
+    return 3;
+  }
+
   Widget _finalSubmit() {
-   return FlatButton(
-     child: Text(
-       'Submit',
-       style: TextStyle(color: Colors.white, fontSize: 18),
-     ),
-     onPressed: () {
-       if (_formKeyE.currentState.validate() &&
-           (profilePicFile != null) &&
-           (coverPicFile != null) &&
-           punditType != 'Pundit type') {
-         _formKeyE.currentState.save();
-         setState(() {
-           loading = true;
-         });
-         _getLocation().whenComplete(() async {
-           StorageReference reference = FirebaseStorage.instance
-               .ref()
-               .child('Users/${widget.uid}/ProfilePic');
-           StorageUploadTask uploadTask = reference.putFile(profilePicFile);
-           var downloadUrl =
-           await (await uploadTask.onComplete).ref.getDownloadURL();
-           var url = downloadUrl.toString();
-           profilePicUrl = url;
-           print(
-               'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
-         }).whenComplete(() async {
-           Auth().updateUser(fName , profilePicUrl);
-         }).whenComplete(() async {
-           StorageReference reference = FirebaseStorage.instance
-               .ref()
-               .child('Users/${widget.uid}/coverPicFile');
-           StorageUploadTask uploadTask = reference.putFile(coverPicFile);
-           var downloadUrl =
-           await (await uploadTask.onComplete).ref.getDownloadURL();
-           var url = downloadUrl.toString();
-           coverPicUrl = url;
-           print(
-               'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
-         }).whenComplete(() {
-           FireStoreDatabase(uid: widget.uid).setData(data: {
-             'experience':exp,
-             'expertise':expert,
-             'language':lang,
-             'call':call??'0.1',
-             'video':video??'0.1',
-             'chat':chat??'0.1',
-             'astrologer':astro,
-             'firstName': fName,
-             'location': addGeoPoint(),
-             'token': tokens,
-             'setReward': 0,
-             'setPrice': 0.0,
-             'lastName': lName,
-             'aboutYou': aboutYou,
-             'profilePicUrl': profilePicUrl,
-             'pujaPicUrl': pujaPicUrl,
-             'uid': widget.uid,
-             'coverpic': coverPicUrl,
-             'state': state,
-             'dateOfBirth': 'no',
-             'type': punditType,
-             'swastik': 0.0,
-             'verified': verified,
-             'searchKey': fName[0].toString(),
-             'number': number,
-             'PujaKeywords': '#'
-           });
-         }).whenComplete(()async{
-         await  FirebaseFirestore.instance.collection('Avaliable_pundit/${widget.uid}/astro').doc('#astro').set({
-             'detail':descp??'Not Available',
-             'name':'Astrology',
-             'offer':descp??'Not Available',
-             'keyword':'#astro',
-             'image':'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
-           });
-         });
+    return FlatButton(
+      child: Text(
+        'Submit',
+        style: TextStyle(color: Colors.white, fontSize: 18),
+      ),
+      onPressed: () {
+        if (_formKeyE.currentState.validate() &&
+            (profilePicFile != null) &&
+            (coverPicFile != null) &&
+            punditType != 'Pundit type' &&
+            validatingAstro() != 2) {
+          _formKeyE.currentState.save();
+          setState(() {
+            loading = true;
+          });
+          _getLocation().whenComplete(() async {
+            StorageReference reference = FirebaseStorage.instance
+                .ref()
+                .child('Users/${widget.uid}/ProfilePic');
+            StorageUploadTask uploadTask = reference.putFile(profilePicFile);
+            var downloadUrl =
+                await (await uploadTask.onComplete).ref.getDownloadURL();
+            var url = downloadUrl.toString();
+            profilePicUrl = url;
+            print(
+                'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
+          }).whenComplete(() async {
+            Auth().updateUser(fName, profilePicUrl);
+          }).whenComplete(() async {
+            StorageReference reference = FirebaseStorage.instance
+                .ref()
+                .child('Users/${widget.uid}/coverPicFile');
+            StorageUploadTask uploadTask = reference.putFile(coverPicFile);
+            var downloadUrl =
+                await (await uploadTask.onComplete).ref.getDownloadURL();
+            var url = downloadUrl.toString();
+            coverPicUrl = url;
+            print(
+                'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
+          }).whenComplete(() {
+            FireStoreDatabase(uid: widget.uid).setData(data: {
+              'experience': exp,
+              'expertise': expert,
+              'language': lang,
+              'description': descp,
+              'call': call ?? null,
+              'video': video ?? null,
+              'chat': chat ?? null,
+              'astrologer': astro,
+              'firstName': capitalize(fName),
+              'location': addGeoPoint(),
+              'token': tokens,
+              'setReward': 0,
+              'setPrice': 0.0,
+              'lastName': lName,
+              'aboutYou': aboutYou,
+              'profilePicUrl': profilePicUrl,
+              'pujaPicUrl': pujaPicUrl,
+              'uid': widget.uid,
+              'coverpic': coverPicUrl,
+              'state': state,
+              'dateOfBirth': 'no',
+              'type': punditType,
+              'swastik': 0.0,
+              'verified': verified,
+              'searchKey': fName[0].toUpperCase().toString(),
+              'number': number,
+              'PujaKeywords': '#'
+            });
+          }).whenComplete(() async {
+            await FirebaseFirestore.instance
+                .collection('Avaliable_pundit/${widget.uid}/astro')
+                .doc('#astro')
+                .set({
+              'detail': descp ?? 'Not Available',
+              'name': 'Astrology',
+              'offer': descp ?? 'Not Available',
+              'keyword': '#astro',
+              'image':
+                  'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
+            });
+          });
 
-         print(
-             'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
-         print(
-             'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
-         print(
-             'linkes................///////////112324r43t54........... $pujaPicUrl ,$profilePicUrl ,$coverPicUrl');
+          print(
+              'nefjierhfewirnfiuoerhfijwqfi  //////////profile/////////$profilePicUrl');
+          print(
+              'nefjierhfewirnfiuoerhfijwqfi  //////////cover/////////$coverPicUrl');
+          print(
+              'linkes................///////////112324r43t54........... $pujaPicUrl ,$profilePicUrl ,$coverPicUrl');
 
-         setState(() {
-           loading = true;
-         });
+          setState(() {
+            loading = true;
+          });
 
-         FirebaseFirestore.instance
-             .doc('punditUsers/${widget.uid}/newsFeed/initialNotification')
-             .set({
-           'title': 'Gallery Update',
-           'subtitle': 'Please update your gallery',
-           'date': FieldValue.serverTimestamp(),
-         });
-         FirebaseFirestore.instance
-             .doc('punditUsers/${widget.uid}/newsFeed/initialNotification2')
-             .set({
-           'title': 'Profile verification',
-           'subtitle': 'Please wait for your profile verification',
-           'description':
-           'Our employees will verify you and will call uh on your contact number after this process you will be verified profile in puja purohit ',
-           'date': FieldValue.serverTimestamp(),
-         });
-       } else {
-         if(astro ==true && chat==null && call==null && video==null){
-           showDialog(
-               context: context,
-               child: AlertDialog(
-                 title: Text('Astrology'),
-                 content: Text('Kindly fill your rates in astrology section'),
-               ));
-         }
-         if (profilePicFile == null) {
-           showDialog(
-               context: context,
-               child: AlertDialog(
-                 title: Text('Incomplete details'),
-                 content: Text('Please upload your profile picture'),
-               ));
-         }
-         if (coverPicFile == null) {
-           showDialog(
-               context: context,
-               child: AlertDialog(
-                 title: Text('Incomplete details'),
-                 content: Text('Please upload your Cover pic'),
-               ));
-         }
+          FirebaseFirestore.instance
+              .doc('punditUsers/${widget.uid}/newsFeed/initialNotification')
+              .set({
+            'title': 'Gallery Update',
+            'subtitle': 'Please update your gallery',
+            'date': FieldValue.serverTimestamp(),
+          });
+          FirebaseFirestore.instance
+              .doc('punditUsers/${widget.uid}/newsFeed/initialNotification2')
+              .set({
+            'title': 'Profile verification',
+            'subtitle': 'Please wait for your profile verification',
+            'description':
+                'Our employees will verify you and will call uh on your contact number after this process you will be verified profile in puja purohit ',
+            'date': FieldValue.serverTimestamp(),
+          });
+        } else {
+          if (astro == true && chat == null && call == null && video == null) {
+            showDialog(
+                context: context,
+                child: AlertDialog(
+                  title: Text('Astrology'),
+                  content: Text('Kindly fill your rates in astrology section'),
+                ));
+          }
+          if (profilePicFile == null) {
+            showDialog(
+                context: context,
+                child: AlertDialog(
+                  title: Text('Incomplete details'),
+                  content: Text('Please upload your profile picture'),
+                ));
+          }
+          if (coverPicFile == null) {
+            showDialog(
+                context: context,
+                child: AlertDialog(
+                  title: Text('Incomplete details'),
+                  content: Text('Please upload your Cover pic'),
+                ));
+          }
 
-         if (punditType == 'Pundit type') {
-           showDialog(
-               context: context,
-               child: AlertDialog(
-                 title: Text('Incomplete details'),
-                 content: Text('Please provide your type'),
-               ));
-         }
-
-       }
-     },
-   );
+          if (punditType == 'Pundit type') {
+            showDialog(
+                context: context,
+                child: AlertDialog(
+                  title: Text('Incomplete details'),
+                  content: Text('Please provide your type'),
+                ));
+          }
+        }
+      },
+    );
   }
 
   getProfilePic({ImageSource source}) async {
@@ -358,7 +375,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: Colors.white,
         child: TextFormField(
           initialValue: number,
-          decoration: InputDecoration(labelText: 'Contact number',prefixText: '+91'),
+          decoration:
+              InputDecoration(labelText: 'Contact number', prefixText: '+91'),
           maxLength: 10,
           keyboardType: TextInputType.number,
           validator: (String value) {
@@ -376,22 +394,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-Widget _buildastro(){
+
+  Widget _buildastro() {
     return Card(
-    child: Container(
-      padding: EdgeInsets.all(10),
-      width: 400,
-      color: Colors.white,
-      child: CheckboxListTile(title: Text('Are you an Astrologer '),value: astro, onChanged: (value){
-        setState(() {
-          astro=value;
-        });
-        }
-      )
-    ),
-  );
-}
-  Widget _builcall(){
+      child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: CheckboxListTile(
+              title: Text('Are you an Astrologer '),
+              value: astro,
+              onChanged: (value) {
+                setState(() {
+                  astro = value;
+                });
+              })),
+    );
+  }
+
+  Widget _builcall() {
     return Container(
         padding: EdgeInsets.all(10),
         width: 400,
@@ -400,9 +421,15 @@ Widget _buildastro(){
           elevation: 5,
           isExpanded: true,
           value: call,
-          hint: call == null ? Text('Select how much you charge for call per minute',style: TextStyle(fontSize: 10)):
-          Text(call,style: TextStyle(fontSize: 10)),
-          items: <String>['3', '5', '7',].map((String value) {
+          hint: call == null
+              ? Text('Select how much you charge for call per minute',
+                  style: TextStyle(fontSize: 10))
+              : Text(call, style: TextStyle(fontSize: 10)),
+          items: <String>[
+            '3',
+            '5',
+            '7',
+          ].map((String value) {
             return new DropdownMenuItem<String>(
               value: value,
               child: new Text(value),
@@ -410,13 +437,13 @@ Widget _buildastro(){
           }).toList(),
           onChanged: (value) {
             setState(() {
-              call=value;
+              call = value;
             });
           },
-        )
-    );
+        ));
   }
-  Widget _builchat(){
+
+  Widget _builchat() {
     return Container(
         padding: EdgeInsets.all(10),
         width: 400,
@@ -424,9 +451,15 @@ Widget _buildastro(){
         child: DropdownButton<String>(
           value: chat,
           isExpanded: true,
-          hint: chat == null?Text('Select how much you charge for 10 text',style: TextStyle(fontSize: 10)):
-          Text(chat,style: TextStyle(fontSize: 10)),
-          items: <String>['3', '5', '7',].map((String value) {
+          hint: chat == null
+              ? Text('Select how much you charge for 10 text',
+                  style: TextStyle(fontSize: 10))
+              : Text(chat, style: TextStyle(fontSize: 10)),
+          items: <String>[
+            '3',
+            '5',
+            '7',
+          ].map((String value) {
             return new DropdownMenuItem<String>(
               value: value,
               child: new Text(value),
@@ -434,23 +467,29 @@ Widget _buildastro(){
           }).toList(),
           onChanged: (value) {
             setState(() {
-              chat=value;
+              chat = value;
             });
           },
-        )
-    );
+        ));
   }
-  Widget _buildvideo(){
+
+  Widget _buildvideo() {
     return Container(
         padding: EdgeInsets.all(10),
         width: 400,
         color: Colors.white,
-
         child: DropdownButton<String>(
           value: video,
           isExpanded: true,
-          hint: Text('Select how much you charge for video call per minute',style: TextStyle(fontSize: 10),),
-          items: <String>['3', '5', '7',].map((String value) {
+          hint: Text(
+            'Select how much you charge for video call per minute',
+            style: TextStyle(fontSize: 10),
+          ),
+          items: <String>[
+            '3',
+            '5',
+            '7',
+          ].map((String value) {
             return new DropdownMenuItem<String>(
               value: value,
               child: new Text(value),
@@ -458,13 +497,13 @@ Widget _buildastro(){
           }).toList(),
           onChanged: (value) {
             setState(() {
-              video=value;
+              video = value;
             });
           },
-        )
-    );
+        ));
   }
- Widget _buildLastName() {
+
+  Widget _buildLastName() {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -489,6 +528,7 @@ Widget _buildastro(){
       ),
     );
   }
+
   Widget _buildexp() {
     return Card(
       child: Container(
@@ -498,7 +538,7 @@ Widget _buildastro(){
         child: TextFormField(
           initialValue: lName,
           decoration: InputDecoration(labelText: 'Experience'),
-          maxLength: 10,
+          maxLength: 30,
           validator: (String value) {
             if (value.isEmpty) {
               return 'Experience is Required';
@@ -507,13 +547,14 @@ Widget _buildastro(){
           },
           onSaved: (String value) {
             setState(() {
-              exp= value;
+              exp = value;
             });
           },
         ),
       ),
     );
   }
+
   Widget _buildlang() {
     return Card(
       child: Container(
@@ -539,6 +580,7 @@ Widget _buildastro(){
       ),
     );
   }
+
   Widget _buildexpert() {
     return Card(
       child: Container(
@@ -564,6 +606,7 @@ Widget _buildastro(){
       ),
     );
   }
+
   Widget _builddesc() {
     return Card(
       child: Container(
@@ -571,8 +614,9 @@ Widget _buildastro(){
         width: 400,
         color: Colors.white,
         child: TextFormField(
-
-          decoration: InputDecoration(labelText: 'Give some description about description and feature you offer to your client'),
+          decoration: InputDecoration(
+              labelText:
+                  'Give some description about description and feature you offer to your client'),
           maxLength: 100,
           onSaved: (String value) {
             setState(() {
@@ -583,6 +627,7 @@ Widget _buildastro(){
       ),
     );
   }
+
   Widget _buildAboutYou() {
     return Card(
       child: Container(
@@ -675,12 +720,11 @@ Widget _buildastro(){
                           value: "Maithali", child: Text('Maithali'))
                     ],*/
                 onChanged: (String value) {
-                  if(value!=null){
+                  if (value != null) {
                     setState(() {
-                    state = value;
-                  });
+                      state = value;
+                    });
                   }
-
                 },
               );
             }),
@@ -725,10 +769,10 @@ Widget _buildastro(){
                           value: "Maithali", child: Text('Maithali'))
                     ],*/
                 onChanged: (String value) {
-                  if(value!=null){
+                  if (value != null) {
                     setState(() {
-                    punditType = value;
-                  });
+                      punditType = value;
+                    });
                   }
                 },
               );
@@ -896,13 +940,13 @@ Widget _buildastro(){
                               _buildNewState(),
                               _buildLastName(),
                               _buildastro(),
-                              astro?_builchat():SizedBox(),
-                              astro?_builcall():SizedBox(),
-                              astro?_buildvideo():SizedBox(),
-                              astro?_buildexp():SizedBox(),
-                              astro?_buildlang():SizedBox(),
-                              astro?_buildexpert():SizedBox(),
-                              astro?_builddesc():SizedBox(),
+                              astro ? _builchat() : SizedBox(),
+                              astro ? _builcall() : SizedBox(),
+                              astro ? _buildvideo() : SizedBox(),
+                              astro ? _buildexp() : SizedBox(),
+                              astro ? _buildlang() : SizedBox(),
+                              astro ? _buildexpert() : SizedBox(),
+                              astro ? _builddesc() : SizedBox(),
                               SizedBox(
                                 height: 20,
                               ),

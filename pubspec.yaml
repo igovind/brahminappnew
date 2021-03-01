@@ -96,6 +96,10 @@ flutter:
     - images/back.png
     - images/6705.jpg
     - images/dlogo.png
+    - images/no_reward.png
+    - images/no_message.png
+    - images/empty_payment.png
+    - images/empty_dashboard.png
     - 0.png
     # - images/namaste.png
     - images/chakra.png

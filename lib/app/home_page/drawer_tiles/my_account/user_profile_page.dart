@@ -26,6 +26,11 @@ class UserProfilePage extends StatelessWidget {
     String chat = ' ';
     String call = ' ';
     String video = ' ';
+    String descp;
+    String exp;
+    String lang;
+    String lName;
+    String expert;
     Widget _buildAppBar(context) {
       return AppBar(
         toolbarHeight: 120,
@@ -42,13 +47,17 @@ class UserProfilePage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (contex) => EditProfilePage(
-                      astro:astro,
-                      call:call,
-                      chat:chat,
-                      video:video,
+                      astro: astro,
+                      call: call,
+                      chat: chat,
+                      video: video,
                       uid: uid,
+                      description: descp,
+                      language: lang,
+                      experience: exp,
+                      expertise: expert,
                       userFirstName: _firstName,
-                      //userLastName: _lastName,
+                      //    userLastName: _lastName,
                       userState: _state,
                       userContactNumber: _number,
                       userBio: _aboutYou,
@@ -78,7 +87,7 @@ class UserProfilePage extends StatelessWidget {
                 );
               }
               _firstName = snapshot.data.data()['firstName'];
-             // _lastName = snapshot.data.data()['lastName'];
+              // _lastName = snapshot.data.data()['lastName'];
               _profilePicUrl = snapshot.data.data()['profilePicUrl'];
               _aboutYou = snapshot.data.data()['aboutYou'];
               _swastik = snapshot.data.data()['swastik'].toDouble();
@@ -88,10 +97,19 @@ class UserProfilePage extends StatelessWidget {
               _name = _firstName + ' ' + _lastName;
               _verified = snapshot.data.data()['verified'];
               _number = snapshot.data.data()['number'];
-              astro = snapshot.data.data()['astrologer'];
-              call=snapshot.data.data()['call'];
-              video=snapshot.data.data()['video'];
-              chat=snapshot.data.data()['chat'];
+              astro = snapshot.data.data()['astrologer'] == null
+                  ? false
+                  : snapshot.data.data()['astrologer'];
+              call = snapshot.data.data()['call'];
+              video = snapshot.data.data()['video'];
+              chat = snapshot.data.data()['chat'];
+              descp = snapshot.data.data()['description'];
+              expert = snapshot.data.data()['expertise'];
+              exp = snapshot.data.data()['experience'];
+              lang = snapshot.data.data()['language'];
+
+              print(
+                  "????????????????????????////////////////////////////////////$astro ${snapshot.data.data()['astrologer']}");
               return SingleChildScrollView(
                 child: Container(
                   // height: MediaQuery.of(context).size.height,

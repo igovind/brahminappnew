@@ -35,19 +35,21 @@ class ModelClass extends StatelessWidget {
                     padding: EdgeInsets.all(20),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(
-                          height: 100,
+                        Image.asset(
+                          "images/empty_dashboard.png",
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          width: MediaQuery.of(context).size.width * 0.6,
                         ),
-                        Icon(
-                          Icons.not_interested,
-                          color: Colors.black54,
-                          size: 100,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'You are not applicable for this feature please add at least 5 puja',
-                            style: TextStyle(color: Colors.black54, fontSize: 18),
+                        Text(
+                          "Data not available",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black54,
                           ),
+                        ),
+                        Text(
+                          '*Add your 5 puja to use this feature',
+                          style: TextStyle(color: Colors.redAccent),
                         )
                       ],
                     ),

@@ -1,7 +1,6 @@
 import 'package:brahminapp/app/home_page/drawer_tiles/my_account/create_profile_page.dart';
-import 'package:brahminapp/app/home_page/drawer_tiles/my_account/new_edit_profile_page.dart';
+import 'package:brahminapp/app/home_page/drawer_tiles/puja_offering/new_add_edit_puja.dart';
 import 'package:brahminapp/app/home_page/home_page.dart';
-import 'package:brahminapp/calls/video_call.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,6 +35,7 @@ class TogglePage extends StatelessWidget {
               child: HomePage(
                 user: user,
               ),
+              /*  child: NewAddEditPuja(),*/
             ),
           );
         });

@@ -107,7 +107,6 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   Future<void> deleteAstro(String keyword) async {
-
     fireStore
         .doc('punditUsers/$uid/astro_offering/$keyword')
         .delete()

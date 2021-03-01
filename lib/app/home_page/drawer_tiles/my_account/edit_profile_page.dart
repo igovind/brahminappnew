@@ -19,7 +19,15 @@ import 'package:searchable_dropdown/searchable_dropdown.dart';
 import '../edit_bank_details.dart';
 import 'edit_adhaar_details.dart';
 
-bool _astro=false;
+bool _astro = false;
+String descp;
+String exp;
+String lang;
+String lName;
+String expert;
+
+String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
 class EditProfilePage extends StatefulWidget {
   final uid;
   final String userFirstName;
@@ -34,6 +42,10 @@ class EditProfilePage extends StatefulWidget {
   final String call;
   final String chat;
   final String video;
+  final String experience;
+  final String expertise;
+  final String language;
+  final String description;
 
   const EditProfilePage(
       {Key key,
@@ -45,7 +57,15 @@ class EditProfilePage extends StatefulWidget {
       @required this.userType,
       @required this.userProfilePicUrl,
       @required this.userCoverPicUrl,
-      this.uid, this.astro, this.call, this.chat, this.video})
+      this.uid,
+      this.astro,
+      this.call,
+      this.chat,
+      this.video,
+      this.experience,
+      this.expertise,
+      this.language,
+      this.description})
       : super(key: key);
 
   @override
@@ -71,9 +91,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void initState() {
     super.initState();
-
+    _astro = widget.astro;
     state = widget.userState;
     type = widget.userType;
+    lang = widget.language;
+    expert = widget.expertise;
+    exp = widget.experience;
+    descp = widget.description;
     _getLocation().then((position) {
       userLocation = position;
     });
@@ -181,13 +205,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     String nUserFirstName = widget.userFirstName;
-    String nUserLastName = widget.userLastName;
-    //String nUserState = widget.userState;
+
     String nUserContactNumber = widget.userContactNumber;
     String nUserBio = widget.userBio;
-    String nUserType = widget.userType;
+
     String nUserProfilePicUrl = widget.userProfilePicUrl;
     String nUserCoverPicUrl = widget.userCoverPicUrl;
     submitCoverPic() {
@@ -226,8 +248,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
     }
 
+    int validatingAstro() {
+      if (_astro) {
+        if (chat != null && call != null && video != null) {
+          return 1;
+        } else {
+          BotToast.showText(text: 'Please fill all sections of astrology');
+          return 2;
+        }
+      }
+      return 3;
+    }
+
     _submit() {
-      if (_validateAndSaveForm()) {
+      if (_validateAndSaveForm() && validatingAstro() != 2) {
+        setState(() {
+          loading = true;
+        });
         if (userProfilePicFile != null) {
           submitProfilePic();
           Auth().updateUserphoto(nUserProfilePicUrl);
@@ -235,20 +272,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
         if (userCoverPicFile != null) {
           submitCoverPic();
         }
+        if (_astro) {
+          FireStoreDatabase(uid: widget.uid).updateData(data: {
+            'call': call ?? widget.call,
+            'chat': chat ?? widget.chat,
+            'video': video ?? widget.video,
+            'experience': exp,
+            'expertise': expert,
+            'language': lang,
+            'description': descp,
+            'astrologer': _astro,
+          });
+          FirebaseFirestore.instance
+              .collection('Avaliable_pundit/${widget.uid}/astro')
+              .doc('#astro')
+              .set({
+            'detail': descp ?? 'Not Available',
+            'name': 'Astrology',
+            'offer': descp ?? 'Not Available',
+            'keyword': '#astro',
+            'image':
+                'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
+          });
+        }
         Auth().updateUserName('$nUserFirstName');
-        //print('Chutiya hu mai : $state');
         FireStoreDatabase(uid: widget.uid).updateData(data: {
-          'firstName': nUserFirstName,
+          'firstName': capitalize(nUserFirstName),
           'location': addGeoPoint(),
-          //'lastName': nUserLastName,
           'aboutYou': nUserBio,
           'number': nUserContactNumber,
           'state': state,
           'type': type,
-          'call':call??widget.call,
-          'chat':chat??widget.chat,
-          'video':video??widget.video,
-          'searchKey': nUserFirstName[0].toString(),
+          'searchKey': nUserFirstName[0].toUpperCase().toString(),
         }).whenComplete(() {
           setState(() {
             loading = false;
@@ -258,24 +313,130 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
       }
     }
-    Widget _buildastro(bool astrologer){
+
+    Widget _buildastro(bool astrologer) {
       return Card(
         child: Container(
             padding: EdgeInsets.all(10),
             width: 400,
             color: Colors.white,
-            child: widget.astro?Text('Update your Astrology Rates',style: TextStyle(color: Colors.red),):CheckboxListTile(title: Text('Are you an Astrologer'),value: widget.astro,
-                onChanged: (value){
+            child: _astro
+                ? Text(
+                    'Update your Astrology Rates',
+                    style: TextStyle(color: Colors.red),
+                  )
+                : CheckboxListTile(
+                    title: Text('Are you an Astrologer'),
+                    value: widget.astro,
+                    onChanged: (value) {
+                      setState(() {
+                        _astro = value;
+                      });
+                    })),
+      );
+    }
+
+    Widget _buildexp() {
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: TextFormField(
+            initialValue: exp,
+            decoration: InputDecoration(labelText: 'Experience'),
+            maxLength: 30,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Experience is Required';
+              }
+              return null;
+            },
+            onSaved: (String value) {
               setState(() {
-                _astro=value;
-                print('Astro is aaaaaaaaaaaaaaaaa $_astro');
+                exp = value;
               });
-            }
-            )
+            },
+          ),
         ),
       );
     }
-    Widget _builcall(){
+
+    Widget _buildlang() {
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: TextFormField(
+            initialValue: lang,
+            decoration: InputDecoration(labelText: 'Language'),
+            maxLength: 10,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Language is Required';
+              }
+              return null;
+            },
+            onSaved: (String value) {
+              setState(() {
+                lang = value;
+              });
+            },
+          ),
+        ),
+      );
+    }
+
+    Widget _buildexpert() {
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: TextFormField(
+            initialValue: expert,
+            decoration: InputDecoration(labelText: 'Expertise'),
+            maxLength: 10,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Expertise is Required';
+              }
+              return null;
+            },
+            onSaved: (String value) {
+              setState(() {
+                expert = value;
+              });
+            },
+          ),
+        ),
+      );
+    }
+
+    Widget _builddesc() {
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          width: 400,
+          color: Colors.white,
+          child: TextFormField(
+            initialValue: descp,
+            decoration: InputDecoration(
+                labelText:
+                    'Give some description about description and feature you offer to your client'),
+            maxLength: 100,
+            onSaved: (String value) {
+              setState(() {
+                descp = value;
+              });
+            },
+          ),
+        ),
+      );
+    }
+
+    Widget _builcall() {
       return Container(
           padding: EdgeInsets.all(10),
           width: 400,
@@ -284,14 +445,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
             elevation: 5,
             isExpanded: true,
             value: call,
-            hint: widget.call == null ?Text('Select how much you charge for call per minute',style: TextStyle(fontSize: 10)):
-            Column(
-              children: [
-                Text('Call rate per min',style: TextStyle(fontSize: 10,color: Colors.green)),
-                Text(widget.call,style: TextStyle(fontSize: 10)),
-              ],
-            ),
-            items: <String>['3', '5', '7',].map((String value) {
+            hint: widget.call == null
+                ? Text('Select how much you charge for call per minute',
+                    style: TextStyle(fontSize: 16))
+                : Column(
+                    children: [
+                      Text('Call rate per min',
+                          style: TextStyle(fontSize: 16, color: Colors.green)),
+                      Text(widget.call, style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+            items: <String>[
+              '3',
+              '5',
+              '7',
+            ].map((String value) {
               return new DropdownMenuItem<String>(
                 value: value,
                 child: new Text(value),
@@ -299,13 +467,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
             }).toList(),
             onChanged: (value) {
               setState(() {
-                call=value;
+                call = value;
               });
             },
-          )
-      );
+          ));
     }
-    Widget _builchat(){
+
+    Widget _builchat() {
       return Container(
           padding: EdgeInsets.all(10),
           width: 400,
@@ -313,14 +481,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: DropdownButton<String>(
             value: chat,
             isExpanded: true,
-            hint: widget.chat == null?Text('Select how much you charge for 10 text',style: TextStyle(fontSize: 10)):
-            Column(
-              children: [
-                Text('Text rate on 10 message',style: TextStyle(fontSize: 10,color: Colors.green)),
-                Text(widget.chat,style: TextStyle(fontSize: 10)),
-              ],
-            ),
-            items: <String>['3', '5', '7',].map((String value) {
+            hint: widget.chat == null
+                ? Text('Select how much you charge for 10 text',
+                    style: TextStyle(fontSize: 16))
+                : Column(
+                    children: [
+                      Text('Text rate on 10 message',
+                          style: TextStyle(fontSize: 16, color: Colors.green)),
+                      Text(widget.chat, style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+            items: <String>[
+              '3',
+              '5',
+              '7',
+            ].map((String value) {
               return new DropdownMenuItem<String>(
                 value: value,
                 child: new Text(value),
@@ -328,28 +503,40 @@ class _EditProfilePageState extends State<EditProfilePage> {
             }).toList(),
             onChanged: (value) {
               setState(() {
-                chat=value;
+                chat = value;
               });
             },
-          )
-      );
+          ));
     }
-    Widget _buildvideo(){
+
+    Widget _buildvideo() {
       return Container(
           padding: EdgeInsets.all(10),
           width: 400,
           color: Colors.white,
-
           child: DropdownButton<String>(
             value: video,
             isExpanded: true,
-            hint:widget.video==null?Text('Select how much you charge for video call per minute',style: TextStyle(fontSize: 10),):Column(
-              children: [
-                Text('Video call rate on per min',style: TextStyle(fontSize: 10,color: Colors.green)),
-                Text('${widget.video}',style: TextStyle(fontSize: 10),)
-              ],
-            ),
-            items: <String>['3', '5', '7',].map((String value) {
+            hint: widget.video == null
+                ? Text(
+                    'Select how much you charge for video call per minute',
+                    style: TextStyle(fontSize: 16),
+                  )
+                : Column(
+                    children: [
+                      Text('Video call rate on per min',
+                          style: TextStyle(fontSize: 16, color: Colors.green)),
+                      Text(
+                        '${widget.video}',
+                        style: TextStyle(fontSize: 16),
+                      )
+                    ],
+                  ),
+            items: <String>[
+              '3',
+              '5',
+              '7',
+            ].map((String value) {
               return new DropdownMenuItem<String>(
                 value: value,
                 child: new Text(value),
@@ -357,11 +544,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             }).toList(),
             onChanged: (value) {
               setState(() {
-                video=value;
+                video = value;
               });
             },
-          )
-      );
+          ));
     }
 
     return Scaffold(
@@ -375,9 +561,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ? SizedBox()
               : FlatButton(
                   onPressed: () {
-                    setState(() {
-                      loading = true;
-                    });
                     _submit();
                   },
                   child: Text(
@@ -581,7 +764,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                       ),
                       ////////////////////LAST NAME/////////////
-         
+
                       ////////////////CONTACT NUMBER//////////////
                       Card(
                         child: Container(
@@ -618,7 +801,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           color: Colors.white,
                           child: TextFormField(
                             initialValue: nUserBio,
-                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(labelText: 'About you'),
                             validator: (String value) {
                               if (value.isEmpty) {
@@ -696,7 +878,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                       )),
-                     /* Card(
+                      /* Card(
                         child: Container(
                           padding: EdgeInsets.all(10),
                           width: 400,
@@ -779,10 +961,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                       )),
-                     _buildastro(_astro),
-                     widget.astro?_builchat():SizedBox(),
-                      widget.astro?_builcall():SizedBox(),
-                      widget.astro?_buildvideo():SizedBox(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Astrology',
+                        style: TextStyle(color: Colors.black54, fontSize: 20),
+                      ),
+                      Divider(
+                        thickness: 1,
+                      ),
+                      _buildastro(_astro),
+                      _astro ? _builchat() : SizedBox(),
+                      _astro ? _builcall() : SizedBox(),
+                      _astro ? _buildvideo() : SizedBox(),
+                      _astro ? _buildlang() : SizedBox(),
+                      _astro ? _buildexp() : SizedBox(),
+                      _astro ? _buildexpert() : SizedBox(),
+                      _astro ? _builddesc() : SizedBox(),
+                      Divider(
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text(
                           'Adhaar details are required in order to verify your account to protect our community from spams.'),
                       SizedBox(

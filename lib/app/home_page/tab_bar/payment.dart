@@ -66,111 +66,132 @@ class _PaymentState extends State<Payment> {
                 color: Color(0XFFffbd59),
               ),
               payment
-                  ? Expanded(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot2.data.docs.reversed.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot ref =
-                                snapshot2.data.docs[index];
-                            final String date = ref.data()['date'];
-                            final String time = ref.data()['time'];
-                            final String pic = ref.data()['pic'];
-                            final String service = ref.data()['service'];
-                            final String client = ref.data()['client'];
-                            final String location = ref.data()['Location'];
-                            final bool paid = ref.data()['payment'];
-                            dynamic cod = ref.data()['cod'];
-                            final String serviceId = ref.id;
-                            final double rate = (ref.data()['price']);
-                            return Container(
-                              padding: EdgeInsets.all(8),
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    child: ClientDetailPage(
-                                      name: client,
-                                      service: service,
-                                      location: location,
-                                      date: date,
-                                      time: time,
-                                      pic: pic,
-                                      paid: paid,
-                                      cod: cod,
-                                      bookingId: serviceId,
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
+                  ? snapshot2.data.docs.isEmpty
+                      ? Column(
+                          children: [
+                            Image.asset(
+                              "images/empty_payment.png",
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              width: MediaQuery.of(context).size.width * 0.55,
+                            ),
+                            Text(
+                              "No transactions yet",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot2.data.docs.reversed.length,
+                              itemBuilder: (context, index) {
+                                final DocumentSnapshot ref =
+                                    snapshot2.data.docs[index];
+                                final String date = ref.data()['date'];
+                                final String time = ref.data()['time'];
+                                final String pic = ref.data()['pic'];
+                                final String service = ref.data()['service'];
+                                final String client = ref.data()['client'];
+                                final String location = ref.data()['Location'];
+                                final bool paid = ref.data()['payment'];
+                                dynamic cod = ref.data()['cod'];
+                                final String serviceId = ref.id;
+                                final double rate = (ref.data()['price']);
+                                return Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        child: ClientDetailPage(
+                                          name: client,
+                                          service: service,
+                                          location: location,
+                                          date: date,
+                                          time: time,
+                                          pic: pic,
+                                          paid: paid,
+                                          cod: cod,
+                                          bookingId: serviceId,
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.check_box,
-                                          size: 30,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Icon(
+                                              Icons.check_box,
+                                              size: 30,
+                                              color: Color(0XFFffbd59),
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  '\₹ ${rate.roundToDouble()}',
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                Text(
+                                                  ' is successfully received by ',
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 15),
+                                                ),
+                                                Text(
+                                                  '$date $time',
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 12),
+                                                ),
+                                                Text(
+                                                  ' $client ',
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15),
+                                                ),
+                                                Text(
+                                                  '$service',
+                                                  style: TextStyle(
+                                                      color: Color(0XFFffbd59),
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                Text(
+                                                  'Booking Id: $serviceId',
+                                                  style: TextStyle(
+                                                      color: Colors.black54),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        Divider(
+                                          thickness: 0.5,
                                           color: Color(0XFFffbd59),
                                         ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              '\₹ ${rate.roundToDouble()}',
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                              ' is successfully received by ',
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15),
-                                            ),
-                                            Text(
-                                              '$date $time',
-                                              style: TextStyle(
-                                                  color: Colors.black54, fontSize:12),
-                                            ),
-                                            Text(
-                                              ' $client ',
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15),
-                                            ),
-                                            Text(
-                                              '$service',
-                                              style: TextStyle(
-                                                  color: Color(0XFFffbd59),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                              'Booking Id: $serviceId',
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                            ),
-                                          ],
-                                        )
                                       ],
                                     ),
-                                    Divider(
-                                      thickness: 0.5,
-                                      color: Color(0XFFffbd59),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    )
+                                  ),
+                                );
+                              }),
+                        )
                   : StreamBuilder<QuerySnapshot>(
                       stream: FireStoreDatabase(uid: widget.uid).getRewadsList,
                       builder: (context, snapshot) {
@@ -179,6 +200,22 @@ class _PaymentState extends State<Payment> {
                             child: CircularProgressIndicator(),
                           );
                         }
+                        return Column(
+                          children: [
+                            Image.asset(
+                              "images/no_reward.png",
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              width: MediaQuery.of(context).size.width * 0.55,
+                            ),
+                            Text(
+                              "No Rewards",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        );
                         return Expanded(
                           child: Container(
                             padding: EdgeInsets.all(16),
