@@ -783,6 +783,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     _added = widget.added;
     return WillPopScope(
       onWillPop: () async {
@@ -794,7 +797,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          toolbarHeight: 120,
+          toolbarHeight: height/7,
           leading: IconButton(
             icon: Icon(Icons.logout),
             color: Colors.white,
@@ -846,43 +849,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             children: [
                               Stack(
                                 children: [
-                                  Container(
-                                    height: 200,
-                                    width: MediaQuery.of(context).size.width,
-                                    color: Colors.pink,
-                                    child: coverPicFile == null
-                                        ? (coverPicUrl == null
-                                            ? Image.asset(
-                                                'images/newback.jpg',
-                                                fit: BoxFit.cover,
-                                              )
-                                            : netImg(coverPicUrl))
-                                        : Image.file(
-                                            coverPicFile,
-                                            fit: BoxFit.fitWidth,
-                                          ),
-                                  ),
-                                  Positioned(
+                                  GestureDetector(
+                                    onTap: () {
+                                      getCoverPic(source: ImageSource.gallery);
+                                    },
                                     child: Container(
-                                      //padding: EdgeInsets.all(),
-                                      color: Color(0XFFffbd59),
-                                      child: IconButton(
-                                          color: Colors.white,
-                                          icon: Icon(Icons.edit),
-                                          onPressed: () {
-                                            getCoverPic(
-                                                source: ImageSource.gallery);
-                                          }),
+                                      height: height / 3.3,
+                                      width: MediaQuery.of(context).size.width,
+                                      color: Colors.white,
+                                      child: coverPicFile == null
+                                          ? (coverPicUrl == null
+                                              ? Image.asset(
+                                                  'images/newback.jpg',
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : netImg(coverPicUrl))
+                                          : Image.file(
+                                              coverPicFile,
+                                              fit: BoxFit.fitWidth,
+                                            ),
                                     ),
                                   ),
                                   Positioned(
-                                    top: 100,
-                                    left: ((MediaQuery.of(context).size.width *
-                                            0.5) -
-                                        120),
-                                    child: Column(
-                                      children: [
-                                        CircularProfileAvatar(
+                                    top: (height / 3.3) - (height/8),
+                                    left: 100,
+                                    child: Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          getProfilePic(
+                                              source: ImageSource.gallery);
+                                        },
+                                        child: CircularProfileAvatar(
                                           '',
                                           child: profilePicFile == null
                                               ? (profilePicUrl == null
@@ -895,36 +892,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           elevation: 8,
                                           borderWidth: 1,
                                         ),
-                                        Container(
-                                          width: 200,
-                                          // color: Colors.white,
-                                          padding: EdgeInsets.all(2),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              IconButton(
-                                                  icon: Icon(Icons.camera),
-                                                  iconSize: 30,
-                                                  color: Color(0XFFffbd59),
-                                                  onPressed: () =>
-                                                      getProfilePic(
-                                                        source:
-                                                            ImageSource.camera,
-                                                      )),
-                                              IconButton(
-                                                  icon: Icon(Icons.photo),
-                                                  iconSize: 30,
-                                                  color: Color(0XFFffbd59),
-                                                  onPressed: () =>
-                                                      getProfilePic(
-                                                        source:
-                                                            ImageSource.gallery,
-                                                      )),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(

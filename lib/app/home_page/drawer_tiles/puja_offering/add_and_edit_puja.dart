@@ -29,7 +29,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
   String _name;
   double _rate;
   String _benefits;
-  String _samagri;
+  String samagri;
   String _additionalDisctription;
   String _time;
   String hr;
@@ -50,28 +50,28 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
   }
 
   Future<void> _submit() async {
-    // if (_validateAndSaveForm()&&keyword!=null) {
     try {
       final String serviceId = DateTime.now().toIso8601String();
-      FireStoreDatabase(uid: widget.uid).setPujaOffering(data: {
-        'puja': _name,
-        'price': _rate + 0.1,
-        'Benefit': _benefits,
-        'swastik': 0,
-        //'The significance or benefits of performing Lakshmi pooja are as given below: Family life becomes more harmonious– To each & every person in the world, their families are the most treasured people. Performing Lakshmi pooja with all the family members creates a sense of harmony & ensures a peaceful environment at home',
-        'PanditD': _additionalDisctription,
-        //'2 pandit will come .One will be purohit and one will be in practice pandit',
-        'Pujan Samagri': _samagri,
-        // 'दिवाली पूजा के लिए रोली यानी टीका, चावल (अक्षत), पान-सुपारी, लौंग, इलायची, धूप, कपूर, घी, तेल, दीपक, कलावा, नारियल, गंगाजल, फल, फूल, मिठाई, दूर्वा, चंदन, मेवे, खील, बताशे, चौकी, कलश, फूलों की माला, शंख, लक्ष्मी-गणेश की मूर्ति, थाली, चांदी का सिक्का, 11 दिए और इससे ज्यादा दिये अपनी श्रृद्धानुसार एकत्रित कर लें।',
-        'time': _time,
-        'keyword': keyword == null ? '#' + _name + '/' : keyword,
-        'subscriber': 0,
-        'profit': 0.1,
-        'serviceId': serviceId,
-      }, pid: serviceId).whenComplete(
-          () => FireStoreDatabase(uid: widget.uid).updateKeyword(
+      FireStoreDatabase(uid: widget.uid)
+          .setPujaOffering(data: {
+            'puja': _name,
+            'price': _rate,
+            'Benefit': _benefits,
+            'swastik': 0,
+            'PanditD': _additionalDisctription,
+            'Pujan Samagri': samagri,
+            'time': _time,
+            'keyword': keyword == null ? '#' + _name + '/' : keyword,
+            'subscriber': 0,
+            'profit': 0.1,
+            'serviceId': serviceId,
+          }, pid: serviceId)
+          .whenComplete(() => FireStoreDatabase(uid: widget.uid).updateKeyword(
                 keyword == null ? '#' + _name + '/' : keyword,
-              ));
+              ))
+          .whenComplete(() {
+            BotToast.showText(text: "$_name adeed in your service list");
+          });
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -81,16 +81,15 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
   }
 
   Future<void> _submit1() async {
-    // if (_validateAndSaveForm()&&keyword!=null) {
     try {
-      final String serviceId = DateTime.now().toIso8601String();
       FireStoreDatabase(uid: widget.uid).updatePujaOffering(data: {
         'puja': _name,
-        'price': _rate + 0.1,
+        'price': _rate,
         'Benefit': _benefits,
         'PanditD': _additionalDisctription,
         'time': _time,
       }, pid: widget.docSnap.id);
+      BotToast.showText(text: "$_name is updated");
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -100,14 +99,22 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
   }
 
   @override
+  void initState() {
+    samagri = null;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (widget.docSnap != null) {
       _name = widget.docSnap.data()['puja'];
       _rate = widget.docSnap.data()['price'];
       _benefits = widget.docSnap.data()['Benefit'];
-      _samagri = widget.docSnap.data()['Pujan Samagri'];
+      samagri = widget.docSnap.data()['Pujan Samagri'];
       _additionalDisctription = widget.docSnap.data()['PanditD'];
       _time = widget.docSnap.data()['time'];
+      print(
+          '########################################+++++++++++$_name $_additionalDisctription $samagri');
     }
     return Scaffold(
       appBar: AppBar(
@@ -128,10 +135,11 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                   Navigator.of(context).pop();
                 }
                 if (keyword == null) {
-                  BotToast.showText(text: "Keyword can\'t empty");
+                  BotToast.showText(text: "Please select puja type");
                 }
               } else {
                 if (_validateAndSaveForm()) {
+                  Navigator.of(context).pop();
                   _submit1();
                 }
               }
@@ -218,24 +226,24 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
       other
           ? TextFormField(
               decoration: InputDecoration(labelText: 'Pujan samagri'),
-              initialValue: _samagri,
+              initialValue: samagri,
               validator: (value) =>
                   value.isNotEmpty ? null : 'Pujan samagri can\'t be empty',
-              onSaved: (value) => _samagri = value,
+              onSaved: (value) => samagri = value,
             )
           : SizedBox(),
       TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
         decoration: InputDecoration(labelText: 'Benefits from this puja'),
         initialValue: _benefits,
-        validator: (value) =>
-            value.isNotEmpty ? null : 'Benefits can\'t be empty',
         onSaved: (value) => _benefits = value,
       ),
       TextFormField(
         decoration: InputDecoration(labelText: 'Additional Description'),
         initialValue: _additionalDisctription,
-        validator: (value) =>
-            value.isNotEmpty ? null : 'Description can\'t be empty',
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
         onSaved: (value) => _additionalDisctription = value,
       ),
       SizedBox(
@@ -249,7 +257,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                       color: Colors.black54,
-                      width: 1.0,
+                      width: 0.5,
                       style: BorderStyle.solid)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -279,7 +287,7 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                           });
                         } else {
                           setState(() {
-                            _samagri = samMap[value];
+                            samagri = samMap[value];
                             keyword = keymap[value];
                             other = false;
                           });
@@ -291,6 +299,37 @@ class _AddAndEditPujaState extends State<AddAndEditPuja> {
                     '*Select this field very carefully as this field will decide pujan samagri*',
                     style: TextStyle(color: Colors.red),
                   ),
+                ],
+              ),
+            ),
+      SizedBox(
+        height: 10,
+      ),
+      widget.docSnap != null
+          ? SizedBox()
+          : Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                      color: Colors.black54,
+                      width: 0.5,
+                      style: BorderStyle.solid)),
+              padding: EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Text("Samagri"),
+                  keyword == null
+                      ? SizedBox()
+                      : TextFormField(
+                          key: Key(samagri.toString()),
+                          initialValue: samagri,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          onSaved: (value) => samagri = value,
+                        ),
                 ],
               ),
             ),

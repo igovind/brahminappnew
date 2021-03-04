@@ -33,7 +33,7 @@ class _PujaPageState extends State<PujaPage> {
 
           return Scaffold(
             appBar: AppBar(
-              toolbarHeight: 120,
+              toolbarHeight: 80,
               centerTitle: true,
               title: Text('Services'),
             ),

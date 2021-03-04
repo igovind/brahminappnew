@@ -114,7 +114,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         setState(() {
           locationLoading = false;
         });
-        BotToast.showText(text: "Location has updated");
+        BotToast.showText(text: "Location is updated");
       });
     });
   }
