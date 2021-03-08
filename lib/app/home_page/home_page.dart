@@ -11,7 +11,6 @@ import 'package:brahminapp/app/home_page/tab_bar/dashboard/model_class.dart';
 import 'package:brahminapp/app/home_page/tab_bar/home_page_sec.dart';
 import 'package:brahminapp/app/home_page/tab_bar/payment.dart';
 import 'package:brahminapp/calls/index.dart';
-import 'package:brahminapp/calls/video_call.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';

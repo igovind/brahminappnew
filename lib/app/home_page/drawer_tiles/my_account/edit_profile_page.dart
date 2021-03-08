@@ -748,7 +748,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             initialValue: nUserFirstName,
                             decoration:
                                 InputDecoration(labelText: 'First name'),
-                            maxLength: 20,
+                            maxLength: 35,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'First name is Required';
@@ -777,7 +777,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             keyboardType: TextInputType.number,
                             decoration:
                                 InputDecoration(labelText: 'Contact number'),
-                            maxLength: 20,
+                            maxLength: 10,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Contact number is required';

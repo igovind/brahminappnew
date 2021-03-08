@@ -202,11 +202,11 @@ class _PaymentState extends State<Payment> {
                         }
                         return Column(
                           children: [
-                            Image.asset(
-                              "images/no_reward.png",
-                              height: MediaQuery.of(context).size.height * 0.55,
-                              width: MediaQuery.of(context).size.width * 0.55,
-                            ),
+                            // Image.asset(
+                            //   "images/no_reward.png",
+                            //   height: MediaQuery.of(context).size.height * 0.55,
+                            //   width: MediaQuery.of(context).size.width * 0.55,
+                            // ),
                             Text(
                               "No Rewards",
                               style: TextStyle(
