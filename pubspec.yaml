@@ -28,8 +28,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   google_fonts: ^1.1.1
-  cupertino_icons: ^1.0.0
-  firebase_auth: ^0.18.2
+
+  cupertino_icons:
+  firebase_auth: ^0.18.0
   google_sign_in: ^4.5.5
   provider:
   shared_preferences:
@@ -37,6 +38,7 @@ dependencies:
   intl:
   firebase_core_web:
   image_picker: ^0.6.7+12
+  swipeable_page_route:
   image_cropper: ^1.3.1
   circular_profile_avatar:
   flutter_awesome_alert_box:
@@ -44,23 +46,39 @@ dependencies:
   floating_search_bar:
   firebase_storage: ^4.0.0
   flutter_slidable:
+  dots_indicator:
+  bottom_navy_bar: ^5.6.0
   flutter_bloc:
-  firebase_core:
+  firebase_core: ^0.5.0
   location:
+  youtube_player_flutter:
   geoflutterfire:
+  circular_bottom_navigation: ^1.0.1
   rxdart:
   geolocator:
   scratcher:
   confetti:
-  firebase_messaging:
+  quiver: ^2.0.1
+  scoped_model: ^1.0.1
+  datetime_picker_formfield: ^1.0.0
+  firebase_messaging: ^7.0.0
   charts_flutter:
   bot_toast:
-  device_preview:
   url_launcher: ^5.5.0
   flare_flutter: ^2.0.6
   searchable_dropdown: ^1.1.3
   agora_rtc_engine: ^3.2.1
+  carousel_slider: ^3.0.0
   permission_handler: ^5.1.0+2
+  bubble_tab_indicator:
+  dotted_border: ^1.0.7
+  modal_bottom_sheet:
+  device_preview:
+  share:
+  sliding_switch:
+  multiselect_dropdown:
+  photo_view:
+
 
 dev_dependencies:
   flutter_test:
@@ -100,6 +118,8 @@ flutter:
     - images/no_message.png
     - images/empty_payment.png
     - images/empty_dashboard.png
+    - images/tab/geeta.jpg
+    - images/cover_image.jpg
     - 0.png
     # - images/namaste.png
     - images/chakra.png
@@ -124,6 +144,9 @@ flutter:
     - family: Montserrat
       fonts:
         - asset: assets/Montserrat-Regular.ttf
+    - family: LohitNepali
+      fonts:
+        - asset: assets/LohitNepali/Lohit-Nepali.ttf
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf

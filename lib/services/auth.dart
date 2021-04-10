@@ -7,11 +7,13 @@ class UserId {
   UserId(
       {@required this.userEmail,
       @required this.uid,
+       this.phone,
       @required this.photoUrl,
       @required this.displayName});
 
   final String uid;
   final String photoUrl;
+  final String phone;
   final String displayName;
   final String userEmail;
 }
@@ -47,6 +49,7 @@ class Auth implements AuthBase {
     }
     return UserId(
         uid: user.uid,
+        phone:user.phoneNumber,
         photoUrl: user.photoURL,
         displayName: user.displayName,
         userEmail: user.email);
@@ -54,8 +57,10 @@ class Auth implements AuthBase {
 
   Future<String> updateUser(String name, photo) async {
     final user = _firebaseAuth.currentUser;
+
     await user.updateProfile(displayName: name);
     await user.updateProfile(photoURL: photo);
+
     await user.reload();
     return user.uid;
   }

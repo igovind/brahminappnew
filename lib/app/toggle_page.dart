@@ -1,42 +1,67 @@
-import 'package:brahminapp/app/home_page/drawer_tiles/my_account/create_profile_page.dart';
-import 'package:brahminapp/app/home_page/drawer_tiles/puja_offering/new_add_edit_puja.dart';
-import 'package:brahminapp/app/home_page/home_page.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:brahminapp/app/account/user_details.dart';
+import 'package:brahminapp/app/bookings/bookings_page.dart';
+import 'package:brahminapp/app/create_profile/create_profile.dart';
+import 'package:brahminapp/app/home/bottom_navigation_bar_page.dart';
+import 'package:brahminapp/app/home/one_more_bottom_navy.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TogglePage extends StatelessWidget {
+import 'astrology/calls/index.dart';
+
+class TogglePage extends StatefulWidget {
   final UserId user;
 
   const TogglePage({Key key, this.user}) : super(key: key);
 
   @override
+  _TogglePageState createState() => _TogglePageState();
+}
+
+class _TogglePageState extends State<TogglePage> {
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-        stream: FireStoreDatabase(uid: user.uid).getUserData,
+        stream: FireStoreDatabase(uid: widget.user.uid).getUserData,
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
+
           if (snapshot.data.data() == null) {
-            return EditProfilePage(
-              uid: user.uid,
-              added: false,
+            return CreateProfile(
+              uid: widget.user.uid,
+            );
+          }
+          bool ready = snapshot.data.data()["ready"] ?? true;
+          if (!ready) {
+            return CreateProfile(
+              uid: widget.user.uid,
+            );
+          }
+          if (UserDetails(snapshot: snapshot).astrologer) {
+            return SecondBottomNavy(
+              userDataSnapshot: snapshot,
+              user: widget.user,
             );
           }
           return Provider<UserId>.value(
-            value: user,
+            value: widget.user,
             child: Provider<DatabaseL>(
-              create: (BuildContext context) =>
-                  FireStoreDatabase(uid: user.uid),
-              child: HomePage(
-                user: user,
-              ),
-              /*  child: NewAddEditPuja(),*/
-            ),
+                create: (BuildContext context) =>
+                    FireStoreDatabase(uid: widget.user.uid),
+                child: BottomNavygationBar(
+                  userDataSnapshot: snapshot,
+                  user: widget.user,
+                )
+                /*  child: NewAddEditPuja(),*/
+                ),
           );
         });
   }

@@ -1,73 +1,59 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/services/Splash_Screen.dart';
+import 'package:brahminapp/common_widgets/hexa_color.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:brahminapp/app/landing_page.dart';
 import 'package:brahminapp/services/auth.dart';
 
-void main() async {
+import 'app/landing_page.dart';
 
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //systemNavigationBarColor: LightColors.kLightYellow, // navigation bar color
-    statusBarColor: Colors.transparent, // status bar color
+    statusBarColor: Colors.transparent
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-     .then((_) { 
-   runApp(MyApp());
+      .then((_) {
+    runApp(MyApp());
   });
   /*runApp( DevicePreview(
     enabled: true,
     builder: (context) => MyApp(),
   ),);*/
-
 }
+
+
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-      builder: DevicePreview.appBuilder,
-      title: 'Purohit dashboard',
-      theme: ThemeData(
-        primaryColor: Color(0XFFffbd59),
-        fontFamily: 'Montserrat',
-      ),
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder<Object>(
+        debugShowCheckedModeBanner: false,
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
+        // builder: DevicePreview.appBuilder,
+        title: 'Purohit dashboard',
+        theme: ThemeData(
+          primaryColor: HexColor("#A50701"), //Color(0xFFffbd59),
+
+          fontFamily: 'Montserrat',
+        ),
+        routes: {'/home': (_) => LandingPage()},
+        home: FutureBuilder<Object>(
           future: Firebase.initializeApp(),
           builder: (context, snapshot) {
-            // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
               return Provider<AuthBase>(
-                create: (context) => Auth(),
-                child: MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-                 // builder: DevicePreview.appBuilder,
-                 builder: BotToastInit(),
-                  navigatorObservers: [BotToastNavigatorObserver()],
-                  title: 'Purohit dashboard',
-                  theme: ThemeData(
-                    primaryColor: Color(0xFFffbd59),
-                    //primarySwatch: Colors.deepOrange,
-                    fontFamily: 'Montserrat',
-                  ),
-                  home: SplashScreen(),
-                  routes: {'/home': (_) => LandingPage()},
-                ),
-              );
+                  create: (context) => Auth(), child: LandingPage());
             }
-            return Scaffold(
-                body: Center(
-                    child: Text('Loading.....') //CircularProgressIndicator()
-                    ));
-          }),
-    );
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:brahminapp/Chat/ChatListModal.dart';
+import 'package:brahminapp/app/home/chat/ChatListModal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'api.dart';
@@ -74,7 +74,6 @@ class FireStoreDatabase implements DatabaseL {
     final reference1 = fireStore.doc(path1);
     await reference.set(data);
     await reference1.set(data);
-    print('$path: $data');
   }
 
   Future<void> updateData({
@@ -86,7 +85,6 @@ class FireStoreDatabase implements DatabaseL {
     final reference1 = fireStore.doc(path1);
     await reference.update(data);
     await reference1.update(data);
-    print('$path: $data');
   }
 
   @override
@@ -177,9 +175,21 @@ class FireStoreDatabase implements DatabaseL {
     return fireStore.collection('Category').snapshots();
   }
 
+  Stream<QuerySnapshot> get getReferrals {
+    return fireStore.collection('/punditUsers/$uid/referrals').snapshots();
+  }
+
   @override
   Stream<DocumentSnapshot> get getUserData {
     return fireStore.doc('punditUsers/$uid/user_profile/user_data').snapshots();
+  }
+
+  Stream<QuerySnapshot> get getNotifications {
+    FirebaseFirestore.instance
+        .collection('punditUsers/$uid/newsFeed')
+        //.orderBy('date', descending: true)
+        .snapshots();
+    return fireStore.collection('punditUsers/$uid/user_profile').snapshots();
   }
 
   @override
@@ -197,8 +207,27 @@ class FireStoreDatabase implements DatabaseL {
     return fireStore.collection('punditUsers/$uid/astro_offering').snapshots();
   }
 
+  Stream<QuerySnapshot> get getTempCall {
+    return fireStore.collection('punditUsers/$uid/tempcall').snapshots();
+  }
+
+  Stream<QuerySnapshot> get getNewsFeed {
+    return fireStore.collection('inventories/need_feed/folder').snapshots();
+  }
+
+  Stream<QuerySnapshot> get getCallHistory {
+    return fireStore
+        .collection('punditUsers/$uid/calls')
+        .orderBy("time", descending: true)
+        .snapshots();
+  }
+
   Stream<DocumentSnapshot> get getStates {
     return fireStore.doc('inventories/state').snapshots();
+  }
+
+  Stream<DocumentSnapshot> get getTabImages {
+    return fireStore.doc('inventories/tab_bar_icons').snapshots();
   }
 
   @override
@@ -207,16 +236,39 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   Stream<QuerySnapshot> get getTrendingPujaList {
-    return fireStore.collection('Trending').orderBy('num').snapshots();
+    return fireStore
+        .collection('Trending')
+        .orderBy('num', descending: true)
+        .snapshots();
   }
 
   Stream<DocumentSnapshot> get getPunditTypes {
     return fireStore.doc('inventories/typesOfPundit').snapshots();
   }
 
+  Stream<DocumentSnapshot> get getAvailableCode {
+    return fireStore.doc('inventories/Folder').snapshots();
+  }
+
+  setAvailableCode() {
+    fireStore.doc("inventories/Folder").update({
+      "available_code": FieldValue.increment(1),
+    });
+  }
+
+  setRefCode({Map<String ,dynamic> data, String ref}) {
+    fireStore.doc("referal/$ref").set(data);
+  }
+
+  Stream<DocumentSnapshot> get getGalleryPic {
+    return FirebaseFirestore.instance
+        .doc('punditUsers/$uid/user_profile/galleryPic')
+        .snapshots();
+  }
+
   Stream<QuerySnapshot> get getOrderdPujaOfferingListBySubscriber {
     return fireStore
-        .collection('punditUsers/$uid/puja_offering')
+        .collection('referal/G100')
         .orderBy('subscriber', descending: true)
         .snapshots();
   }
@@ -228,6 +280,43 @@ class FireStoreDatabase implements DatabaseL {
     fireStore
         .doc('punditUsers/$uid/upComingPuja/$bookingId')
         .update({'puja_status': true}).whenComplete(() => print("oh yes"));
+  }
+
+  setOnlineStatus({bool value}) {
+    fireStore
+        .doc('punditUsers/$uid/user_profile/user_data')
+        .update({'online': value}).whenComplete(() {
+      fireStore.doc("Avaliable_pundit/$uid").update({'online': value});
+    });
+    if (!value) {
+      setMessageStatus(value: false);
+      setCallStatus(value: false);
+      setVideoStatus(value: false);
+    }
+  }
+
+  setMessageStatus({bool value}) {
+    fireStore
+        .doc('punditUsers/$uid/user_profile/user_data')
+        .update({'chatOk': value}).whenComplete(() {
+      fireStore.doc("Avaliable_pundit/$uid").update({'chatOk': value});
+    });
+  }
+
+  setCallStatus({bool value}) {
+    fireStore
+        .doc('punditUsers/$uid/user_profile/user_data')
+        .update({'callOk': value}).whenComplete(() {
+      fireStore.doc("Avaliable_pundit/$uid").update({'callOk': value});
+    });
+  }
+
+  setVideoStatus({bool value}) {
+    fireStore
+        .doc('punditUsers/$uid/user_profile/user_data')
+        .update({'videoOk': value}).whenComplete(() {
+      fireStore.doc("Avaliable_pundit/$uid").update({'videoOk': value});
+    });
   }
 
   setAstrology(
@@ -381,6 +470,10 @@ class FireStoreDatabase implements DatabaseL {
     fireStore.doc('Avaliable_pundit/$uid').update({
       'PujaKeywords': FieldValue.arrayUnion([data])
     });
+  }
+
+  void deleteBooking(String id) {
+    fireStore.collection('punditUsers/$uid/bookingrequest').doc(id).delete();
   }
 
   @override
