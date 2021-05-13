@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -17,11 +18,13 @@ import '../../common_widgets/custom_slider.dart';
 class EditAstrologyPrices extends StatelessWidget {
   final UserId userId;
   final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final language;
 
   const EditAstrologyPrices({
     Key key,
     this.userId,
     this.snapshot,
+    this.language,
   }) : super(key: key);
 
   @override
@@ -51,7 +54,13 @@ class EditAstrologyPrices extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Astrology",
+                  Language(code: language, text: [
+                    "Astrology ",
+                    "ज्योतिष ",
+                    "জ্যোতিষ ",
+                    "ஜோதிடம் ",
+                    "జ్యోతిషశాస్త్రం "
+                  ]).getText,
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.w700),
                 ),
@@ -70,6 +79,7 @@ class EditAstrologyPrices extends StatelessWidget {
                                       topRight: Radius.circular(30))),
                               height: MediaQuery.of(context).size.height * 0.9,
                               child: EditAstrologyForm(
+                                language: language,
                                 uid: userId.uid,
                                 snapshot: snapshot,
                               ));
@@ -77,7 +87,13 @@ class EditAstrologyPrices extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      "Edit",
+                      Language(code: language, text: [
+                        "Edit ",
+                        "संपादित करें ",
+                        "সম্পাদনা করুন ",
+                        "தொகு ",
+                        "సవరించండి "
+                      ]).getText,
                       style: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.w700),
@@ -103,7 +119,13 @@ class EditAstrologyPrices extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Available",
+                        Language(code: language, text: [
+                          "Available",
+                          "उपलब्ध ",
+                          "উপলব্ধ ",
+                          "கிடைக்கிறது ",
+                          "అందుబాటులో ఉంది "
+                        ]).getText,
                         style: TextStyle(color: Colors.white),
                       ),
                       CustomSlider(
@@ -130,7 +152,13 @@ class EditAstrologyPrices extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Message receive",
+                              Language(code: language, text: [
+                                "Recieve Message ",
+                                "संदेश प्राप्त करें ",
+                                "বার্তা গ্রহণ করুন ",
+                                "செய்திகளைப் பெறுக ",
+                                "సందేశాలను స్వీకరించండి "
+                              ]).getText,
                               style: TextStyle(color: Colors.white),
                             ),
                             CustomSlider(
@@ -156,7 +184,14 @@ class EditAstrologyPrices extends StatelessWidget {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Audio call receive",
+                            Text(
+                                Language(code: language, text: [
+                                  "Receive Audio Calls ",
+                                  "ऑडियो कॉल प्राप्त करें ",
+                                  "অডিও কল গ্রহণ করুন ",
+                                  "ஆடியோ அழைப்புகளைப் பெறுக ",
+                                  "ఆడియో కాల్‌లను స్వీకరించండి "
+                                ]).getText,
                                 style: TextStyle(color: Colors.white)),
                             CustomSlider(
                               animationDuration: Duration(milliseconds: 100),
@@ -181,7 +216,14 @@ class EditAstrologyPrices extends StatelessWidget {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("video call receive",
+                            Text(
+                                Language(code: language, text: [
+                                  "Recieve Video Calls ",
+                                  "वीडियो कॉल प्राप्त करें ",
+                                  "ভিডিও কল গ্রহণ করুন ",
+                                  "வீடியோ அழைப்புகளைப் பெறுக ",
+                                  "వీడియో కాల్‌లను స్వీకరించండి "
+                                ]).getText,
                                 style: TextStyle(color: Colors.white)),
                             CustomSlider(
                               animationDuration: Duration(milliseconds: 100),
@@ -208,7 +250,13 @@ class EditAstrologyPrices extends StatelessWidget {
               height: height(20),
             ),
             Text(
-              "Wallet",
+              Language(code: language, text: [
+                "Wallet ",
+                "झोली",
+                "মানিব্যাগ ",
+                "பணப்பை ",
+                "వాలెట్ "
+              ]).getText,
               style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w700,
@@ -222,15 +270,24 @@ class EditAstrologyPrices extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Rs/- ${snapshot.data.data()["coins"]}",style: TextStyle(
-                color: Colors.black54, fontWeight: FontWeight.bold)),
+                  Text("Rs/- ${snapshot.data.data()["coins"]}",
+                      style: TextStyle(
+                          color: Colors.black54, fontWeight: FontWeight.bold)),
                   FlatButton(
-                    child: Text("Claim",
+                    child: Text(
+                        Language(code: language, text: [
+                          "Coins ",
+                          "सिक्के ",
+                          "কয়েন ",
+                          "நாணயங்கள் ",
+                          "నాణేలు "
+                        ]).getText,
                         style: TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold)),
                     onPressed: () {
                       FirebaseFirestore.instance
-                          .doc("coindWid/${UserDetails(snapshot: snapshot).uid}")
+                          .doc(
+                              "coindWid/${UserDetails(snapshot: snapshot).uid}")
                           .set({"price": snapshot.data.data()["coins"]});
                       BotToast.showText(text: "Claimed");
                     },
@@ -242,7 +299,13 @@ class EditAstrologyPrices extends StatelessWidget {
               height: height(20),
             ),
             Text(
-              "Call history",
+              Language(code: language, text: [
+                "Last calls ",
+                "पिछले कॉल्स  ",
+                "শেষ কল ",
+                "கடைசி அழைப்புகள் ",
+                "చివరి కాల్స్ "
+              ]).getText,
               style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w700,
@@ -262,14 +325,15 @@ class EditAstrologyPrices extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return CallTile(
+                            language: language,
                             name: snapshot.data.docs[index].data()["title"],
                             image: snapshot.data.docs[index].data()["image"],
                             duration:
                                 snapshot.data.docs[index].data()["subtitle"],
                             time: snapshot.data.docs[index].data()["time"],
                             type: snapshot.data.docs[index].data()["type"],
-                            transactionId:
-                                snapshot.data.docs[index].data()["TransactionId"],
+                            transactionId: snapshot.data.docs[index]
+                                .data()["TransactionId"],
                             coins: snapshot.data.docs[index].data()["coins"],
                           );
                         },
@@ -297,6 +361,7 @@ class CallTile extends StatelessWidget {
   final String type;
   final int transactionId;
   final int coins;
+  final language;
 
   const CallTile(
       {Key key,
@@ -306,7 +371,8 @@ class CallTile extends StatelessWidget {
       this.duration,
       this.type,
       this.transactionId,
-      this.coins})
+      this.coins,
+      this.language})
       : super(key: key);
 
   @override
@@ -351,7 +417,8 @@ class CallTile extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    "Transaction ID $transactionId",
+                    Language(code: language, text: [" ", " ", " ", " ", " "])
+                        .getText,
                     style: TextStyle(
                         color: Colors.black54,
                         fontSize: 10,

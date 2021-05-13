@@ -9,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 
+import '../languages.dart';
+
 List<Category> trendingPujaList = [];
 List<String> trendingPujaNameList = [];
 
 class NewAddAndEditPuja extends StatefulWidget {
   final uid;
   final DocumentSnapshot docSnap;
+  final language;
 
-  const NewAddAndEditPuja({Key key, @required this.uid, @required this.docSnap})
+  const NewAddAndEditPuja(
+      {Key key, @required this.uid, @required this.docSnap, this.language})
       : super(key: key);
 
   @override
@@ -71,7 +75,15 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                 keyword == null ? '#' + _name + '/' : keyword,
               ))
           .whenComplete(() {
-            BotToast.showText(text: "$_name adeed in your service list");
+            BotToast.showText(
+              text: Language(code: widget.language, text: [
+                "$_name Added in your puja service ",
+                "$_name आपकी पूजा सेवा में जोड़ा गया ",
+                "$_name আপনার পূজা পরিষেবায় যুক্ত হয়েছে ",
+                "$_name உங்கள் பூஜை சேவையில் சேர்க்கப்பட்டது ",
+                "$_name మీ పూజా సేవలో చేర్చబడింది "
+              ]).getText,
+            );
           });
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
@@ -90,7 +102,14 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'PanditD': _additionalDisctription,
         'time': _time,
       }, pid: widget.docSnap.id);
-      BotToast.showText(text: "$_name is updated");
+      BotToast.showText(
+          text: Language(code: widget.language, text: [
+        "$_name is updated ",
+        "$_name अपडेट किया गया है ",
+        "$_name আপডেট হয়েছে ",
+        "$_name புதுப்பிக்கப்பட்டது ",
+        "$_name నవీకరించబడింది "
+      ]).getText);
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -136,7 +155,14 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       Navigator.of(context).pop();
                     }
                     if (keyword == null) {
-                      BotToast.showText(text: "Please select puja type");
+                      BotToast.showText(
+                          text: Language(code: widget.language, text: [
+                        "Please select puja type ",
+                        "कृपया पूजा प्रकार चुनें ",
+                        "পূজা টাইপ নির্বাচন করুন ",
+                        "பூஜா வகையைத் தேர்ந்தெடுக்கவும் ",
+                        "దయచేసి పూజా రకాన్ని ఎంచుకోండి "
+                      ]).getText);
                     }
                   } else {
                     if (_validateAndSaveForm()) {
@@ -146,7 +172,13 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                   }
                 },
                 child: Text(
-                  "Save",
+                  Language(code: widget.language, text: [
+                    "Save ",
+                    "पूर्ण ",
+                    "সম্পন্ন ",
+                    "முடிந்தது ",
+                    "పూర్తి "
+                  ]).getText,
                   style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -217,12 +249,25 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         ),
         child: TextFormField(
           decoration: InputDecoration(
-            labelText: 'Puja name',
+            labelText: Language(code: widget.language, text: [
+              "Name of puja ",
+              "पूजा का नाम  ",
+              "নাম উপাসনা ",
+              "வழிபாட்டின் பெயர் ",
+              "ఆరాధన పేరు "
+            ]).getText,
             border: InputBorder.none,
           ),
           initialValue: _name,
-          validator: (value) =>
-              value.isNotEmpty ? null : 'Name can\'t be empty',
+          validator: (value) => value.isNotEmpty
+              ? null
+              : Language(code: widget.language, text: [
+                  "This field is required",
+                  "यह फ़ील्ड आवश्यक है",
+                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                  "இந்த புலம் தேவை",
+                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                ]).getText,
           onSaved: (value) => _name = value,
         ),
       ),
@@ -239,14 +284,29 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         ),
         child: TextFormField(
           decoration: InputDecoration(
-              border: InputBorder.none, labelText: 'Rate', prefixText: '₹'),
+              border: InputBorder.none,
+              labelText: Language(code: widget.language, text: [
+                "Rate ",
+                "मूल्यांकन करें ",
+                "হার ",
+                "விகிதம் ",
+                "రేటు "
+              ]).getText,
+              prefixText: '₹'),
           initialValue: _rate != null ? '$_rate' : '',
           keyboardType: TextInputType.numberWithOptions(
             signed: false,
             decimal: false,
           ),
-          validator: (value) =>
-              value.isNotEmpty ? null : 'Rate can\'t be empty',
+          validator: (value) => value.isNotEmpty
+              ? null
+              : Language(code: widget.language, text: [
+                  "This field is required",
+                  "यह फ़ील्ड आवश्यक है",
+                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                  "இந்த புலம் தேவை",
+                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                ]).getText,
           onSaved: (value) => _rate = double.tryParse(value) ?? 0,
         ),
       ),
@@ -264,9 +324,23 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         child: TextFormField(
           initialValue: _time,
           decoration: InputDecoration(
-              border: InputBorder.none, labelText: 'Duration in min'),
-          validator: (value) =>
-              value.isNotEmpty ? null : 'Duration can\'t be empty',
+              border: InputBorder.none,
+              labelText: Language(code: widget.language, text: [
+                "How long will Puja last? ",
+                "पूजा कितने देर चलेगी ? ",
+                "পূজা আর কতক্ষণ চলবে? ",
+                "பூஜை எவ்வளவு காலம் நீடிக்கும்? ",
+                "పూజ ఎంతకాలం ఉంటుంది? "
+              ]).getText),
+          validator: (value) => value.isNotEmpty
+              ? null
+              : Language(code: widget.language, text: [
+                  "This field is required",
+                  "यह फ़ील्ड आवश्यक है",
+                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                  "இந்த புலம் தேவை",
+                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                ]).getText,
           onSaved: (value) => _time = value, // = int.tryParse(value) ?? 0,
         ),
       ),
@@ -286,10 +360,24 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
               ),
               child: TextFormField(
                 decoration: InputDecoration(
-                    border: InputBorder.none, labelText: 'Pujan samagri'),
+                    border: InputBorder.none,
+                    labelText: Language(code: widget.language, text: [
+                      "Puja samagri ",
+                      "पूजा की सामग्री  ",
+                      "পূজা উপাদান ",
+                      "பூஜை பொருள் ",
+                      "పూజా పదార్థం "
+                    ]).getText),
                 initialValue: samagri,
-                validator: (value) =>
-                    value.isNotEmpty ? null : 'Pujan samagri can\'t be empty',
+                validator: (value) => value.isNotEmpty
+                    ? null
+                    : Language(code: widget.language, text: [
+                        "This field is required",
+                        "यह फ़ील्ड आवश्यक है",
+                        "ঘরটি অবশ্যই পূরণ করতে হবে",
+                        "இந்த புலம் தேவை",
+                        "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                      ]).getText,
                 onSaved: (value) => samagri = value,
               ),
             )
@@ -306,7 +394,14 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
           keyboardType: TextInputType.multiline,
           maxLines: null,
           decoration: InputDecoration(
-              border: InputBorder.none, labelText: 'Benefits from this puja'),
+              border: InputBorder.none,
+              labelText: Language(code: widget.language, text: [
+                "What are the benefits of doing this pooja? ",
+                "ये पूजा करने के क्या लाभ है?",
+                "এই পুজো করার সুবিধা কী? ",
+                "இந்த பூஜை செய்வதன் நன்மைகள் என்ன? ",
+                "ఈ పూజ చేయడం వల్ల కలిగే ప్రయోజనాలు ఏమిటి? "
+              ]).getText),
           initialValue: _benefits,
           onSaved: (value) => _benefits = value,
         ),
@@ -324,7 +419,14 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         ),
         child: TextFormField(
           decoration: InputDecoration(
-              border: InputBorder.none, labelText: 'Additional Description'),
+              border: InputBorder.none,
+              labelText: Language(code: widget.language, text: [
+                "Any additional information? ",
+                "कोई अतिरिक्त जानकारी ? ",
+                "কোন অতিরিক্ত তথ্য? ",
+                "கூடுதல் தகவல் ஏதேனும் உள்ளதா? ",
+                "ఏదైనా అదనపు సమాచారం ఉందా? "
+              ]).getText),
           initialValue: _additionalDisctription,
           keyboardType: TextInputType.multiline,
           maxLines: null,
@@ -348,12 +450,24 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Choose Category",
+                    Language(code: widget.language, text: [
+                      "What type of puja is this? ",
+                      "यह पूजा किस प्रकार की है ? ",
+                      "এটি কোন ধরণের উপাসনা? ",
+                      "இது என்ன வகையான வழிபாடு? ",
+                      "ఇది ఏ రకమైన ఆరాధన? "
+                    ]).getText,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   SizedBox(width: 25),
                   SearchableDropdown.single(
-                    hint: Text("Puja type"),
+                    hint: Text(Language(code: widget.language, text: [
+                      "Type of puja ",
+                      "पूजा का प्रकार ",
+                      "পূজা টাইপ ",
+                      "பூஜை வகை ",
+                      "పూజ రకం "
+                    ]).getText),
                     isExpanded: true,
                     displayClearIcon: false,
                     items:
@@ -381,14 +495,33 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                     },
                   ),
                   Text(
-                    '*Select this field very carefully as this field will decide pujan samagri*',
+                    Language(code: widget.language, text: [
+                      "*Select this field very carefully as this field will decide pujan samagri* ",
+                      "* इस क्षेत्र का चयन बहुत सावधानी से करें क्योंकि यह क्षेत्र पूजा सामग्री तय करेगा * ",
+                      "* এই পিএলটি খুব গাড়ি চালিতভাবে নির্বাচন করুন এই পিএলভি ভিলা দেশি ভূজন সমাক্রি হিসাবে * ",
+                      "* இந்த புலம் வழிபாட்டுப் பொருட்களைத் தீர்மானிக்கும் என்பதால் இந்த துறையை மிகவும் கவனமாகத் தேர்ந்தெடுக்கவும் * ",
+                      "* ఈ పిఎల్‌టిని ఈ పిఎల్‌వి విల్లా దేశీతే భుజన్ సమాక్రీగా చాలా సరళంగా ఎంచుకోండి * "
+                    ]).getText,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    Language(code: widget.language, text: [
+                      "If the puja service you are adding is in this list or matches it, then please select it! If not, select \"Other\" ",
+                      "आप जो पूजा सेवा जोड़  रहे है अगर वो इस सूची में है या उससे मेल खाता है तो कृपया उसे सेलेक्ट करे! अगर नहीं है तो \"Other\" सेलेक्ट कीजिये  ",
+                      "আপনি যে পূজা সেবাটি যুক্ত করছেন তা যদি এই তালিকায় থাকে বা এটির সাথে মেলে, তবে দয়া করে এটি নির্বাচন করুন! যদি তা না হয় তবে \"Other\" নির্বাচন করুন ",
+                      "நீங்கள் சேர்க்கும் வழிபாட்டு சேவை இந்த பட்டியலில் இருந்தால் அல்லது பொருந்தினால், தயவுசெய்து அதைத் தேர்ந்தெடுக்கவும்! இல்லையென்றால், \"Other\" என்பதைத் தேர்ந்தெடுக்கவும் ",
+                      "మీరు జోడించే ఆరాధన సేవ ఈ జాబితాలో ఉంటే లేదా దానికి సరిపోలితే, దయచేసి దాన్ని ఎంచుకోండి! కాకపోతే, \"Other\" ఎంచుకోండి "
+                    ]).getText,
                     style: TextStyle(color: Colors.red),
                   ),
                 ],
               ),
             ),
       SizedBox(
-        height:  MagicScreen(height: 10,context: context).getHeight,
+        height: MagicScreen(height: 10, context: context).getHeight,
       ),
       widget.docSnap != null
           ? SizedBox()
@@ -402,7 +535,13 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
               padding: EdgeInsets.all(8),
               child: Column(
                 children: [
-                  Text("Samagri"),
+                  Text(Language(code: widget.language, text: [
+                    "Samagri ",
+                    "सामग्री  ",
+                    "উপাদান ",
+                    "பொருள் ",
+                    "పదార్థం "
+                  ]).getText),
                   keyword == null
                       ? SizedBox()
                       : TextFormField(

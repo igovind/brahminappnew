@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/hexa_color.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -14,9 +15,14 @@ class HomePageFolder extends StatefulWidget {
   final AsyncSnapshot<DocumentSnapshot> snapshot;
   final AsyncSnapshot<DocumentSnapshot> userDataSnapshot;
   final UserId userId;
+  final language;
 
   const HomePageFolder(
-      {Key key, this.snapshot, this.userId, this.userDataSnapshot})
+      {Key key,
+      this.snapshot,
+      this.userId,
+      this.userDataSnapshot,
+      this.language})
       : super(key: key);
 
   @override
@@ -29,9 +35,11 @@ class _HomePageFolderState extends State<HomePageFolder> {
     double height(double height) {
       return MagicScreen(context: context, height: height).getHeight;
     }
+
     double width(double width) {
       return MagicScreen(context: context, width: width).getWidth;
     }
+
     String icon_1 = widget.snapshot.data.data()["icon_1"];
     String icon_2 = widget.snapshot.data.data()["icon_2"];
     String icon_3 = widget.snapshot.data.data()["icon_3"];
@@ -84,11 +92,11 @@ class _HomePageFolderState extends State<HomePageFolder> {
             child: ListView(
               children: [
                 SizedBox(
-                  height: height(140),
+                  height: height(120),
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  height: height(200),
+                  height: height(220),
                   // width: 300,
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -106,34 +114,77 @@ class _HomePageFolderState extends State<HomePageFolder> {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
-                          mainAxisSpacing: 20,
+                          mainAxisSpacing: 10,
                           childAspectRatio: 1.0 / 1),
                       shrinkWrap: true,
                       children: [
                         CustomGridTile(
                           image: icon_1,
+                          name: Language(code: widget.language, text: [
+                            "Bhagavad Gita  ",
+                            "भगवद गीता ",
+                            "ভগবদ গীতা  ",
+                            "பகவத் கீதை ் ",
+                            "భగవద్గీత "
+                          ]).getText,
                           child: ComingSoon(),
                         ),
                         CustomGridTile(
+                          name: Language(code: widget.language, text: [
+                            "Dashboard ",
+                            "डैशबोर्ड ",
+                            "ড্যাশবোর্ড ",
+                            "டாஷ்போர்டு ",
+                            "డాష్బోర్డ్ "
+                          ]).getText,
                           image: icon_2,
                           child: ComingSoon(),
                         ),
                         CustomGridTile(
+                          name: Language(code: widget.language, text: [
+                            "Hindu calender ",
+                            "हिंदू कैलेंडर ",
+                            "হিন্দু ক্যালেন্ডার ",
+                            "இந்து நாட்காட்டி ",
+                            "హిందూ క్యాలెండర్ "
+                          ]).getText,
                           image: icon_3,
                           child: ComingSoon(),
                         ),
                         CustomGridTile(
+                          name: Language(code: widget.language, text: [
+                            "Referal ",
+                            "रेफ़रल ",
+                            "রেফারেল ",
+                            "பரிந்துரை ",
+                            "రెఫరల్ "
+                          ]).getText,
                           image: icon_4,
                           child: Referals(
+                            language: widget.language,
                             refSnap: widget.snapshot,
                             snapshot: widget.userDataSnapshot,
                           ),
                         ),
                         CustomGridTile(
+                          name: Language(code: widget.language, text: [
+                            "Panchang ",
+                            "पंचांग ",
+                            "পঞ্চং ",
+                            "பஞ்சங் ",
+                            "పంచాంగ్ "
+                          ]).getText,
                           image: icon_5,
                           child: ComingSoon(),
                         ),
                         CustomGridTile(
+                          name: Language(code: widget.language, text: [
+                            "Live Darshan ",
+                            "लाइव दर्शन ",
+                            "লাইভ দর্শন ",
+                            "நேரடி தரிசனம் ",
+                            "ప్రత్యక్ష దర్శనం "
+                          ]).getText,
                           image: icon_6,
                           child: ComingSoon(),
                         ),
@@ -164,7 +215,13 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                 width: 5,
                               ),
                               Text(
-                                'Complete 7 puja and claim your reward',
+                                Language(code: widget.language, text: [
+                                  "Complete 7 puja and get your reward ",
+                                  "7 पूजा पूरी करें और अपना इनाम पाएं ",
+                                  "7 টি পূজা সম্পূর্ণ করুন এবং আপনার পুরষ্কার পান ",
+                                  "7 பூஜைகளை முடித்து உங்கள் வெகுமதியைப் பெறுங்கள் ",
+                                  "7 పూజలు పూర్తి చేసి మీ బహుమతిని పొందండి "
+                                ]).getText,
                                 style: TextStyle(
                                     color: Color(0XFFffbd59), fontSize: 12),
                               ),
@@ -195,7 +252,13 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                     width: 5,
                                   ),
                                   Text(
-                                    'Criteria fulfilled claim your reward',
+                                    Language(code: widget.language, text: [
+                                      "Get your reward now ",
+                                      "अब अपना इनाम पाओ ",
+                                      "এখনই আপনার পুরষ্কার পান ",
+                                      "உங்கள் வெகுமதியை இப்போது பெறுங்கள் ",
+                                      "మీ బహుమతిని ఇప్పుడే పొందండి "
+                                    ]).getText,
                                     style: TextStyle(
                                         color: Colors.green, fontSize: 12),
                                   ),
@@ -207,9 +270,28 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                         showDialog(
                                             context: context,
                                             child: AlertDialog(
-                                              title: Text('Reward Claimed'),
+                                              title: Text(
+                                                Language(
+                                                    code: widget.language,
+                                                    text: [
+                                                      "Reward Claimed ",
+                                                      "इनाम के लिए आवेदन किया ",
+                                                      "পুরষ্কার জন্য আবেদন করা ",
+                                                      "வெகுமதிக்கு விண்ணப்பிக்கப்பட்டது ",
+                                                      "బహుమతి కోసం దరఖాస్తు "
+                                                    ]).getText,
+                                              ),
                                               content: Text(
-                                                  'We will soon add your reward'),
+                                                Language(
+                                                    code: widget.language,
+                                                    text: [
+                                                      "We will soon give your reward ",
+                                                      "हम जल्द ही आपका इनाम देंगे ",
+                                                      "আমরা শীঘ্রই আপনার পুরষ্কার দেব ",
+                                                      "உங்கள் வெகுமதியை விரைவில் தருவோம் ",
+                                                      "మేము త్వరలో మీ బహుమతిని ఇస్తాము "
+                                                    ]).getText,
+                                              ),
                                             ));
                                         FirebaseFirestore.instance
                                             .collection('rewardClaim')
@@ -238,7 +320,25 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                             });
                                       },
                                       child: Text(
-                                        claimed ? 'Claimed' : 'Claim Reward',
+                                        claimed
+                                            ? Language(
+                                                code: widget.language,
+                                                text: [
+                                                    "Please wait ",
+                                                    "कृपया प्रतीक्षा करें ",
+                                                    "অনুগ্রহপূর্বক অপেক্ষা করুন ",
+                                                    "தயவுசெய்து காத்திருங்கள் ",
+                                                    "దయచేసి వేచి ఉండండి "
+                                                  ]).getText
+                                            : Language(
+                                                code: widget.language,
+                                                text: [
+                                                    "Send request ",
+                                                    "अनुरोध भेजें ",
+                                                    "অনুরোধ প্রেরণ করুন ",
+                                                    "கோரிக்கையை அனுப்பவும் ",
+                                                    "అభ్యర్థన పంపు "
+                                                  ]).getText,
                                         style: TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.w800),
@@ -271,7 +371,13 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                     width: 5,
                                   ),
                                   Text(
-                                    'Complete 7 puja and claim your reward',
+                                    Language(code: widget.language, text: [
+                                      "Complete 7 puja and get your reward ",
+                                      "7 पूजा पूरी करें और अपना इनाम पाएं ",
+                                      "7 টি পূজা সম্পূর্ণ করুন এবং আপনার পুরষ্কার পান ",
+                                      "7 பூஜைகளை முடித்து உங்கள் வெகுமதியைப் பெறுங்கள் ",
+                                      "7 పూజలు పూర్తి చేసి మీ బహుమతిని పొందండి "
+                                    ]).getText,
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontSize: 12,
@@ -367,9 +473,11 @@ class _HomePageFolderState extends State<HomePageFolder> {
 
 class CustomGridTile extends StatelessWidget {
   final image;
+  final name;
   final Widget child;
 
-  const CustomGridTile({Key key, this.image, this.child}) : super(key: key);
+  const CustomGridTile({Key key, this.image, this.child, this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -392,24 +500,37 @@ class CustomGridTile extends StatelessWidget {
         );
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          height: MagicScreen(height: 50, context: context).getHeight,
-          width: MagicScreen(height: 50, context: context).getHeight,
-          child: Image.network(image),
-          decoration: BoxDecoration(
-              /* border: Border.all(
+          borderRadius: BorderRadius.circular(10),
+          child: Column(
+            children: [
+              Container(
+                height: MagicScreen(height: 75, context: context).getHeight,
+                //width: MagicScreen(width: 80, context: context).getWidth,
+                child: Image.network(image),
+                decoration: BoxDecoration(
+                    /* border: Border.all(
                 color: Colors.black54, style: BorderStyle.solid, width: 0.5),*/
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: HexColor("#F4D27A"),
-                  blurRadius: 5.0,
+                    color: Colors.white,
+                    /* boxShadow: [
+                  BoxShadow(
+                    color: HexColor("#F4D27A"),
+                    blurRadius: 5.0,
+                  ),
+                ],*/
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              Expanded(
+                child: Text(
+                  "$name",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: HexColor("#70201C")),
                 ),
-              ],
-              borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
+              )
+            ],
+          )),
     );
   }
 }

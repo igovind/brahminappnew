@@ -6,10 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../languages.dart';
+
 class AdhaarDetailsPage extends StatelessWidget {
   final uid;
-
-  const AdhaarDetailsPage({Key key, this.uid}) : super(key: key);
+  final language;
+  const AdhaarDetailsPage({Key key, this.uid, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class AdhaarDetailsPage extends StatelessWidget {
           }
           if (snapshot.data.data() == null) {
             return EditAdhaarDetails(
+              language: language,
               uid: uid,
             );
           } else {
@@ -59,6 +62,7 @@ class AdhaarDetailsPage extends StatelessWidget {
                               height: MagicScreen(height: 700, context: context)
                                   .height,
                               child: EditAdhaarDetails(
+                                language: language,
                                 adhaarName: name,
                                 adhaarNumber: adhaarNumber,
                                 frontAdhaarUrl: front,
@@ -79,7 +83,13 @@ class AdhaarDetailsPage extends StatelessWidget {
                           color: Colors.deepOrangeAccent,
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        "Edit",
+                        Language(code: language, text: [
+                          "Edit ",
+                          "संपादित करें ",
+                          "সম্পাদনা করুন ",
+                          "தொகு ",
+                          "సవరించండి "
+                        ]).getText,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,

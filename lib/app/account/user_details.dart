@@ -17,6 +17,7 @@ class UserDetails {
       snapshot == null ? "" : snapshot.data.data()["refCode"] ?? "000";
 
   String get state => snapshot == null ? "" : snapshot.data.data()["state"];
+  String get language => snapshot == null ? "" : snapshot.data.data()["langCode"];
 
   String get city => snapshot == null ? "" : snapshot.data.data()["lastName"];
 

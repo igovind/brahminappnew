@@ -1,8 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/bank_details.dart';
+import 'package:brahminapp/app/account/choose_language.dart';
 import 'package:brahminapp/app/account/edit_profile.dart';
 import 'package:brahminapp/app/account/gallery_page.dart';
 import 'package:brahminapp/app/account/user_details.dart';
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -51,10 +53,32 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<void> _confirmSignOut(context) async {
     final didRequestSignOut = await PlatformAlertDialog(
-      title: 'Logout',
-      content: 'Are you sure that you want to logout?',
-      cancelActionText: 'Cancel',
-      defaultActionText: 'Logout',
+      title: Language(
+              code: UserDetails(snapshot: widget.snapshot).language,
+              text: ["Logout", "लॉग आउट", "প্রস্থান", "வெளியேறு", "లాగ్ అవుట్"])
+          .getText,
+      content: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Are you sure that you want to logout?",
+            "क्या आप वाकई लॉगआउट करना चाहते हैं?",
+            "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+            "நீங்கள் வெளியேற விரும்புகிறீர்களா?",
+            "మీరు లాగ్ అవుట్ చేయాలనుకుంటున్నారా?"
+          ]).getText,
+      cancelActionText: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Cancel",
+            "रद्द करें",
+            "বাতিল",
+            "ரத்துசெய்",
+            "రద్దు చేయండి"
+          ]).getText,
+      defaultActionText: Language(
+              code: UserDetails(snapshot: widget.snapshot).language,
+              text: ["Logout", "लॉग आउट", "প্রস্থান", "வெளியேறு", "లాగ్ అవుట్"])
+          .getText,
     ).show(context);
     if (didRequestSignOut == true) {
       _signOut(context);
@@ -84,10 +108,42 @@ class _AccountPageState extends State<AccountPage> {
 
   updateLocation() async {
     final didRequestSignOut = await PlatformAlertDialog(
-      title: 'Update location',
-      content: 'Are you sure that you want to update your current location?',
-      cancelActionText: 'Cancel',
-      defaultActionText: 'Update',
+      title: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Update location ",
+            "स्थान अपडेट करें ",
+            "আপডেট অবস্থান ",
+            "இருப்பிடத்தைப் புதுப்பிக்கவும் ",
+            "స్థానాన్ని నవీకరించండి "
+          ]).getText,
+      content: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Are you sure that you want to update your current location? ",
+            "क्या आप वाकई अपने वर्तमान स्थान को अपडेट करना चाहते हैं? ",
+            "আপনি কি নিশ্চিত যে আপনি আপনার বর্তমান অবস্থান আপডেট করতে চান? ",
+            "உங்கள் தற்போதைய இருப்பிடத்தைப் புதுப்பிக்க விரும்புகிறீர்களா? ",
+            "మీరు మీ ప్రస్తుత స్థానాన్ని నవీకరించాలనుకుంటున్నారా? "
+          ]).getText,
+      cancelActionText: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Cancel ",
+            "रद्द करें ",
+            "বাতিল ",
+            "ரத்துசெய் ",
+            "రద్దు చేయండి "
+          ]).getText,
+      defaultActionText: Language(
+          code: UserDetails(snapshot: widget.snapshot).language,
+          text: [
+            "Update ",
+            "अपडेट करें ",
+            "হালনাগাদ ",
+            "புதுப்பிப்பு ",
+            "నవీకరణ "
+          ]).getText,
     ).show(context);
     if (didRequestSignOut == true) {
       setState(() {
@@ -100,7 +156,16 @@ class _AccountPageState extends State<AccountPage> {
           setState(() {
             locationLoading = false;
           });
-          BotToast.showText(text: "Location is updated");
+          BotToast.showText(
+              text: Language(
+                  code: UserDetails(snapshot: widget.snapshot).language,
+                  text: [
+                "Location is updated ",
+                "स्थान अपडेट किया गया है ",
+                "অবস্থান আপডেট হয়েছে ",
+                "இடம் புதுப்பிக்கப்பட்டது ",
+                "స్థానం నవీకరించబడింది "
+              ]).getText);
         });
       });
     }
@@ -131,7 +196,7 @@ class _AccountPageState extends State<AccountPage> {
                 child: CircularProgressIndicator(),
               )
             : SingleChildScrollView(
-              child: Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -144,7 +209,8 @@ class _AccountPageState extends State<AccountPage> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 boxShadow: [
-                                  BoxShadow(color: Colors.black54, blurRadius: 5)
+                                  BoxShadow(
+                                      color: Colors.black54, blurRadius: 5)
                                 ],
                                 image: DecorationImage(
                                     image: NetworkImage(
@@ -170,11 +236,14 @@ class _AccountPageState extends State<AccountPage> {
                                                   Theme.of(context).canvasColor,
                                               borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(30),
-                                                  topRight: Radius.circular(30))),
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.95,
+                                                  topRight:
+                                                      Radius.circular(30))),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.95,
                                           child: EditProfile(
+
                                             uid: widget.userId.uid,
                                             snapshot: widget.snapshot,
                                           ));
@@ -187,12 +256,23 @@ class _AccountPageState extends State<AccountPage> {
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.black54, blurRadius: 3)
+                                            color: Colors.black54,
+                                            blurRadius: 3)
                                       ],
                                       color: Colors.deepOrangeAccent,
                                       borderRadius: BorderRadius.circular(20)),
                                   child: Text(
-                                    "Edit profile",
+                                    Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Edit profile ",
+                                          "प्रोफ़ाइल संपादित करें ",
+                                          "জীবন বৃত্তান্ত সম্পাদনা ",
+                                          "சுயவிவரத்தைத் திருத்து ",
+                                          "ప్రొఫైల్‌ను సవరించండి "
+                                        ]).getText,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
@@ -297,64 +377,140 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                     ),
                     SizedBox(
-                      height: MagicScreen(height: 20, context: context).getHeight,
+                      height:
+                          MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
-                      title: "Gallery",
+                      title: Language(
+                          code: UserDetails(snapshot: widget.snapshot).language,
+                          text: [
+                            "Gallery ",
+                            "गेलरी ",
+                            "গ্যালারী ",
+                            "கேலரி ",
+                            "గ్యాలరీ "
+                          ]).getText,
                       icon: Icons.photo_camera,
                       child: GalleryPage(
+                        language:
+                            UserDetails(snapshot: widget.snapshot).language,
                         uid: widget.userId.uid,
                       ),
                     ),
                     SizedBox(
-                      height: MagicScreen(height: 20, context: context).getHeight,
+                      height:
+                          MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
                       height: widget.bankSnapshot.data.data() == null
                           ? MagicScreen(height: 500, context: context).getHeight
-                          : MagicScreen(height: 400, context: context).getHeight,
-                      title: "Bank details",
+                          : MagicScreen(height: 400, context: context)
+                              .getHeight,
+                      title: Language(
+                          code: UserDetails(snapshot: widget.snapshot).language,
+                          text: [
+                            "Bank Details ",
+                            "बैंक विवरण ",
+                            "ব্যাংক বিবরণ ",
+                            "வங்கி விவரங்கள் ",
+                            "బ్యాంక్ వివరములు "
+                          ]).getText,
                       icon: Icons.home_repair_service,
                       child: BankDetailsPage(
+                        language:
+                            UserDetails(snapshot: widget.snapshot).language,
                         uid: widget.userId.uid,
                       ),
                     ),
                     SizedBox(
-                      height: MagicScreen(height: 20, context: context).getHeight,
+                      height:
+                          MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
                       height: widget.adhaarSnapshot.data.data() == null
                           ? MagicScreen(height: 660, context: context).getHeight
-                          : MagicScreen(height: 500, context: context).getHeight,
-                      title: "Adhaar details",
+                          : MagicScreen(height: 500, context: context)
+                              .getHeight,
+                      title: Language(
+                          code: UserDetails(snapshot: widget.snapshot).language,
+                          text: [
+                            "Adhaar details ",
+                            "अधार विवरण ",
+                            "আধার বিবরণ ",
+                            "ஆதார் விவரங்கள் ",
+                            "అధార్ వివరాలు "
+                          ]).getText,
                       icon: Icons.file_copy_rounded,
                       child: AdhaarDetailsPage(
+                        language:
+                            UserDetails(snapshot: widget.snapshot).language,
                         uid: widget.userId.uid,
                       ),
                     ),
                     SizedBox(
-                      height: MagicScreen(height: 20, context: context).getHeight,
+                      height:
+                          MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
-                      title: "Logout",
+                        height: MagicScreen(height: 300, context: context)
+                            .getHeight,
+                        title: Language(
+                            code:
+                                UserDetails(snapshot: widget.snapshot).language,
+                            text: [
+                              "Language ",
+                              "भाषा ",
+                              "ভাষা ",
+                              "மொழி ",
+                              "భాష "
+                            ]).getText,
+                        icon: Icons.language,
+                        child: ChooseLanguage(
+                          uid: widget.userId.uid,
+                          language:
+                              UserDetails(snapshot: widget.snapshot).language,
+                        )),
+                    SizedBox(
+                      height:
+                          MagicScreen(height: 20, context: context).getHeight,
+                    ),
+                    AccountTile(
+                      title: Language(
+                          code: UserDetails(snapshot: widget.snapshot).language,
+                          text: [
+                            "Logout ",
+                            "लॉग आउट ",
+                            "প্রস্থান ",
+                            "வெளியேறு ",
+                            "లాగ్ అవుట్ "
+                          ]).getText,
                       icon: Icons.logout,
                       onPress: () {
                         _confirmSignOut(context);
                       },
                     ),
                     SizedBox(
-                      height: MagicScreen(height: 40, context: context).getHeight,
+                      height:
+                          MagicScreen(height: 40, context: context).getHeight,
                     ),
                     AccountTile(
                       icon: Icons.add_location_alt,
-                      title: "Tap to update your location",
+                      title: Language(
+                          code: UserDetails(snapshot: widget.snapshot).language,
+                          text: [
+                            "Tap to update location ",
+                            "स्थान अपडेट करने के लिए टैप करें ",
+                            "অবস্থান আপডেট করতে আলতো চাপুন ",
+                            "இருப்பிடத்தைப் புதுப்பிக்க தட்டவும் ",
+                            "స్థానాన్ని నవీకరించడానికి నొక్కండి "
+                          ]).getText,
                       onPress: () {
                         updateLocation();
                       },
                     )
                   ],
                 ),
-            ));
+              ));
   }
 }
 

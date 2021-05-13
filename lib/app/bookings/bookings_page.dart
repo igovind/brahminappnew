@@ -9,10 +9,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
+import '../languages.dart';
+
 class BookingsPage extends StatefulWidget {
   final UserId userId;
+  final language;
 
-  BookingsPage({Key key, this.userId}) : super(key: key);
+  BookingsPage({Key key, this.userId, this.language}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -22,17 +25,39 @@ class BookingsPage extends StatefulWidget {
 
 class HomeWidgetState extends State<BookingsPage>
     with SingleTickerProviderStateMixin {
-  final List<Tab> tabs = <Tab>[
-    new Tab(text: "Request"),
-    new Tab(text: "Upcoming"),
-    new Tab(text: "History")
-  ];
+  List<Tab> tabs;
 
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    tabs = <Tab>[
+      new Tab(
+        text: Language(code: widget.language, text: [
+          "Request ",
+          "निवेदन ",
+          "অনুরোধ ",
+          "கோரிக்கை ",
+          "అభ్యర్థన "
+        ]).getText,
+      ),
+      new Tab(
+        text: Language(code: widget.language, text: [
+          "Upcoming ",
+          "आगामी ",
+          "আসন্ন ",
+          "வரவிருக்கும் ",
+          "రాబోయే "
+        ]).getText,
+      ),
+      new Tab(
+        text: Language(
+                code: widget.language,
+                text: ["History ", "समाप्त ", "সমাপ্ত ", "முடி ", "ముగించు "])
+            .getText,
+      )
+    ];
     _tabController = new TabController(vsync: this, length: tabs.length);
   }
 
@@ -101,14 +126,17 @@ class HomeWidgetState extends State<BookingsPage>
                             controller: _tabController,
                             children: [
                               BookingRequest(
+                                language: widget.language,
                                 snapshot: bookingRequestSnapshot,
                                 userId: widget.userId,
                               ),
                               Upcoming(
+                                language: widget.language,
                                 userId: widget.userId,
                                 snapshot: upcomingPujaSnapshot,
                               ),
                               BookingHistory(
+                                language: widget.language,
                                 snapshot: bookingHistorySnapshot,
                                 userId: widget.userId,
                               ),

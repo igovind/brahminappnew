@@ -6,11 +6,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../languages.dart';
+
 class GalleryPage extends StatelessWidget {
+  final language;
   final uid;
   final done;
 
-  const GalleryPage({Key key, this.uid, this.done}) : super(key: key);
+  const GalleryPage({Key key, this.uid, this.done, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,13 @@ class GalleryPage extends StatelessWidget {
                     FireStoreDatabase(uid: uid).updateData(data: {'index': 3});
                   },
                   child: Text(
-                    "Next",
+                  Language(code:language, text: [
+                  "Next",
+                  "आगे बढ़ें",
+                  "এগিয়ে যান",
+                  "மேலே செல்லுங்கள்",
+                  "ముందుకి వెళ్ళు"
+                  ]).getText,
                     style: TextStyle(
                         color: Colors.deepOrangeAccent,
                         fontWeight: FontWeight.bold),
@@ -48,7 +58,7 @@ class GalleryPage extends StatelessWidget {
         toolbarHeight: height(40),
         centerTitle: true,
         title: Text(
-          "Gallery",
+          Language(code: language, text: ["Gallery ", "गेलरी ", "গ্যালারী ", "கேலரி ", "గ్యాలరీ "]).getText,
           style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
         ),
       ),
@@ -82,6 +92,7 @@ class GalleryPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(children: [
                   ImageBox(
+                    language: language,
                     image: imageUrl1,
                     uid: uid,
                     check: check,
@@ -91,6 +102,7 @@ class GalleryPage extends StatelessWidget {
                     height: height(10),
                   ),
                   ImageBox(
+                    language: language,
                     image: imageUrl2,
                     uid: uid,
                     check: check,
@@ -100,6 +112,7 @@ class GalleryPage extends StatelessWidget {
                     height: height(10),
                   ),
                   ImageBox(
+                    language: language,
                     image: imageUrl3,
                     uid: uid,
                     check: check,
@@ -109,6 +122,7 @@ class GalleryPage extends StatelessWidget {
                     height: height(10),
                   ),
                   ImageBox(
+                    language: language,
                     image: imageUrl4,
                     uid: uid,
                     check: check,
@@ -130,8 +144,9 @@ class ImageBox extends StatelessWidget {
   final uid;
   final check;
   final int num;
+  final language;
 
-  const ImageBox({Key key, this.image, this.uid, this.check, this.num})
+  const ImageBox({Key key, this.image, this.uid, this.check, this.num, this.language})
       : super(key: key);
 
   @override
@@ -151,6 +166,7 @@ class ImageBox extends StatelessWidget {
                       topRight: Radius.circular(30))),
               height: MediaQuery.of(context).size.height * 0.6,
               child: EditGallery(
+                language: language,
                 set: check,
                 imageUrl: image,
                 uid: uid,

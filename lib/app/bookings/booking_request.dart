@@ -7,13 +7,14 @@ import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../languages.dart';
+
 class BookingRequest extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot> snapshot;
-
+  final language;
   final UserId userId;
 
-  const BookingRequest(
-      {Key key, this.snapshot,  this.userId})
+  const BookingRequest({Key key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
   @override
@@ -21,11 +22,20 @@ class BookingRequest extends StatelessWidget {
     double height(double height) {
       return MagicScreen(context: context, height: height).getHeight;
     }
+
     String url = userId.photoUrl;
-    if(snapshot.data.docs.isEmpty){
-      return Center(child:
-        Text("You don't have any booking request")
-        ,);
+    if (snapshot.data.docs.isEmpty) {
+      return Center(
+        child: Text(
+          Language(code: language, text: [
+            "You don't have any booking request ",
+            "आपके पास कोई बुकिंग अनुरोध नहीं है ",
+            "আপনার কাছে কোনও বুকিংয়ের অনুরোধ নেই ",
+            "உங்களிடம் எந்த முன்பதிவு கோரிக்கையும் இல்லை ",
+            "మీకు బుకింగ్ అభ్యర్థన లేదు "
+          ]).getText,
+        ),
+      );
     }
     return ListView.builder(
       shrinkWrap: true,
@@ -40,6 +50,7 @@ class BookingRequest extends StatelessWidget {
         final bool cancel = ref.data()['cancel'];
         final String tid = ref.id;
         return BookingTiles(
+          language: language,
           snapshot: snapshot.data.docs[index],
           onPressLocation: () {},
           child: cancel
@@ -49,7 +60,13 @@ class BookingRequest extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Canceled by $client",
+                        Language(code: language, text: [
+                          "Canceled by $client ",
+                          "$client द्वारा रद्द किया गया ",
+                          "$client দ্বারা বাতিল ",
+                          "$client ரத்து செய்தார் ",
+                          "$client రద్దు చేశారు "
+                        ]).getText,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w700),
                       ),
@@ -70,7 +87,13 @@ class BookingRequest extends StatelessWidget {
                   ? Container(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        "Payment is pending",
+                          Language(code:language, text: [
+                            "Payment is pending ",
+                            "भुगतान लंबित है ",
+                            "অর্থ মুলতুবি রয়েছে ",
+                            "கட்டணம் நிலுவையில் உள்ளது ",
+                            "చెల్లింపు పెండింగ్‌లో ఉంది "
+                          ]).getText,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w700),
                       ),
@@ -84,7 +107,13 @@ class BookingRequest extends StatelessWidget {
                         CustomRaisedButton(
                           color: Colors.lightGreen,
                           child: Text(
-                            "Accept",
+                              Language(code:language, text: [
+                                "Accept ",
+                                "स्वीकार ",
+                                "গ্রহণ ",
+                                "ஏற்றுக்கொள் ",
+                                "అంగీకరించు "
+                              ]).getText,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -98,13 +127,25 @@ class BookingRequest extends StatelessWidget {
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: true);
-                            BotToast.showText(text: "Accepted");
+                            BotToast.showText(text: Language(code:language, text: [
+                              "Accepted ",
+                              "स्वीकार किया ",
+                              "স্বীকৃত ",
+                              "ஏற்றுக்கொள்ளப்பட்டது ",
+                              "ఆమోదించబడిన "
+                            ]).getText,);
                           },
                         ),
                         CustomRaisedButton(
                           color: Colors.redAccent[100],
                           child: Text(
-                            "Reject",
+                              Language(code:language, text: [
+                                "Reject ",
+                                "अस्वीकार ",
+                                "প্রত্যাখ্যান ",
+                                "நிராகரி ",
+                                "తిరస్కరించండి "
+                              ]).getText,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -118,7 +159,13 @@ class BookingRequest extends StatelessWidget {
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: false);
-                            BotToast.showText(text: "Rejected");
+                            BotToast.showText(text:  Language(code:language, text: [
+                              "Rejected ",
+                              "अस्वीकृत ",
+                              "প্রত্যাখ্যাত ",
+                              "நிராகரிக்கப்பட்டது ",
+                              "తిరస్కరించబడింది "
+                            ]).getText,);
                           },
                         )
                       ],

@@ -17,14 +17,17 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:brahminapp/app/languages.dart';
 
 String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
 class RegistrationForm extends StatefulWidget {
   final uid;
+  final language;
   final AsyncSnapshot<DocumentSnapshot> snapshot;
 
-  const RegistrationForm({Key key, this.uid, this.snapshot}) : super(key: key);
+  const RegistrationForm({Key key, this.uid, this.snapshot, this.language})
+      : super(key: key);
 
   @override
   _RegistrationFormState createState() => _RegistrationFormState();
@@ -230,6 +233,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'refImg': refPicUrl,
         'PujaKeywords': '#',
         "index": 1,
+        "langCode": widget.language,
+        "lang": Language(code: widget.language).getLang,
+        "dateOfProfileCreation": FieldValue.serverTimestamp(),
+        "dateOfProfileUpdate":
+            FieldValue.arrayUnion([FieldValue.serverTimestamp()])
       }).whenComplete(() {
         Auth().updateUser("$fullName", profileUrl);
         FireStoreDatabase(uid: widget.uid).setAvailableCode();
@@ -279,19 +287,51 @@ class _RegistrationFormState extends State<RegistrationForm> {
         if (this.mounted) {
           setState(() {
             loading = true;
-            BotToast.showText(text: "Information saved");
+            BotToast.showText(
+              text: Language(code: widget.language, text: [
+                "Information saved ",
+                "पूरा हुआ ",
+                "সমাপ্ত ",
+                "நிறைவு ",
+                "పూర్తయింది "
+              ]).getText,
+            );
           });
         }
       });
     } else {
       if (userProfilePicFile == null && userProfilePicFile == null) {
-        BotToast.showText(text: "Please add profile and cover picture");
+        BotToast.showText(
+          text: Language(code: widget.language, text: [
+            "Please add profile and cover picture ",
+            "कृपया प्रोफ़ाइल और कवर चित्र जोड़ें ",
+            "দয়া করে প্রোফাইল এবং কভার ছবি যুক্ত করুন ",
+            "சுயவிவரம் மற்றும் அட்டைப் படத்தைச் சேர்க்கவும் ",
+            "దయచేసి ప్రొఫైల్ మరియు కవర్ చిత్రాన్ని జోడించండి "
+          ]).getText,
+        );
       } else {
         if (userProfilePicFile == null) {
-          BotToast.showText(text: "Please add profile picture");
+          BotToast.showText(
+            text: Language(code: widget.language, text: [
+              "Please add profile picture ",
+              "कृपया प्रोफ़ाइल चित्र जोड़ें ",
+              "দয়া করে প্রোফাইল ছবি যুক্ত করুন ",
+              "சுயவிவரப் படத்தைச் சேர்க்கவும் ",
+              "దయచేసి ప్రొఫైల్ చిత్రాన్ని జోడించండి "
+            ]).getText,
+          );
         }
         if (userCoverPicFile == null) {
-          BotToast.showText(text: "Please add cover picture");
+          BotToast.showText(
+            text: Language(code: widget.language, text: [
+              "Please add cover picture ",
+              "কভার ছবি যোগ করুন ",
+              "कृपया कवर चित्र जोड़ें ",
+              "அட்டைப் படத்தைச் சேர்க்கவும் ",
+              "కవర్ చిత్రాన్ని జోడించండి "
+            ]).getText,
+          );
         }
       }
     }
@@ -336,7 +376,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           color: Colors.deepOrangeAccent,
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        "Save",
+                        Language(code: widget.language, text: [
+                          "Next",
+                          "आगे बढ़ें",
+                          "এগিয়ে যান",
+                          "மேலே செல்லுங்கள்",
+                          "ముందుకి వెళ్ళు"
+                        ]).getText,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -420,10 +466,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   border: InputBorder.none,
-                                  labelText: "*Your full name"),
+                                  labelText:
+                                      Language(code: widget.language, text: [
+                                    "*Your full name",
+                                    "*आपका पूरा नाम",
+                                    "*আপনার পূর্ণ নাম",
+                                    "*உன் முழு பெயர்",
+                                    "*మీ పూర్తి పేరు"
+                                  ]).getText),
                               validator: (String value) {
                                 if (value.isEmpty) {
-                                  return 'This field is required';
+                                  return Language(code: widget.language, text: [
+                                    "This field is required",
+                                    "यह फ़ील्ड आवश्यक है",
+                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                    "இந்த புலம் தேவை",
+                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                  ]).getText;
                                 }
                                 return null;
                               },
@@ -446,10 +505,24 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   border: InputBorder.none,
-                                  labelText: "*Contact number"),
+                                  labelText: Language(
+                                      code: widget.language,
+                                      text: [
+                                        "Mobile Number",
+                                        "मोबाइल नंबर",
+                                        "মোবাইল নম্বর",
+                                        "கைபேசி எண்",
+                                        "మొబైల్ సంఖ్య"
+                                      ]).getText),
                               validator: (String value) {
                                 if (value.isEmpty) {
-                                  return 'This field is required';
+                                  return Language(code: widget.language, text: [
+                                    "This field is required",
+                                    "यह फ़ील्ड आवश्यक है",
+                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                    "இந்த புலம் தேவை",
+                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                  ]).getText;
                                 }
                                 return null;
                               },
@@ -471,10 +544,24 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   border: InputBorder.none,
-                                  labelText: "About you"),
+                                  labelText: Language(
+                                      code: widget.language,
+                                      text: [
+                                        "About you",
+                                        "आपके बारे में",
+                                        "তোমার সম্পর্কে",
+                                        "உன்னை பற்றி",
+                                        "నీ గురించి"
+                                      ]).getText),
                               validator: (String value) {
                                 if (value.isEmpty) {
-                                  return 'This field is required';
+                                  return Language(code: widget.language, text: [
+                                    "This field is required",
+                                    "यह फ़ील्ड आवश्यक है",
+                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                    "இந்த புலம் தேவை",
+                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                  ]).getText;
                                 }
                                 return null;
                               },
@@ -523,7 +610,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             ? UserDetails(snapshot: null).state
                                             : value;
                                         if (value == null) {
-                                          return 'This field is required';
+                                          return Language(
+                                              code: widget.language,
+                                              text: [
+                                                "This field is required",
+                                                "यह फ़ील्ड आवश्यक है",
+                                                "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                                "இந்த புலம் தேவை",
+                                                "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                              ]).getText;
                                         }
                                         return null;
                                       },
@@ -534,7 +629,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       ),
                                       items: statesList,
 
-                                      label: "*Select your state",
+                                      label: Language(
+                                          code: widget.language,
+                                          text: [
+                                            "Select your state",
+                                            "अपना राज्य चुनें",
+                                            "আপনার রাষ্ট্র নির্বাচন করুন",
+                                            "உங்கள் மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
+                                            "మీ రాష్ట్రాన్ని ఎంచుకోండి"
+                                          ]).getText,
                                       lableColor: Colors.black54,
                                       isExpanded: true,
                                       //icon: Icon(Icons.description),
@@ -542,7 +645,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       hint: state ??
                                           "${UserDetails(snapshot: null).state}",
                                       //underline: false,
-                                      searchHint: "Select One",
+                                      searchHint: Language(
+                                          code: widget.language,
+                                          text: [
+                                            "Select one ",
+                                            "एक का चयन करें ",
+                                            "একটা নির্বাচন করুন ",
+                                            "ஒன்றை தேர்ந்தெடு ",
+                                            "ఒకటి ఎంచుకో "
+                                          ]).getText,
                                       onChanged: (String value) {
                                         setState(() {
                                           state = value;
@@ -559,15 +670,30 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           child: TextFormField(
                               validator: (String value) {
                                 if (value.isEmpty) {
-                                  return 'This field is required';
+                                  return Language(code: widget.language, text: [
+                                    "This field is required",
+                                    "यह फ़ील्ड आवश्यक है",
+                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                    "இந்த புலம் தேவை",
+                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                  ]).getText;
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 20),
-                                  border: InputBorder.none,
-                                  labelText: "*Your city"),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
+                                border: InputBorder.none,
+                                labelText: Language(
+                                    code: widget.language,
+                                    text: [
+                                      "Your city ",
+                                      "आपका शहर  ",
+                                      "তোমার শহর ",
+                                      "உங்கள் நகரம் ",
+                                      "మీ నగరం "
+                                    ]).getText,
+                              ),
                               onSaved: (value) {
                                 setState(() {
                                   city = value;
@@ -611,11 +737,26 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                           ? UserDetails(snapshot: null).type
                                           : value;
                                       if (value == null) {
-                                        return 'This field is required';
+                                        return Language(
+                                            code: widget.language,
+                                            text: [
+                                              "This field is required",
+                                              "यह फ़ील्ड आवश्यक है",
+                                              "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                              "இந்த புலம் தேவை",
+                                              "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                            ]).getText;
                                       }
                                       return null;
                                     },
-                                    label: "*Select pundit type",
+                                    label:
+                                        Language(code: widget.language, text: [
+                                      "Select Pandit Type ",
+                                      "पंडित प्रकार का चयन करें ",
+                                      "পন্ডিত প্রকার নির্বাচন করুন ",
+                                      "பண்டிட் வகையைத் தேர்ந்தெடுக்கவும் ",
+                                      "పండిట్ రకాన్ని ఎంచుకోండి "
+                                    ]).getText,
                                     lableColor: Colors.black54,
                                     icon: Icon(
                                       Icons.arrow_drop_down_circle_outlined,
@@ -629,7 +770,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     displayClearIcon: false,
 
                                     //underline: false,
-                                    searchHint: "Select One",
+                                    searchHint:
+                                        Language(code: widget.language, text: [
+                                      "Select one ",
+                                      "एक का चयन करें ",
+                                      "একটা নির্বাচন করুন ",
+                                      "ஒன்றை தேர்ந்தெடு ",
+                                      "ఒకటి ఎంచుకో "
+                                    ]).getText,
                                     onChanged: (String value) {
                                       setState(() {
                                         punditType = value;
@@ -660,7 +808,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     ),
                                   )
                                 : Text(
-                                    "Invalid referral code",
+                                    Language(code: widget.language, text: [
+                                      "invalid referral code ",
+                                      "अमान्य रेफरल कोड ",
+                                      "অবৈধ রেফারেল কোড ",
+                                      "தவறான பரிந்துரை குறியீடு ",
+                                      "చెల్లని రిఫెరల్ కోడ్ "
+                                    ]).getText,
                                     style: TextStyle(
                                         color: Colors.deepOrangeAccent,
                                         fontWeight: FontWeight.bold),
@@ -677,10 +831,19 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                 radius: 30,
                                 child: TextFormField(
                                     decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 20),
-                                        border: InputBorder.none,
-                                        labelText: "Referral Code"),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 20),
+                                      border: InputBorder.none,
+                                      labelText: Language(
+                                          code: widget.language,
+                                          text: [
+                                            "referral code ",
+                                            "रेफरल कोड ",
+                                            "রেফারেল কোড ",
+                                            "பரிந்துரை குறியீடு ",
+                                            "రిఫెరల్ కోడ్ "
+                                          ]).getText,
+                                    ),
                                     onChanged: (value) {
                                       setState(() {
                                         refBy = value;
@@ -722,7 +885,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     }
                                   },
                                   child: Text(
-                                    "Check",
+                                    Language(code: widget.language, text: [
+                                      "Check ",
+                                      "जाँच करे ",
+                                      "করে চেক ",
+                                      "கரே சரிபார்க்கவும் ",
+                                      "కరే తనిఖీ చేయండి "
+                                    ]).getText,
                                     style: TextStyle(
                                         color: Colors.green,
                                         fontWeight: FontWeight.bold),

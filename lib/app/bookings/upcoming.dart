@@ -8,13 +8,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../languages.dart';
 import 'booking_tile.dart';
 
 class Upcoming extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot> snapshot;
   final UserId userId;
+  final language;
 
-  const Upcoming({Key key, this.snapshot, this.userId})
+  const Upcoming({Key key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
   @override
@@ -25,7 +27,15 @@ class Upcoming extends StatelessWidget {
 
     if (snapshot.data.docs.isEmpty) {
       return Center(
-        child: Text("You don't have any upcoming puja"),
+        child: Text(
+          Language(code: language, text: [
+            "You don't have any upcoming puja ",
+            "आपके पास कोई आगामी पूजा नहीं है ",
+            "আপনার কোনও আসন্ন পূজা নেই ",
+            "உங்களிடம் வரவிருக்கும் பூஜைகள் எதுவும் இல்லை ",
+            "మీకు రాబోయే పూజలు లేవు "
+          ]).getText,
+        ),
       );
     }
     return ListView.builder(
@@ -51,7 +61,15 @@ class Upcoming extends StatelessWidget {
                   var url = '$link';
                   if (await canLaunch(url)) {
                     await launch(url);
-                    BotToast.showText(text: "Opening Google Maps");
+                    BotToast.showText(
+                      text: Language(code: language, text: [
+                        "Google Maps is opening ",
+                        "Google मानचित्र खुल रहा है ",
+                        "গুগল ম্যাপস খুলছে ",
+                        "கூகிள் மேப்ஸ் திறக்கிறது ",
+                        "గూగుల్ మ్యాప్స్ తెరవబడుతున్నాయి "
+                      ]).getText,
+                    );
                   } else {
                     throw 'Could not launch $url';
                   }
@@ -62,11 +80,31 @@ class Upcoming extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Payment mode"),
+                        Text(
+                          Language(code: language, text: [
+                            "Payment mode ",
+                            "भुगतान का प्रकार ",
+                            "পরিশোধের মাধ্যম ",
+                            "கட்டண முறை ",
+                            "చెల్లింపు మోడ్ "
+                          ]).getText,
+                        ),
                         Text(
                           cod != null && cod == true
-                              ? ' Cash at home'
-                              : ' Online',
+                              ? Language(code: language, text: [
+                                  "Cash at home ",
+                                  "घर पर नकदी ",
+                                  "বাড়িতে নগদ ",
+                                  "வீட்டில் பணம் ",
+                                  "ఇంట్లో నగదు "
+                                ]).getText
+                              : Language(code: language, text: [
+                                  "Online ",
+                                  "ऑनलाइन ",
+                                  "অনলাইন ",
+                                  "நிகழ்நிலை ",
+                                  "ఆన్‌లైన్ "
+                                ]).getText,
                           style: TextStyle(
                               color: Colors.red, fontWeight: FontWeight.w700),
                         ),
@@ -84,7 +122,13 @@ class Upcoming extends StatelessWidget {
                       children: [
                         CustomRaisedButton(
                             child: Text(
-                              'Mark as done',
+                              Language(code: language, text: [
+                                "Mark as done ",
+                                "पूर्ण के रूप में चिह्नित करें ",
+                                "সম্পন্ন হিসাবে চিহ্নিত করুন ",
+                                "முடிந்தது என குறி ",
+                                "ఐపోయినట్టుగా ముద్రించు "
+                              ]).getText,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),

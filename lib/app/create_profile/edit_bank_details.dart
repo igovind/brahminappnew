@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:brahminapp/services/database.dart';
@@ -14,6 +15,7 @@ class EditBankDetails extends StatefulWidget {
   final ifscCode;
   final uid;
   final check;
+  final language;
 
   const EditBankDetails(
       {Key key,
@@ -22,7 +24,8 @@ class EditBankDetails extends StatefulWidget {
       this.name,
       this.ifscCode,
       @required this.uid,
-      this.check})
+      this.check,
+      this.language})
       : super(key: key);
 
   @override
@@ -119,7 +122,13 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   color: Colors.deepOrangeAccent,
                   borderRadius: BorderRadius.circular(20)),
               child: Text(
-                widget.name == null ? 'Submit' : 'Update',
+                Language(code: widget.language, text: [
+                  "Submit ",
+                  "जमा करे  ",
+                  "জমা দিন ",
+                  "சமர்ப்பிக்கவும் ",
+                  "సమర్పించండి "
+                ]).getText,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -136,7 +145,13 @@ class _EditBankDetailsState extends State<EditBankDetails> {
             key: _formKey,
             child: Column(
               children: [
-                Text("Bank details"),
+                Text(Language(code: widget.language, text: [
+                  "Bank Details ",
+                  "बैंक विवरण ",
+                  "ব্যাংক বিবরণ ",
+                  "வங்கி விவரங்கள் ",
+                  "బ్యాంక్ వివరములు "
+                ]).getText),
                 SizedBox(
                   height: height(10),
                 ),
@@ -145,10 +160,23 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: 'Your name as per bank details'),
+                        labelText: Language(code: widget.language, text: [
+                          "Your name( as per bank details) ",
+                          "आपका नाम (बैंक विवरण के अनुसार) ",
+                          "আপনার নাম (ব্যাঙ্কের বিবরণ অনুসারে) ",
+                          "உங்கள் பெயர் (வங்கி விவரங்களின்படி) ",
+                          "మీ పేరు (బ్యాంక్ వివరాల ప్రకారం) "
+                        ]).getText),
                     initialValue: widget.name,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Name can\'t be empty',
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _name = value,
                   ),
                 ),
@@ -160,11 +188,24 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: 'Name of your bank'),
+                        labelText: Language(code: widget.language, text: [
+                          "Name of Bank ",
+                          "बैंक का नाम ",
+                          "ব্যাংকের নাম ",
+                          "வங்கியின் பெயர் ",
+                          "బ్యాంక్ పేరు "
+                        ]).getText),
                     initialValue: widget.bankName,
                     keyboardType: TextInputType.name,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Bank name can\'t be empty',
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _bankName = value,
                   ),
                 ),
@@ -175,13 +216,26 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
-                        border: InputBorder.none, labelText: 'Account number'),
+                        border: InputBorder.none,
+                        labelText: Language(code: widget.language, text: [
+                          "Account number ",
+                          "खाता संख्या ",
+                          "হিসাব নাম্বার ",
+                          "கணக்கு எண் ",
+                          "ఖాతా సంఖ్య "
+                        ]).getText),
                     initialValue: widget.accountNumber,
                     keyboardType: TextInputType.number,
                     obscureText: false,
                     validator: (value) => value.isNotEmpty
                         ? null
-                        : 'Account number can\'t be empty',
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _accountNumber = value,
                   ),
                 ),
@@ -192,12 +246,26 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
-                        border: InputBorder.none, labelText: 'Enter IFSC code'),
+                        border: InputBorder.none,
+                        labelText: Language(code: widget.language, text: [
+                          "IFSC Code ",
+                          "IFSC कोड ",
+                          "IFSC কোড ",
+                          "IFSC குறியீடு ",
+                          "IFSC కోడ్ "
+                        ]).getText),
                     initialValue: widget.ifscCode,
                     keyboardType: TextInputType.text,
                     obscureText: false,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'IFSC code can\'t be empty',
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _ifscCode = value,
                   ),
                 ),

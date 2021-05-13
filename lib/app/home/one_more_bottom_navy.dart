@@ -16,11 +16,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../languages.dart';
+
 class SecondBottomNavy extends StatefulWidget {
   final AsyncSnapshot<DocumentSnapshot> userDataSnapshot;
   final UserId user;
+  final language;
 
-  const SecondBottomNavy({Key key, this.user, this.userDataSnapshot})
+  const SecondBottomNavy(
+      {Key key, this.user, this.userDataSnapshot, this.language})
       : super(key: key);
 
   @override
@@ -29,11 +33,60 @@ class SecondBottomNavy extends StatefulWidget {
 
 class _SecondBottomNavyState extends State<SecondBottomNavy> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  List<TabItem> tabItems;
 
   void initState() {
     super.initState();
     _navigationController = new CircularBottomNavigationController(selectedPos);
     _navigationController = new CircularBottomNavigationController(selectedPos);
+    tabItems = List.of([
+      new TabItem(
+          Icons.home,
+          Language(
+              code: widget.language,
+              text: ["Home ", "घर ", "বাড়ি ", "வீடு ", "హోమ్ "]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      /* new TabItem(Icons.dynamic_feed_outlined, "Feed", Colors.deepOrangeAccent,
+        labelStyle: TextStyle(fontWeight: FontWeight.normal)),*/
+      new TabItem(
+          Icons.person_add_alt_1,
+          Language(code: widget.language, text: [
+            "Booking ",
+            "बुकिंग ",
+            "সংরক্ষণ ",
+            "பதிவு ",
+            "బుకింగ్ "
+          ]).getText,
+          Colors.orange,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.layers,
+          Language(
+              code: widget.language,
+              text: ["Service ", "सेवा ", "সেবা ", "சேவை ", "సేవ "]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.star,
+          Language(code: widget.language, text: [
+            "Astrology ",
+            "ज्योतिष",
+            "জ্যোতিষ ",
+            "ஜோதிடம் ",
+            "జ్యోతిషశాస్త్రం"
+          ]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.account_circle,
+          Language(
+                  code: widget.language,
+                  text: ["Account ", "खाता ", "হিসাব ", "கணக்கு ", "ఖాతా "])
+              .getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+    ]);
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         //  print("onMessage: $message");
@@ -126,20 +179,6 @@ class _SecondBottomNavyState extends State<SecondBottomNavy> {
 
   int selectedPos = 0;
 
-  List<TabItem> tabItems = List.of([
-    new TabItem(Icons.home, "Home", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    /* new TabItem(Icons.dynamic_feed_outlined, "Feed", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),*/
-    new TabItem(Icons.person_add_alt_1, "Bookings", Colors.orange,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    new TabItem(Icons.layers, "Services", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    new TabItem(Icons.star, "Astrology", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    new TabItem(Icons.account_circle, "Account", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-  ]);
   CircularBottomNavigationController _navigationController;
 
   @override
@@ -199,6 +238,7 @@ class _SecondBottomNavyState extends State<SecondBottomNavy> {
       case 0:
         //slogan = "Familly, Happiness, Food";
         return HomePageFolder(
+          language: widget.language,
           userId: widget.user,
           snapshot: tabImageSnapshot,
           userDataSnapshot: userDataSnapshot,
@@ -211,16 +251,19 @@ class _SecondBottomNavyState extends State<SecondBottomNavy> {
         break;*/
       case 1:
         return BookingsPage(
+          language: widget.language,
           userId: widget.user,
         );
         break;
       case 2:
         return ServicesPage(
+          language: widget.language,
           userId: widget.user,
         );
         break;
       case 3:
         return EditAstrologyPrices(
+          language: widget.language,
           snapshot: userDataSnapshot,
           userId: widget.user,
         );

@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,8 +9,8 @@ class BookingTiles extends StatelessWidget {
   final DocumentSnapshot snapshot;
   final Widget child;
   final VoidCallback onPressLocation;
-
-  const BookingTiles({Key key, this.snapshot, this.child, this.onPressLocation})
+  final language;
+  const BookingTiles({Key key, this.snapshot, this.child, this.onPressLocation, this.language})
       : super(key: key);
 
   @override
@@ -126,7 +127,13 @@ class BookingTiles extends StatelessWidget {
             SizedBox(
               height: height(10),
             ),
-            Text("Booking ID: $tid"),
+            Text(Language(code:language, text: [
+              "Booking ID: $tid ",
+              "बुकिंग: $tid ",
+              "সংরক্ষণ: $tid ",
+              "பதிவு: $tid  ",
+              "బుకింగ్: $tid  "
+            ]).getText,),
             SizedBox(
               height: height(5),
             ),

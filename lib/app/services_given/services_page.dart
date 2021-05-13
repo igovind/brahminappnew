@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/app/services_given/puja_offering.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -8,8 +9,8 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 class ServicesPage extends StatefulWidget {
   final UserId userId;
-
-  const ServicesPage({Key key, this.userId}) : super(key: key);
+  final language;
+  const ServicesPage({Key key, this.userId, this.language}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,16 +20,23 @@ class ServicesPage extends StatefulWidget {
 
 class HomeWidgetState extends State<ServicesPage>
     with SingleTickerProviderStateMixin {
-  final List<Tab> tabs = <Tab>[
-    Tab(text: "Puja Offering"),
-   // Tab(text: "Astrology offering"),
-  ];
+   List<Tab> tabs;
 
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    tabs = <Tab>[
+      Tab(text: Language(code: widget.language, text: [
+        "Puja service ",
+        "पूजा सेवा ",
+        "পূজা সেবা ",
+        "பூஜா சேவை ",
+        "పూజా సేవ "
+      ]).getText,),
+      // Tab(text: "Astrology offering"),
+    ];
     _tabController = new TabController(vsync: this, length: tabs.length);
   }
 
@@ -88,7 +96,7 @@ class HomeWidgetState extends State<ServicesPage>
                       );
                     }
                     return TabBarView(controller: _tabController, children: [
-                      PujaOffering(snapshot: pujaOfferingSnapshot,uid: widget.userId.uid,),
+                      PujaOffering(snapshot: pujaOfferingSnapshot,uid: widget.userId.uid,language: widget.language,),
                      // AstroOffering(snapshot: pujaOfferingSnapshot,userId: widget.userId,),
                     ]);
                   });

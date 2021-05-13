@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../languages.dart';
 
 bool loading = false;
 
@@ -22,6 +23,7 @@ class EditAdhaarDetails extends StatefulWidget {
   final frontAdhaarUrl;
   final backAdhaarUrl;
   final check;
+  final language;
 
   const EditAdhaarDetails({
     Key key,
@@ -30,7 +32,9 @@ class EditAdhaarDetails extends StatefulWidget {
     this.address,
     @required this.uid,
     this.frontAdhaarUrl,
-    this.backAdhaarUrl, this.check,
+    this.backAdhaarUrl,
+    this.check,
+    this.language,
   }) : super(key: key);
 
   @override
@@ -185,7 +189,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text('Incomplete details'),
+            title: Text(Language(code: widget.language, text: [
+              "Please upload photo of adhaar card ",
+              "कृपया आधार कार्ड की फोटो अपलोड करें ",
+              "আধার কার্ডের ছবি আপলোড করুন ",
+              "ஆதார் அட்டையின் புகைப்படத்தை பதிவேற்றவும் ",
+              "దయచేసి ఆధార్ కార్డు యొక్క ఫోటోను అప్‌లోడ్ చేయండి "
+            ]).getText),
           ));
     }
   }
@@ -198,7 +208,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-   /* double width(double width) {
+    /* double width(double width) {
       return MagicScreen(context: context, width: width).getWidth;
     }*/
 
@@ -217,7 +227,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                         .updateData(data: {"ready": true});
                   },
                   child: Text(
-                    "Skip",
+                    Language(code: widget.language, text: [
+                      "Skip ",
+                      "छोड़ें ",
+                      "এড়িয়ে যান ",
+                      "தவிர் ",
+                      "దాటవేయి "
+                    ]).getText,
                     style: TextStyle(
                         color: Colors.deepOrange, fontWeight: FontWeight.bold),
                   ))
@@ -233,7 +249,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   color: Colors.deepOrangeAccent,
                   borderRadius: BorderRadius.circular(20)),
               child: Text(
-                "save",
+                Language(code: widget.language, text: [
+                  "Next",
+                  "आगे बढ़ें",
+                  "এগিয়ে যান",
+                  "மேலே செல்லுங்கள்",
+                  "ముందుకి వెళ్ళు"
+                ]).getText,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -251,72 +273,125 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
             key: _tMformKey,
             child: Column(
               children: [
-                Text("Adhaar details"),
+                Text(
+                  Language(code: widget.language, text: [
+                    "Adhaar Details ",
+                    "अधार विवरण ",
+                    "আধার বিবরণ ",
+                    "ஆதார் விவரங்கள் ",
+                    "అధార్ వివరాలు "
+                  ]).getText,
+                ),
                 SizedBox(
-                  height:  height(10),
+                  height: height(10),
                 ),
                 CustomContainer(
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: 'Your name as per Adhaar '),
+                      border: InputBorder.none,
+                      labelText: Language(code: widget.language, text: [
+                        "Your name as per Adhaar ",
+                        "आपका नाम अधार के अनुसार ",
+                        "আধার অনুযায়ী আপনার নাম ",
+                        "ஆதார் படி உங்கள் பெயர் ",
+                        "అధార్ ప్రకారం మీ పేరు "
+                      ]).getText,
+                    ),
                     initialValue: widget.adhaarName,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Name can\'t be empty',
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : Language(code: widget.language, text: [
+                            "Name can't be empty ",
+                            "नाम खाली नहीं हो सकता ",
+                            "নাম খালি থাকতে পারে না ",
+                            "பெயர் காலியாக இருக்க முடியாது ",
+                            "పేరు ఖాళీగా ఉండకూడదు "
+                          ]).getText,
                     onSaved: (value) => _name = value,
                   ),
                 ),
                 SizedBox(
-                  height:  height(10),
+                  height: height(10),
                 ),
                 CustomContainer(
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: 'Permanent address'),
+                      border: InputBorder.none,
+                      labelText: Language(code: widget.language, text: [
+                        "Permanent address ",
+                        "সस्थायी पता ",
+                        "স্থায়ী ঠিকানা ",
+                        "நிரந்தர முகவரி ",
+                        "శాశ్వత చిరునామా "
+                      ]).getText,
+                    ),
                     initialValue: widget.address,
                     keyboardType: TextInputType.name,
                     validator: (value) => value.isNotEmpty
                         ? null
-                        : 'Address name can\'t be empty',
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _address = value,
                   ),
                 ),
                 SizedBox(
-                  height:  height(10),
+                  height: height(10),
                 ),
                 CustomContainer(
                   radius: 10,
                   child: TextFormField(
                     maxLength: 16,
                     decoration: InputDecoration(
-                        border: InputBorder.none, labelText: 'Adhaar number'),
+                      border: InputBorder.none,
+                      labelText: Language(code: widget.language, text: [
+                        "Adhaar number ",
+                        "अधार नंबर ",
+                        "আধার নাম্বার ",
+                        "ஆதார் எண் ",
+                        "అధార్ సంఖ్య "
+                      ]).getText,
+                    ),
                     initialValue: widget.adhaarNumber,
                     keyboardType: TextInputType.number,
                     obscureText: true,
                     validator: (value) => value.isNotEmpty
                         ? null
-                        : value.length != 16
-                            ? 'It must be of 16 numbers'
-                            : 'Adhaar number can\'t be empty',
+                        : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
                     onSaved: (value) => _adhaarNumber = value,
                   ),
                 ),
                 SizedBox(
-                  height:  height(50),
+                  height: height(50),
                 ),
                 CustomContainer(
                   radius: 10,
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Please upload your adhaar(front side)',
+                        Language(code: widget.language, text: [
+                          "Please upload your adhaar(front side) ",
+                          "कृपया अपना अधार अपलोड करें (सामने की ओर) ",
+                          "দয়া করে আপনার আধারে আপলোড করুন (সামনের দিকে) ",
+                          "உங்கள் ஆதார் (முன் பக்கம்) பதிவேற்றவும் ",
+                          "దయచేసి మీ అధార్ (ముందు వైపు) అప్‌లోడ్ చేయండి "
+                        ]).getText,
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       SizedBox(
-                        height:  height(12),
+                        height: height(12),
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -333,7 +408,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                               ? _frontAdhaarUrl == null
                                   ? Center(
                                       child: Text(
-                                        'Add image',
+                                        Language(code: widget.language, text: [
+                                          "Add Image ",
+                                          "छवि जोड़ें ",
+                                          "ছবি সংযুক্ত কর ",
+                                          "படத்தைச் சேர்க்கவும் ",
+                                          "ছবি সংযুক্ত কর "
+                                        ]).getText,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     )
@@ -377,18 +458,24 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   ),
                 ),
                 SizedBox(
-                  height:  height(10),
+                  height: height(10),
                 ),
                 CustomContainer(
                   radius: 10,
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Please upload your adhaar(back)',
+                        Language(code: widget.language, text: [
+                          "Please upload your adhaar(back side) ",
+                          "कृपया अपना अधार अपलोड करें (पीछे की ओर) ",
+                          "দয়া করে আপনার আধারটি (পিছনের দিকে) আপলোড করুন ",
+                          "உங்கள் ஆதார் (பின் பக்கம்) பதிவேற்றவும் ",
+                          "దయచేసి మీ అధార్ (వెనుక వైపు) అప్‌లోడ్ చేయండి "
+                        ]).getText,
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       SizedBox(
-                        height:  height(12),
+                        height: height(12),
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -404,7 +491,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                               ? _backAdhaarUrl == null
                                   ? Center(
                                       child: Text(
-                                        'Add image',
+                                        Language(code: widget.language, text: [
+                                          "Add Image ",
+                                          "छवि जोड़ें ",
+                                          "ছবি সংযুক্ত কর ",
+                                          "படத்தைச் சேர்க்கவும் ",
+                                          "ছবি সংযুক্ত কর "
+                                        ]).getText,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     )

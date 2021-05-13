@@ -4,6 +4,7 @@ import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/create_profile/create_profile.dart';
 import 'package:brahminapp/app/home/bottom_navigation_bar_page.dart';
 import 'package:brahminapp/app/home/one_more_bottom_navy.dart';
+import 'package:brahminapp/app/select_language_page.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,22 +34,27 @@ class _TogglePageState extends State<TogglePage> {
           if (snapshot.data == null) {
             return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
-
+          String lang=snapshot.data.data()["langCode"];
           if (snapshot.data.data() == null) {
-            return CreateProfile(
+           /* return CreateProfile(
+              uid: widget.user.uid,
+            );*/
+            return SelectLanguage(
               uid: widget.user.uid,
             );
           }
           bool ready = snapshot.data.data()["ready"] ?? true;
           if (!ready) {
+
             return CreateProfile(
-              uid: widget.user.uid,
+              uid: widget.user.uid, language: lang,
             );
           }
           if (UserDetails(snapshot: snapshot).astrologer) {
             return SecondBottomNavy(
               userDataSnapshot: snapshot,
               user: widget.user,
+              language: lang,
             );
           }
           return Provider<UserId>.value(

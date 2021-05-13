@@ -3,6 +3,7 @@ import 'package:brahminapp/app/account/edit_adhaar_details.dart';
 import 'package:brahminapp/app/account/gallery_page.dart';
 import 'package:brahminapp/app/astrology/astrology_page.dart';
 import 'package:brahminapp/app/create_profile/registration_form.dart';
+import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
@@ -13,8 +14,10 @@ import 'package:provider/provider.dart';
 
 class CreateProfile extends StatelessWidget {
   final uid;
+  final language;
 
-  const CreateProfile({Key key, this.uid}) : super(key: key);
+  const CreateProfile({Key key, @required this.uid, @required this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +34,10 @@ class CreateProfile extends StatelessWidget {
 
     Future<void> _confirmSignOut(context) async {
       final didRequestSignOut = await PlatformAlertDialog(
-        title: 'Logout',
-        content: 'Are you sure that you want to logout?',
-        cancelActionText: 'Cancel',
-        defaultActionText: 'Logout',
+        title: Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
+        content: Language(code: language,text: ["Are you sure that you want to logout?","क्या आप वाकई लॉगआउट करना चाहते हैं?","আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?","நீங்கள் வெளியேற விரும்புகிறீர்களா?","మీరు లాగ్ అవుట్ చేయాలనుకుంటున్నారా?"]).getText,
+        cancelActionText: Language(code: language,text: ["Cancel","रद्द करें","বাতিল","ரத்துசெய்","రద్దు చేయండి"]).getText,
+        defaultActionText: Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
       ).show(context);
       if (didRequestSignOut == true) {
         _signOut(context);
@@ -59,26 +62,28 @@ class CreateProfile extends StatelessWidget {
           }
           return Scaffold(
             appBar: AppBar(
+             // iconTheme: IconThemeData(color: Colors.black54),
               //actions: [FlatButton(onPressed: () {}, child: Text("check"))],
+              leading: SizedBox(),
               toolbarHeight: 30,
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                "Registration",
+                Language(code: language,text: ["Registration","पंजीकरण","নিবন্ধন","பதிவு","నమోదు"]).getText,
                 style: TextStyle(color: Colors.black),
               ),
               actions: [
                 FlatButton(
                     onPressed: () => _confirmSignOut(context),
                     child: Text(
-                      "Logout",
+                      Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
                       style: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.bold),
                     ))
               ],
             ),
-            body: body(_currentIndex, uid),
+            body: body(_currentIndex, uid,language),
             bottomNavigationBar: DotsIndicator(
                 onTap: (value) {},
                 position: _currentIndex.toDouble(),
@@ -95,7 +100,7 @@ class CreateProfile extends StatelessWidget {
   }
 }
 
-Widget body(int value, uid) {
+Widget body(int value, uid,language) {
   switch (value) {
     case 0:
       return StreamBuilder<DocumentSnapshot>(
@@ -107,22 +112,25 @@ Widget body(int value, uid) {
               );
             }
             return RegistrationForm(
+              language: language,
               snapshot: snapshot,
               uid: uid,
             );
           });
       break;
     case 1:
-      return AstrologyPage(uid: uid);
+      return AstrologyPage(uid: uid,language: language,);
       break;
     case 2:
       return GalleryPage(
+        language: language,
         uid: uid,
         done: "dj",
       );
       break;
     case 3:
       return EditAdhaarDetails(
+        language: language,
         uid: uid,
         check: "gfh",
       );

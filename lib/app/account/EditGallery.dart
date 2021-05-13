@@ -9,18 +9,20 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../languages.dart';
+
 class EditGallery extends StatefulWidget {
   final imageUrl;
   final uid;
   final set;
   final num;
-
+  final language;
   const EditGallery(
       {Key key,
       @required this.imageUrl,
       @required this.uid,
       this.num,
-      this.set})
+      this.set, this.language})
       : super(key: key);
 
   @override
@@ -153,7 +155,13 @@ class _EditGalleryState extends State<EditGallery> {
                     color: Colors.deepOrangeAccent,
                     borderRadius: BorderRadius.circular(20)),
                 child: Text(
-                  "Submit",
+                  Language(code: widget.language, text: [
+                    "Submit",
+                    "आगे बढ़ें",
+                    "এগিয়ে যান",
+                    "மேலே செல்லுங்கள்",
+                    "ముందుకి వెళ్ళు"
+                  ]).getText,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,

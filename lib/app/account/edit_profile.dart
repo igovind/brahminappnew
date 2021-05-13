@@ -11,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import '../languages.dart';
 import 'account_page.dart';
 
 class EditProfile extends StatefulWidget {
@@ -96,6 +97,8 @@ class _EditProfileState extends State<EditProfile> {
         'number': contact ?? UserDetails(snapshot: widget.snapshot).aboutYou,
         'state': state ?? UserDetails(snapshot: widget.snapshot).state,
         'type': punditType ?? UserDetails(snapshot: widget.snapshot).type,
+        "dateOfProfileUpdate":
+            FieldValue.arrayUnion([FieldValue.serverTimestamp()]),
         'searchKey': fullName == null
             ? UserDetails(snapshot: widget.snapshot).name[0]
             : fullName[0].toUpperCase().toString(),
@@ -188,7 +191,16 @@ class _EditProfileState extends State<EditProfile> {
                           color: Colors.deepOrangeAccent,
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        "Save",
+                        Language(
+                            code:
+                                UserDetails(snapshot: widget.snapshot).language,
+                            text: [
+                              "Next",
+                              "आगे बढ़ें",
+                              "এগিয়ে যান",
+                              "மேலே செல்லுங்கள்",
+                              "ముందుకి వెళ్ళు"
+                            ]).getText,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -208,8 +220,8 @@ class _EditProfileState extends State<EditProfile> {
                   child: Column(
                     children: [
                       Container(
-                        height:
-                            MagicScreen(height: 260, context: context).getHeight,
+                        height: MagicScreen(height: 260, context: context)
+                            .getHeight,
                         child: Stack(
                           children: [
                             GestureDetector(
@@ -280,10 +292,28 @@ class _EditProfileState extends State<EditProfile> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 border: InputBorder.none,
-                                labelText: "Your full name"),
+                                labelText: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "*Your full name",
+                                      "*आपका पूरा नाम",
+                                      "*আপনার পূর্ণ নাম",
+                                      "*உன் முழு பெயர்",
+                                      "*మీ పూర్తి పేరు"
+                                    ]).getText),
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return 'This field is required';
+                                return Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "This field is required",
+                                      "यह फ़ील्ड आवश्यक है",
+                                      "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                      "இந்த புலம் தேவை",
+                                      "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                    ]).getText;
                               }
                               return null;
                             },
@@ -308,10 +338,28 @@ class _EditProfileState extends State<EditProfile> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 border: InputBorder.none,
-                                labelText: "Contact number"),
+                                labelText: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "Mobile Number",
+                                      "मोबाइल नंबर",
+                                      "মোবাইল নম্বর",
+                                      "கைபேசி எண்",
+                                      "మొబైల్ సంఖ్య"
+                                    ]).getText),
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return 'This field is required';
+                                return Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "This field is required",
+                                      "यह फ़ील्ड आवश्यक है",
+                                      "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                      "இந்த புலம் தேவை",
+                                      "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                    ]).getText;
                               }
                               return null;
                             },
@@ -335,10 +383,28 @@ class _EditProfileState extends State<EditProfile> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 border: InputBorder.none,
-                                labelText: "About you"),
+                                labelText: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "About you",
+                                      "आपके बारे में",
+                                      "তোমার সম্পর্কে",
+                                      "உன்னை பற்றி",
+                                      "నీ గురించి"
+                                    ]).getText),
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return 'This field is required';
+                                return Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "This field is required",
+                                      "यह फ़ील्ड आवश्यक है",
+                                      "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                      "இந்த புலம் தேவை",
+                                      "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                    ]).getText;
                               }
                               return null;
                             },
@@ -391,7 +457,17 @@ class _EditProfileState extends State<EditProfile> {
                                               .state
                                           : value;
                                       if (value == null) {
-                                        return 'This field is required';
+                                        return Language(
+                                            code: UserDetails(
+                                                    snapshot: widget.snapshot)
+                                                .language,
+                                            text: [
+                                              "This field is required",
+                                              "यह फ़ील्ड आवश्यक है",
+                                              "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                              "இந்த புலம் தேவை",
+                                              "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                            ]).getText;
                                       }
                                       return null;
                                     },
@@ -402,7 +478,17 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     items: statesList,
 
-                                    label: "Select your state",
+                                    label: Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Select your state",
+                                          "अपना राज्य चुनें",
+                                          "আপনার রাষ্ট্র নির্বাচন করুন",
+                                          "உங்கள் மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
+                                          "మీ రాష్ట్రాన్ని ఎంచుకోండి"
+                                        ]).getText,
                                     lableColor: Colors.black54,
                                     isExpanded: true,
                                     //icon: Icon(Icons.description),
@@ -410,7 +496,17 @@ class _EditProfileState extends State<EditProfile> {
                                     hint: state ??
                                         "${UserDetails(snapshot: widget.snapshot).state}",
                                     //underline: false,
-                                    searchHint: "Select One",
+                                    searchHint: Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Select one ",
+                                          "एक का चयन करें ",
+                                          "একটা নির্বাচন করুন ",
+                                          "ஒன்றை தேர்ந்தெடு ",
+                                          "ఒకటి ఎంచుకో "
+                                        ]).getText,
                                     onChanged: (String value) {
                                       setState(() {
                                         state = value;
@@ -427,7 +523,16 @@ class _EditProfileState extends State<EditProfile> {
                         child: TextFormField(
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return 'This field is required';
+                                return Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "This field is required",
+                                      "यह फ़ील्ड आवश्यक है",
+                                      "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                      "இந்த புலம் தேவை",
+                                      "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                    ]).getText;
                               }
                               return null;
                             },
@@ -435,7 +540,16 @@ class _EditProfileState extends State<EditProfile> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 border: InputBorder.none,
-                                labelText: "Your city"),
+                                labelText: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "Your city ",
+                                      "आपका शहर  ",
+                                      "তোমার শহর ",
+                                      "உங்கள் நகரம் ",
+                                      "మీ నగరం "
+                                    ]).getText),
                             initialValue:
                                 "${UserDetails(snapshot: widget.snapshot).city}",
                             onSaved: (value) {
@@ -480,11 +594,31 @@ class _EditProfileState extends State<EditProfile> {
                                             .type
                                         : value;
                                     if (value == null) {
-                                      return 'This field is required';
+                                      return Language(
+                                          code: UserDetails(
+                                                  snapshot: widget.snapshot)
+                                              .language,
+                                          text: [
+                                            "This field is required",
+                                            "यह फ़ील्ड आवश्यक है",
+                                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                            "இந்த புலம் தேவை",
+                                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                          ]).getText;
                                     }
                                     return null;
                                   },
-                                  label: "Select pundit type",
+                                  label: Language(
+                                      code:
+                                          UserDetails(snapshot: widget.snapshot)
+                                              .language,
+                                      text: [
+                                        "Select Pandit Type ",
+                                        "पंडित प्रकार का चयन करें ",
+                                        "পন্ডিত প্রকার নির্বাচন করুন ",
+                                        "பண்டிட் வகையைத் தேர்ந்தெடுக்கவும் ",
+                                        "పండిట్ రకాన్ని ఎంచుకోండి "
+                                      ]).getText,
                                   lableColor: Colors.black54,
                                   icon: Icon(
                                     Icons.arrow_drop_down_circle_outlined,
@@ -499,7 +633,17 @@ class _EditProfileState extends State<EditProfile> {
                                   hint: punditType ??
                                       "${UserDetails(snapshot: widget.snapshot).type}",
                                   //underline: false,
-                                  searchHint: "Select One",
+                                  searchHint: Language(
+                                      code:
+                                          UserDetails(snapshot: widget.snapshot)
+                                              .language,
+                                      text: [
+                                        "Select one ",
+                                        "एक का चयन करें ",
+                                        "একটা নির্বাচন করুন ",
+                                        "ஒன்றை தேர்ந்தெடு ",
+                                        "ఒకటి ఎంచుకో "
+                                      ]).getText,
                                   onChanged: (String value) {
                                     setState(() {
                                       punditType = value;
@@ -522,12 +666,23 @@ class _EditProfileState extends State<EditProfile> {
                       UserDetails(snapshot: widget.snapshot).astrologer
                           ? SizedBox()
                           : AccountTile(
-                              title: "Switch to astrology account",
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Switch to astrology account ",
+                                    "ज्योतिष खाते में स्विच करें ",
+                                    "জ্যোতিষ অ্যাকাউন্টে স্যুইচ করুন ",
+                                    "ஜோதிட கணக்கிற்கு மாறவும் ",
+                                    "జ్యోతిషశాస్త్ర ఖాతాకు మారండి "
+                                  ]).getText,
                               height: MagicScreen(context: context, height: 630)
                                   .getHeight,
                               onPress: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => EditAstrologyForm(uid: widget.uid,)));
+                                    builder: (context) => EditAstrologyForm(
+                                          uid: widget.uid,
+                                        )));
                               },
                             )
                     ],

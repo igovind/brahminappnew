@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_bank_details.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
@@ -6,10 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../languages.dart';
+
 class BankDetailsPage extends StatelessWidget {
   final uid;
+  final language;
 
-  const BankDetailsPage({Key key, @required this.uid}) : super(key: key);
+  const BankDetailsPage({Key key, @required this.uid, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +40,7 @@ class BankDetailsPage extends StatelessWidget {
             );
           }
           if (snapshot.data.data() == null) {
-            return EditBankDetails(uid: uid);
+            return EditBankDetails(uid: uid,language: language,);
           }
 
           if (snapshot.data.data() != null) {
@@ -78,6 +83,7 @@ class BankDetailsPage extends StatelessWidget {
                             bankName: bankName,
                             ifscCode: IFSC,
                             accountNumber: accountNumber,
+                            language: language,
                           ),
                         );
                       },
@@ -92,7 +98,13 @@ class BankDetailsPage extends StatelessWidget {
                         color: Colors.deepOrangeAccent,
                         borderRadius: BorderRadius.circular(20)),
                     child: Text(
-                      'Edit',
+                      Language(code: language, text: [
+                        "Edit ",
+                        "संपादित करें ",
+                        "সম্পাদনা করুন ",
+                        "தொகு ",
+                        "సవరించండి "
+                      ]).getText,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -118,25 +130,58 @@ class BankDetailsPage extends StatelessWidget {
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text('Name'), Text("$name")],
-                            ),
-                            Divider(thickness: 1),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text('Bank name'), Text("$bankName")],
+                              children: [
+                                Text(Language(code: language, text: [
+                                  "Name ",
+                                  "नाम ",
+                                  "নাম ",
+                                  "பெயர் ",
+                                  "పేరు "
+                                ]).getText),
+                                Text("$name")
+                              ],
                             ),
                             Divider(thickness: 1),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Account number'),
+                                Text(Language(code: language, text: [
+                                  "Name of Bank ",
+                                  "बैंक का नाम ",
+                                  "ব্যাংকের নাম ",
+                                  "வங்கியின் பெயர் ",
+                                  "బ్యాంక్ పేరు "
+                                ]).getText),
+                                Text("$bankName")
+                              ],
+                            ),
+                            Divider(thickness: 1),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(Language(code: language, text: [
+                                  "Account number ",
+                                  "खाता संख्या ",
+                                  "হিসাব নাম্বার ",
+                                  "கணக்கு எண் ",
+                                  "ఖాతా సంఖ్య "
+                                ]).getText),
                                 Text('$accountNumber'),
                               ],
                             ),
                             Divider(thickness: 1),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text('IFSC Code'), Text("$IFSC")],
+                              children: [
+                                Text(Language(code: language, text: [
+                                  "IFSC Code ",
+                                  "IFSC कोड ",
+                                  "IFSC কোড ",
+                                  "IFSC குறியீடு ",
+                                  "IFSC కోడ్ "
+                                ]).getText),
+                                Text("$IFSC")
+                              ],
                             )
                           ],
                         ),

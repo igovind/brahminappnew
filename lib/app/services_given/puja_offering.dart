@@ -9,11 +9,14 @@ import 'package:flutter/rendering.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 
+import '../languages.dart';
+
 class PujaOffering extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot> snapshot;
+  final language;
   final uid;
 
-  const PujaOffering({Key key, this.snapshot, this.uid}) : super(key: key);
+  const PujaOffering({Key key, this.snapshot, this.uid, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class PujaOffering extends StatelessWidget {
                             topRight: Radius.circular(30))),
                     height: height(700),
                     child: NewAddAndEditPuja(
+                      language: language,
                       docSnap: null,
                       uid: uid,
                     ));
@@ -52,7 +56,13 @@ class PujaOffering extends StatelessWidget {
         body: snapshot.data.docs.isEmpty
             ? Center(
                 child: Text(
-                  "Please add your puja that you are going to offer here ",
+                  Language(code:language, text: [
+                    "You have not added any puja yet, whatever you puja please add ",
+                    "आपने अभी तक कोई पूजा ऐड नहीं किआ, आप जो भी पूजा करवाते है कृपया ऐड कीजिये  ",
+                    "আপনি এখনও কোনও উপাসনা যোগ করেন নি, আপনি যা পূজা করেন দয়া করে যোগ করুন ",
+                    "நீங்கள் இதுவரை எந்த வழிபாட்டையும் சேர்க்கவில்லை, நீங்கள் வணங்குவதை தயவுசெய்து சேர்க்கவும் ",
+                    "మీరు ఇంకా ఏ ఆరాధనను జోడించలేదు, మీరు ఆరాధించేది దయచేసి జోడించండి "
+                  ]).getText,
                   textAlign: TextAlign.center,
                 ),
               )
@@ -79,18 +89,42 @@ class PujaOffering extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text("Confirm"),
-                            content: const Text(
-                                "Are you sure you wish to delete this service?"),
+                            title:  Text(Language(code:language, text: [
+                              "Confirm ",
+                              "पुष्टि करें ",
+                              "কনফার্ম ",
+                              "உறுதிப்படுத்தவும் ",
+                              "నిర్ధారించండి "
+                            ]).getText,),
+                            content: Text(
+                              Language(code:language, text: [
+                                "Are you sure you wish to delete this service?",
+                                "क्या आप वाकई इस सेवा को हटाना चाहते हैं ",
+                                "আপনি কি নিশ্চিত যে আপনি এই পরিষেবাটি মুছতে চান? ",
+                                "இந்த சேவையை நீக்க விரும்புகிறீர்களா? ",
+                                "మీరు ఖచ్చితంగా ఈ సేవను తొలగించాలనుకుంటున్నారా? "
+                              ]).getText,),
                             actions: <Widget>[
                               FlatButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
-                                  child: const Text("DELETE")),
+                                  child: Text(Language(code:language, text: [
+                                    "Delete ",
+                                    "हटाएं ",
+                                    "মুছে ফেলা ",
+                                    "அழி ",
+                                    "తొలగించు "
+                                  ]).getText,)),
                               FlatButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
-                                child: const Text("CANCEL"),
+                                child: Text(Language(code:language, text: [
+                                  "Cancel ",
+                                  "रद्द करें ",
+                                  "বাতিল ",
+                                  "ரத்துசெய் ",
+                                  "రద్దు చేయండి "
+                                ]).getText,),
                               ),
                             ],
                           );
@@ -108,7 +142,13 @@ class PujaOffering extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "DELETE ",
+                                  Language(code:language, text: [
+                                "DELETE ",
+                                "हटाएँ ",
+                                "মুছে ফেলা ",
+                                "அழி ",
+                                "తొలగించు "
+                              ]).getText,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,
@@ -126,7 +166,13 @@ class PujaOffering extends StatelessWidget {
                       direction.index.toString();
                       FireStoreDatabase(uid: uid).deletepuja(
                           id, snapshot.data.docs[index].data()['keyword']);
-                      BotToast.showText(text: "Deleted Successfully");
+                      BotToast.showText(text: Language(code:language, text: [
+                        "Deleted successfully ",
+                        "सफलतापूर्वक मिटाया गया ",
+                        "সফলভাবে মোছা হয়েছে ",
+                        "வெற்றிகரமாக நீக்கப்பட்டது ",
+                        "విజయవంతంగా తొలగించబడింది "
+                      ]).getText,);
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
@@ -236,7 +282,13 @@ class PujaOffering extends StatelessWidget {
                                     onPress: () {
                                       Share.share("$samagri");
                                     },
-                                    title: "Share shamagri to contact",
+                                    title: Language(code:language, text: [
+                                      "Share samagri",
+                                      "शेयर सामग्री  ",
+                                      "সমাগরী শেয়ার করুন ",
+                                      "பகிர் சமகிரி ",
+                                      "భాగస్వామ్యం "
+                                    ]).getText,
                                     icon: Icons.share,
                                   ))
                             ],

@@ -5,12 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect_dropdown/multiple_select.dart';
 import '../../common_widgets/custom_multi_select_file.dart';
+import '../languages.dart';
 
 class AstrologyPage extends StatefulWidget {
+  final language;
   final uid;
   final AsyncSnapshot<DocumentSnapshot> snapshot;
 
-  const AstrologyPage({Key key, this.snapshot, this.uid}) : super(key: key);
+  const AstrologyPage({Key key, this.snapshot, this.uid, this.language})
+      : super(key: key);
 
   @override
   _AstrologyPageState createState() => _AstrologyPageState();
@@ -43,16 +46,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
       value: "7",
     ),
   ];
-  List<DropdownMenuItem> dropdownMenuItemExperience =
-      List<DropdownMenuItem>.generate(
-          80,
-          (index) => DropdownMenuItem(
-                child: Text(
-                  "${index + 2} Years",
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-                value: "${index + 2} Years",
-              ));
+
   List<MultipleSelectItem> elements = [
     MultipleSelectItem.build(
       value: 1,
@@ -173,7 +167,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
         'callOk': true,
         'videoOk': true,
       }).whenComplete(() {
-         FirebaseFirestore.instance
+        FirebaseFirestore.instance
             .collection('Avaliable_pundit/${widget.uid}/astro')
             .doc('#astro')
             .set({
@@ -182,7 +176,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
           'offer': description ?? 'Not Available',
           'keyword': '#astro',
           'image':
-          'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
+              'https://assets.teenvogue.com/photos/5f31a0d6861f578bcc3baf40/16:9/w_2560%2Cc_limit/GettyImages-1192843057.jpg'
         });
         FirebaseFirestore.instance
             .doc("Avaliable_pundit/${widget.uid}")
@@ -207,14 +201,39 @@ class _AstrologyPageState extends State<AstrologyPage> {
       });
     } else {
       if (_selectedValues.isEmpty) {
-        print("what the fuck**");
-        BotToast.showText(text: "Please select your languages");
+        BotToast.showText(
+          text: Language(code: widget.language, text: [
+            "Please select your languages ",
+            "कृपया अपनी भाषाओं का चयन करें ",
+            "আপনার ভাষা নির্বাচন করুন ",
+            "உங்கள் மொழிகளைத் தேர்ந்தெடுக்கவும் ",
+            "దయచేసి మీ భాషలను ఎంచుకోండి "
+          ]).getText,
+        );
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem> dropdownMenuItemExperience =
+    List<DropdownMenuItem>.generate(
+        80,
+            (index) => DropdownMenuItem(
+          child: Text(
+            "${index + 2} "+"${ Language(
+                code: widget.language,
+                text: [
+                  "Year ",
+                  "साल ",
+                  "বছর ",
+                  "ஆண்டு ",
+                  "సంవత్సరం "
+                ]).getText}",
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          value: "${index + 2} Years",
+        ));
     return astrologer
         ? Scaffold(
             appBar: AppBar(
@@ -245,7 +264,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                         color: Colors.deepOrangeAccent,
                         borderRadius: BorderRadius.circular(20)),
                     child: Text(
-                      "Save",
+                      Language(code: widget.language, text: [
+                        "Next",
+                        "आगे बढ़ें",
+                        "এগিয়ে যান",
+                        "மேலே செல்லுங்கள்",
+                        "ముందుకి వెళ్ళు"
+                      ]).getText,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -270,13 +295,29 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Price per 10 message"),
+                                Text(
+                                  Language(code: widget.language, text: [
+                                    "Price per 10 message ",
+                                    "संदेश का मूल्य प्रति 10 संदेश ",
+                                    "প্রতি 10 বার্তা বার্তার দাম",
+                                    "10 செய்திக்கு செய்தி விலை ",
+                                    "10 సందేశానికి సందేశ ధర"
+                                  ]).getText,
+                                ),
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
                                       validator: (value) {
                                         if (value == null) {
-                                          return "This field can't empty";
+                                          return Language(
+                                              code: widget.language,
+                                              text: [
+                                                "This field is required",
+                                                "यह फ़ील्ड आवश्यक है",
+                                                "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                                "இந்த புலம் தேவை",
+                                                "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                              ]).getText;
                                         }
                                         return null;
                                       },
@@ -301,13 +342,29 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Audio call per minute price"),
+                                Text(
+                                  Language(code: widget.language, text: [
+                                    "Audio call price per minute ",
+                                    "ऑडियो कॉल की कीमत प्रति मिनट ",
+                                    "প্রতি মিনিটে অডিও কল মূল্য ",
+                                    "நிமிடத்திற்கு ஆடியோ அழைப்பு விலை ",
+                                    "నిమిషానికి ఆడియో కాల్ ధర "
+                                  ]).getText,
+                                ),
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
                                       validator: (value) {
                                         if (value == null) {
-                                          return "This field can't empty";
+                                          Language(
+                                              code: widget.language,
+                                              text: [
+                                                "This field is required",
+                                                "यह फ़ील्ड आवश्यक है",
+                                                "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                                "இந்த புலம் தேவை",
+                                                "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                              ]).getText;
                                         }
                                         return null;
                                       },
@@ -332,13 +389,29 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Video call per minute price"),
+                                Text(
+                                  Language(code: widget.language, text: [
+                                    "Video call price per minute ",
+                                    "वीडियो कॉल की कीमत प्रति मिनट ",
+                                    "প্রতি মিনিটে ভিডিও কল মূল্য ",
+                                    "நிமிடத்திற்கு வீடியோ அழைப்பு விலை ",
+                                    "నిమిషానికి వీడియో కాల్ ధర "
+                                  ]).getText,
+                                ),
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
                                       validator: (value) {
                                         if (value == null) {
-                                          return "This field can't empty";
+                                          Language(
+                                              code: widget.language,
+                                              text: [
+                                                "This field is required",
+                                                "यह फ़ील्ड आवश्यक है",
+                                                "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                                "இந்த புலம் தேவை",
+                                                "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                              ]).getText;
                                         }
                                         return null;
                                       },
@@ -371,13 +444,27 @@ class _AstrologyPageState extends State<AstrologyPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Year of experience"),
+                            Text(
+                              Language(code: widget.language, text: [
+                                "Year of experience ",
+                                "अनुभव का वर्ष ",
+                                "অভিজ্ঞতার বছর ",
+                                "அனுபவ ஆண்டு ",
+                                "అనుభవం సంవత్సరం "
+                              ]).getText,
+                            ),
                             Container(
                               width: 100,
                               child: DropdownButtonFormField(
                                   validator: (value) {
                                     if (value == null) {
-                                      return "This field can't empty";
+                                      Language(code: widget.language, text: [
+                                        "This field is required",
+                                        "यह फ़ील्ड आवश्यक है",
+                                        "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                        "இந்த புலம் தேவை",
+                                        "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                      ]).getText;
                                     }
                                     return null;
                                   },
@@ -409,7 +496,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Language",
+                              Language(code: widget.language, text: [
+                                "language ",
+                                "भाषा ",
+                                "ভাষা ",
+                                "மொழி ",
+                                "భాష "
+                              ]).getText,
                             ),
                             SizedBox(
                               height: 5,
@@ -424,7 +517,15 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                 Icons.arrow_drop_down_circle_outlined,
                                 color: Colors.deepOrangeAccent,
                               ),
-                              placeholder: 'Select language',
+                              placeholder: Language(
+                                  code: widget.language,
+                                  text: [
+                                    "language ",
+                                    "भाषा ",
+                                    "ভাষা ",
+                                    "மொழி ",
+                                    "భాష "
+                                  ]).getText,
                               disabled: false,
                               values: _selectedValues,
                               elements: elements,
@@ -441,8 +542,15 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Expertise"),
+                              border: InputBorder.none,
+                              labelText: Language(code: widget.language, text: [
+                                "Expertise ",
+                                "विशेषज्ञता ",
+                                "দক্ষতা ",
+                                "நிபுணத்துவம் ",
+                                "నైపుణ్యం "
+                              ]).getText,
+                            ),
                             initialValue: expertise,
 
                             onSaved: (value) {
@@ -452,7 +560,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             },
                             validator: (value) {
                               if (value == null) {
-                                return "This field can't empty";
+                                Language(code: widget.language, text: [
+                                  "This field is required",
+                                  "यह फ़ील्ड आवश्यक है",
+                                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                  "இந்த புலம் தேவை",
+                                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                ]).getText;
                               }
                               return null;
                             }, //_benefits = value,
@@ -466,8 +580,15 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Additional description"),
+                              border: InputBorder.none,
+                              labelText: Language(code: widget.language, text: [
+                                "Additional description ",
+                                "अतिरिक्त विवरण ",
+                                "অতিরিক্ত বিবরণ ",
+                                "கூடுதல் விளக்கம் ",
+                                "అదనపు వివరణ "
+                              ]).getText,
+                            ),
                             initialValue: description,
 
                             onSaved: (value) {
@@ -607,7 +728,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                   height: 300,
                 ),
                 Text(
-                  "Are you a Astrologer?",
+                  Language(code: widget.language, text: [
+                    "Are you a Astrologer? ",
+                    "क्या आप एक ज्योतिषी हैं? ",
+                    "আপনি কি একজন জ্যোতিষী? ",
+                    "நீங்கள் ஒரு ஜோதிடரா? ",
+                    "మీరు జ్యోతిష్కులా? "
+                  ]).getText,
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.bold),
                 ),
@@ -633,7 +760,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          "Yes",
+                          Language(code: widget.language, text: [
+                            "Yes ",
+                            "हाँ ",
+                            "হ্যাঁ ",
+                            "ஆம் ",
+                            "हाँ "
+                          ]).getText,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
@@ -661,7 +794,13 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          "No",
+                          Language(code: widget.language, text: [
+                            "No ",
+                            "नहीं ",
+                            "না ",
+                            "இல்லை ",
+                            "కాదు "
+                          ]).getText,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
