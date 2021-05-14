@@ -34,7 +34,7 @@ class _TogglePageState extends State<TogglePage> {
           if (snapshot.data == null) {
             return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
-          String lang=snapshot.data.data()["langCode"];
+          String lang=snapshot.data.data()["langCode"]??null;
           if (snapshot.data.data() == null) {
            /* return CreateProfile(
               uid: widget.user.uid,
