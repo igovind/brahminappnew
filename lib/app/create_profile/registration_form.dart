@@ -237,7 +237,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         "lang": Language(code: widget.language).getLang,
         "dateOfProfileCreation": FieldValue.serverTimestamp(),
         "dateOfProfileUpdate":
-            FieldValue.arrayUnion([FieldValue.serverTimestamp()])
+            FieldValue.arrayUnion([DateTime.now()])
       }).whenComplete(() {
         Auth().updateUser("$fullName", profileUrl);
         FireStoreDatabase(uid: widget.uid).setAvailableCode();

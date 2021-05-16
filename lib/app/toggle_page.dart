@@ -46,7 +46,6 @@ class _TogglePageState extends State<TogglePage> {
           String lang=snapshot.data.data()["langCode"]??"ENG";
           bool ready = snapshot.data.data()["ready"] ?? true;
           if (!ready) {
-
             return CreateProfile(
               uid: widget.user.uid, language: lang,
             );

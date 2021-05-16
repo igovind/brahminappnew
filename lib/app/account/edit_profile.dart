@@ -98,7 +98,7 @@ class _EditProfileState extends State<EditProfile> {
         'state': state ?? UserDetails(snapshot: widget.snapshot).state,
         'type': punditType ?? UserDetails(snapshot: widget.snapshot).type,
         "dateOfProfileUpdate":
-            FieldValue.arrayUnion([FieldValue.serverTimestamp()]),
+            FieldValue.arrayUnion([DateTime.now()]),
         'searchKey': fullName == null
             ? UserDetails(snapshot: widget.snapshot).name[0]
             : fullName[0].toUpperCase().toString(),
