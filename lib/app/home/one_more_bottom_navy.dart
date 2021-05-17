@@ -39,54 +39,7 @@ class _SecondBottomNavyState extends State<SecondBottomNavy> {
     super.initState();
     _navigationController = new CircularBottomNavigationController(selectedPos);
     _navigationController = new CircularBottomNavigationController(selectedPos);
-    tabItems = List.of([
-      new TabItem(
-          Icons.home,
-          Language(
-              code: widget.language,
-              text: ["Home ", "घर ", "বাড়ি ", "வீடு ", "హోమ్ "]).getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      /* new TabItem(Icons.dynamic_feed_outlined, "Feed", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),*/
-      new TabItem(
-          Icons.person_add_alt_1,
-          Language(code: widget.language, text: [
-            "Booking ",
-            "बुकिंग ",
-            "সংরক্ষণ ",
-            "பதிவு ",
-            "బుకింగ్ "
-          ]).getText,
-          Colors.orange,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      new TabItem(
-          Icons.layers,
-          Language(
-              code: widget.language,
-              text: ["Service ", "सेवा ", "সেবা ", "சேவை ", "సేవ "]).getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      new TabItem(
-          Icons.star,
-          Language(code: widget.language, text: [
-            "Astrology ",
-            "ज्योतिष",
-            "জ্যোতিষ ",
-            "ஜோதிடம் ",
-            "జ్యోతిషశాస్త్రం"
-          ]).getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      new TabItem(
-          Icons.account_circle,
-          Language(
-                  code: widget.language,
-                  text: ["Account ", "खाता ", "হিসাব ", "கணக்கு ", "ఖాతా "])
-              .getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    ]);
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         //  print("onMessage: $message");
@@ -183,6 +136,54 @@ class _SecondBottomNavyState extends State<SecondBottomNavy> {
 
   @override
   Widget build(BuildContext context) {
+    tabItems = List.of([
+      new TabItem(
+          Icons.home,
+          Language(
+              code: widget.language,
+              text: ["Home ", "घर ", "বাড়ি ", "வீடு ", "హోమ్ "]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      /* new TabItem(Icons.dynamic_feed_outlined, "Feed", Colors.deepOrangeAccent,
+        labelStyle: TextStyle(fontWeight: FontWeight.normal)),*/
+      new TabItem(
+          Icons.person_add_alt_1,
+          Language(code: widget.language, text: [
+            "Booking ",
+            "बुकिंग ",
+            "সংরক্ষণ ",
+            "பதிவு ",
+            "బుకింగ్ "
+          ]).getText,
+          Colors.orange,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.layers,
+          Language(
+              code: widget.language,
+              text: ["Service ", "सेवा ", "সেবা ", "சேவை ", "సేవ "]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.star,
+          Language(code: widget.language, text: [
+            "Astrology ",
+            "ज्योतिष",
+            "জ্যোতিষ ",
+            "ஜோதிடம் ",
+            "జ్యోతిషశాస్త్రం"
+          ]).getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+      new TabItem(
+          Icons.account_circle,
+          Language(
+              code: widget.language,
+              text: ["Account ", "खाता ", "হিসাব ", "கணக்கு ", "ఖాతా "])
+              .getText,
+          Colors.deepOrangeAccent,
+          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
+    ]);
     double height(double height) {
       return MagicScreen(context: context, height: height).getHeight;
     }

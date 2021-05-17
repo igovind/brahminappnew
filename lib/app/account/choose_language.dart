@@ -28,7 +28,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                   "langCode": Language(language: selLanguage).getCode,
                   "lang": selLanguage
                 }).whenComplete(() {
-                  BotToast.showText(text: Language(code: widget.language, text: [
+                  BotToast.showText(text: Language(code: Language(language: selLanguage).getCode, text: [
                     "Language updated ",
                     "भाषा अपडेट की गई ",
                     "ভাষা আপডেট হয়েছে ",

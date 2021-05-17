@@ -25,7 +25,6 @@ class TogglePage extends StatefulWidget {
 }
 
 class _TogglePageState extends State<TogglePage> {
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
@@ -36,18 +35,23 @@ class _TogglePageState extends State<TogglePage> {
           }
 
           if (snapshot.data.data() == null) {
-           /* return CreateProfile(
+            /* return CreateProfile(
               uid: widget.user.uid,
             );*/
             return SelectLanguage(
-              uid: widget.user.uid,
+              userId: widget.user,
             );
           }
-          String lang=snapshot.data.data()["langCode"]??"ENG";
+          String lang = snapshot.data.data()["langCode"] ?? "ENG";
           bool ready = snapshot.data.data()["ready"] ?? true;
           if (!ready) {
             return CreateProfile(
-              uid: widget.user.uid, language: lang,
+              uid: widget.user.uid,
+              language: lang,
+            );
+            return CreateProfile(
+              uid: widget.user.uid,
+              language: lang,
             );
           }
           if (UserDetails(snapshot: snapshot).astrologer) {
@@ -63,6 +67,7 @@ class _TogglePageState extends State<TogglePage> {
                 create: (BuildContext context) =>
                     FireStoreDatabase(uid: widget.user.uid),
                 child: BottomNavygationBar(
+                  language: lang,
                   userDataSnapshot: snapshot,
                   user: widget.user,
                 )

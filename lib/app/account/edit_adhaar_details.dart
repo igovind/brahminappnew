@@ -225,6 +225,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {"ready": true});
+                    Navigator.of(context).pop();
                   },
                   child: Text(
                     Language(code: widget.language, text: [

@@ -1,11 +1,13 @@
 import 'package:brahminapp/app/create_profile/create_profile.dart';
 import 'package:brahminapp/app/languages.dart';
+import 'package:brahminapp/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectLanguage extends StatelessWidget {
-  final String uid;
+  final UserId userId;
 
-  const SelectLanguage({Key key, @required this.uid}) : super(key: key);
+  const SelectLanguage({Key key, @required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +18,13 @@ class SelectLanguage extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreateProfile(
-                          uid: uid,
-                          language: Language(language: language).getCode,
-                        )));
+                    builder: (context) => Provider<AuthBase>(
+                      create: (context)=>Auth(),
+                      child: CreateProfile(
+                            uid: userId.uid,
+                            language: Language(language: language).getCode,
+                          ),
+                    )));
               },
               child: Container(
                 padding: EdgeInsets.only(top: 8, bottom: 8),
