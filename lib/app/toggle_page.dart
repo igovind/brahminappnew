@@ -1,6 +1,4 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/user_details.dart';
-import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/create_profile/create_profile.dart';
 import 'package:brahminapp/app/home/bottom_navigation_bar_page.dart';
 import 'package:brahminapp/app/home/one_more_bottom_navy.dart';
@@ -13,12 +11,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'astrology/calls/index.dart';
 
 class TogglePage extends StatefulWidget {
-  final UserId user;
+  final UserId? user;
 
-  const TogglePage({Key key, this.user}) : super(key: key);
+  const TogglePage({Key? key, this.user}) : super(key: key);
 
   @override
   _TogglePageState createState() => _TogglePageState();
@@ -26,15 +23,26 @@ class TogglePage extends StatefulWidget {
 
 class _TogglePageState extends State<TogglePage> {
   @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-        stream: FireStoreDatabase(uid: widget.user.uid).getUserData,
+        stream: FireStoreDatabase(uid: widget.user!.uid).getUserData,
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
 
-          if (snapshot.data.data() == null) {
+          if (snapshot.data!.data() == null) {
             /* return CreateProfile(
               uid: widget.user.uid,
             );*/
@@ -42,31 +50,28 @@ class _TogglePageState extends State<TogglePage> {
               userId: widget.user,
             );
           }
-          String lang = snapshot.data.data()["langCode"] ?? "ENG";
-          bool ready = snapshot.data.data()["ready"] ?? true;
+          String lang = snapshot.data!.get("langCode") ?? "ENG";
+          bool ready = snapshot.data!.get("ready") ?? true;
           if (!ready) {
             return CreateProfile(
-              uid: widget.user.uid,
+              uid: widget.user!.uid,
               language: lang,
             );
-            return CreateProfile(
-              uid: widget.user.uid,
-              language: lang,
-            );
+
           }
-          if (UserDetails(snapshot: snapshot).astrologer) {
-            return SecondBottomNavy(
+          if (UserDetails(snapshot: snapshot).astrologer!) {
+            return ExtBotNavBar(
               userDataSnapshot: snapshot,
               user: widget.user,
               language: lang,
             );
           }
-          return Provider<UserId>.value(
+          return Provider<UserId?>.value(
             value: widget.user,
             child: Provider<DatabaseL>(
                 create: (BuildContext context) =>
-                    FireStoreDatabase(uid: widget.user.uid),
-                child: BottomNavygationBar(
+                    FireStoreDatabase(uid: widget.user!.uid),
+                child: BotNavBar(
                   language: lang,
                   userDataSnapshot: snapshot,
                   user: widget.user,

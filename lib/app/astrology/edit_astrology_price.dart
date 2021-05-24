@@ -1,4 +1,4 @@
-import 'package:bot_toast/bot_toast.dart';
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
 import 'package:brahminapp/app/languages.dart';
@@ -6,22 +6,19 @@ import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
 import '../../common_widgets/custom_slider.dart';
 
 class EditAstrologyPrices extends StatelessWidget {
-  final UserId userId;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final UserId? userId;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
   final language;
 
   const EditAstrologyPrices({
-    Key key,
+    Key? key,
     this.userId,
     this.snapshot,
     this.language,
@@ -37,10 +34,10 @@ class EditAstrologyPrices extends StatelessWidget {
       return MagicScreen(context: context, width: width).getWidth;
     }
 
-    bool chatOk = snapshot.data.data()["chatOk"] ?? false;
-    bool callOk = snapshot.data.data()["callOk"] ?? false;
-    bool videoOk = snapshot.data.data()["videoOk"] ?? false;
-    bool online = snapshot.data.data()["online"] ?? false;
+    bool chatOk = snapshot!.data!.get("chatOk") ?? false;
+    bool callOk = snapshot!.data!.get("callOk") ?? false;
+    bool videoOk = snapshot!.data!.get("videoOk") ?? false;
+    bool online = snapshot!.data!.get("online") ?? false;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -64,10 +61,10 @@ class EditAstrologyPrices extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.w700),
                 ),
-                FlatButton(
+                ElevatedButton(
                     onPressed: () {
-                      showMaterialModalBottomSheet(
-                        backgroundColor: Colors.transparent,
+                      showDialog(
+                      //  backgroundColor: Colors.transparent,
                         context: context,
                         builder: (context) {
                           return Container(
@@ -80,7 +77,7 @@ class EditAstrologyPrices extends StatelessWidget {
                               height: MediaQuery.of(context).size.height * 0.9,
                               child: EditAstrologyForm(
                                 language: language,
-                                uid: userId.uid,
+                                uid: userId!.uid,
                                 snapshot: snapshot,
                               ));
                         },
@@ -135,10 +132,10 @@ class EditAstrologyPrices extends StatelessWidget {
                         colorOff: Colors.red,
                         colorOn: Colors.green,
                         height: height(40),
-                        onChanged: (bool value) {
-                          FireStoreDatabase(uid: userId.uid)
-                              .setOnlineStatus(value: value);
-                          print(value);
+                        onChanged: (value) {
+                          FireStoreDatabase(uid: userId!.uid)
+                              .setOnlineStatus(value: value!);
+
                         },
                       ),
                     ],
@@ -168,10 +165,9 @@ class EditAstrologyPrices extends StatelessWidget {
                               colorOff: Colors.red,
                               colorOn: Colors.green,
                               height: height(40),
-                              onChanged: (bool value) {
-                                FireStoreDatabase(uid: userId.uid)
+                              onChanged: (value) {
+                                FireStoreDatabase(uid: userId!.uid)
                                     .setMessageStatus(value: value);
-                                print(value);
                               },
                             ),
                           ],
@@ -200,10 +196,9 @@ class EditAstrologyPrices extends StatelessWidget {
                               height: height(40),
                               colorOff: Colors.red,
                               colorOn: Colors.green,
-                              onChanged: (bool value) {
-                                FireStoreDatabase(uid: userId.uid)
+                              onChanged: (value) {
+                                FireStoreDatabase(uid: userId!.uid)
                                     .setCallStatus(value: value);
-                                print(value);
                               },
                             ),
                           ],
@@ -232,8 +227,8 @@ class EditAstrologyPrices extends StatelessWidget {
                               colorOn: Colors.green,
                               width: width(100),
                               height: height(40),
-                              onChanged: (bool value) {
-                                FireStoreDatabase(uid: userId.uid)
+                              onChanged: (value) {
+                                FireStoreDatabase(uid: userId!.uid)
                                     .setVideoStatus(value: value);
                                 print(value);
                               },
@@ -270,10 +265,10 @@ class EditAstrologyPrices extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Rs/- ${snapshot.data.data()["coins"]}",
+                  Text("Rs/- ${snapshot!.data!.get("coins")}",
                       style: TextStyle(
                           color: Colors.black54, fontWeight: FontWeight.bold)),
-                  FlatButton(
+                  ElevatedButton(
                     child: Text(
                         Language(code: language, text: [
                           "Coins ",
@@ -288,8 +283,9 @@ class EditAstrologyPrices extends StatelessWidget {
                       FirebaseFirestore.instance
                           .doc(
                               "coindWid/${UserDetails(snapshot: snapshot).uid}")
-                          .set({"price": snapshot.data.data()["coins"]});
-                      BotToast.showText(text: "Claimed");
+                          .set({"price": snapshot!.data!.get("coins")});
+                      //TODO: botToast
+                     /* BotToast.showText(text: "Claimed");*/
                     },
                   )
                 ],
@@ -312,7 +308,7 @@ class EditAstrologyPrices extends StatelessWidget {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-                stream: FireStoreDatabase(uid: userId.uid).getCallHistory,
+                stream: FireStoreDatabase(uid: userId!.uid).getCallHistory,
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
                     return Center(child: CircularProgressIndicator());
@@ -326,15 +322,15 @@ class EditAstrologyPrices extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return CallTile(
                             language: language,
-                            name: snapshot.data.docs[index].data()["title"],
-                            image: snapshot.data.docs[index].data()["image"],
+                            name: snapshot.data!.docs[index].get("title"),
+                            image: snapshot.data!.docs[index].get("image"),
                             duration:
-                                snapshot.data.docs[index].data()["subtitle"],
-                            time: snapshot.data.docs[index].data()["time"],
-                            type: snapshot.data.docs[index].data()["type"],
-                            transactionId: snapshot.data.docs[index]
-                                .data()["TransactionId"],
-                            coins: snapshot.data.docs[index].data()["coins"],
+                                snapshot.data!.docs[index].get("subtitle"),
+                            time: snapshot.data!.docs[index].get("time"),
+                            type: snapshot.data!.docs[index].get("type"),
+                            transactionId: snapshot.data!.docs[index]
+                                .get("TransactionId"),
+                            coins: snapshot.data!.docs[index].get("coins"),
                           );
                         },
                         separatorBuilder: (context, index) {
@@ -343,7 +339,7 @@ class EditAstrologyPrices extends StatelessWidget {
                             color: Colors.black54,
                           );
                         },
-                        itemCount: snapshot.data.docs.length),
+                        itemCount: snapshot.data!.docs.length),
                   );
                 })
           ],
@@ -354,17 +350,17 @@ class EditAstrologyPrices extends StatelessWidget {
 }
 
 class CallTile extends StatelessWidget {
-  final String name;
-  final String image;
-  final Timestamp time;
-  final String duration;
-  final String type;
-  final int transactionId;
-  final int coins;
+  final String? name;
+  final String? image;
+  final Timestamp? time;
+  final String? duration;
+  final String? type;
+  final int? transactionId;
+  final int? coins;
   final language;
 
   const CallTile(
-      {Key key,
+      {Key? key,
       this.name,
       this.image,
       this.time,
@@ -384,9 +380,8 @@ class CallTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircularProfileAvatar(
-                image,
-                radius: MagicScreen(context: context, height: 20).getHeight,
+              CircularAvatarNetwork(
+                url: image,
               ),
               Column(
                 children: [
@@ -427,7 +422,7 @@ class CallTile extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
-                    "${DateFormat.yMMMMd().format(time.toDate())}   ${DateFormat.Hm().format(time.toDate())}",
+                    "${DateFormat.yMMMMd().format(time!.toDate())}   ${DateFormat.Hm().format(time!.toDate())}",
                     style: TextStyle(
                         color: Colors.black54,
                         fontSize: 10,

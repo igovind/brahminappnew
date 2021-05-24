@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class StarRating extends StatelessWidget {
-  final double swastik;
+  final double? swastik;
 
-  const StarRating({Key key, this.swastik}) : super(key: key);
+  const StarRating({Key? key, this.swastik}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     if(swastik==0){

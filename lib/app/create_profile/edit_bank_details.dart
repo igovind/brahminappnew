@@ -18,12 +18,12 @@ class EditBankDetails extends StatefulWidget {
   final language;
 
   const EditBankDetails(
-      {Key key,
+      {Key? key,
       this.bankName,
       this.accountNumber,
       this.name,
       this.ifscCode,
-      @required this.uid,
+      required this.uid,
       this.check,
       this.language})
       : super(key: key);
@@ -34,13 +34,13 @@ class EditBankDetails extends StatefulWidget {
 
 class _EditBankDetailsState extends State<EditBankDetails> {
   final _formKey = GlobalKey<FormState>();
-  String _name;
-  String _bankName;
-  String _accountNumber;
-  String _ifscCode;
+  String? _name;
+  String? _bankName;
+  String? _accountNumber;
+  String? _ifscCode;
 
   bool _validateAndSaveForm() {
-    final form = _formKey.currentState;
+    final form = _formKey.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -90,7 +90,6 @@ class _EditBankDetailsState extends State<EditBankDetails> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -100,7 +99,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
         actions: [
           widget.check == null
               ? SizedBox()
-              : FlatButton(
+              : ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {"ready": true});
@@ -111,7 +110,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                         color: Colors.deepOrangeAccent,
                         fontWeight: FontWeight.bold),
                   )),
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               _submit();
             },
@@ -168,7 +167,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                           "మీ పేరు (బ్యాంక్ వివరాల ప్రకారం) "
                         ]).getText),
                     initialValue: widget.name,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",
@@ -197,7 +196,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                         ]).getText),
                     initialValue: widget.bankName,
                     keyboardType: TextInputType.name,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",
@@ -227,7 +226,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                     initialValue: widget.accountNumber,
                     keyboardType: TextInputType.number,
                     obscureText: false,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",
@@ -257,7 +256,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                     initialValue: widget.ifscCode,
                     keyboardType: TextInputType.text,
                     obscureText: false,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",

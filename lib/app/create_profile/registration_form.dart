@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bot_toast/bot_toast.dart';
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
@@ -7,7 +7,6 @@ import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,9 +23,9 @@ String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 class RegistrationForm extends StatefulWidget {
   final uid;
   final language;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
 
-  const RegistrationForm({Key key, this.uid, this.snapshot, this.language})
+  const RegistrationForm({Key? key, this.uid, this.snapshot, this.language})
       : super(key: key);
 
   @override
@@ -35,34 +34,34 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _sTFormKey = GlobalKey<FormState>();
-  File userProfilePicFile;
-  File userCoverPicFile;
+  File? userProfilePicFile;
+  File? userCoverPicFile;
   bool inProcess = false;
   bool loading = false;
-  String fullName;
-  String aboutYou;
-  String state;
-  String city;
-  String contact;
-  String profilePicUrl;
-  String coverPicUrl;
-  String punditType;
-  String refBy;
+  String? fullName;
+  String? aboutYou;
+  String? state;
+  String? city;
+  String? contact;
+  String? profilePicUrl;
+  String? coverPicUrl;
+  String? punditType;
+  late String refBy;
 
-  Position userLocation;
+  Position? userLocation;
   bool locationLoading = false;
   Geoflutterfire geo = Geoflutterfire();
   GeolocatorPlatform geoLocator = GeolocatorPlatform.instance;
-  String tokens;
-  bool found;
-  String refName;
-  String refPicUrl;
-  String refAbt;
-  String refUID;
-  final FirebaseMessaging _messaging = FirebaseMessaging();
+  String? tokens;
+  bool? found;
+  String? refName;
+  String? refPicUrl;
+  String? refAbt;
+  String? refUID;
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   bool _validateAndSaveForm() {
-    final form = _sTFormKey.currentState;
+    final form = _sTFormKey.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -70,7 +69,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return false;
   }
 
-  Future<Position> _getLocation() async {
+  Future<Position?> _getLocation() async {
     var currentLocation;
     try {
       currentLocation = await geoLocator.getCurrentPosition(
@@ -87,7 +86,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       return null;
     }
     GeoFirePoint point = geo.point(
-        latitude: userLocation.latitude, longitude: userLocation.longitude);
+        latitude: userLocation!.latitude, longitude: userLocation!.longitude);
     return point.data;
   }
 
@@ -109,20 +108,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
           setState(() {
             locationLoading = false;
           });
-          BotToast.showText(text: "Location is updated");
+          //TODO: botToast
+          /*BotToast.showText(text: "Location is updated");*/
         });
       });
     }
   }
 
-  getProfilePic({ImageSource source}) async {
+  getProfilePic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         compressQuality: 100,
@@ -142,14 +142,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
     }
   }
 
-  getCoverPic({ImageSource source}) async {
+  getCoverPic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
         compressQuality: 100,
@@ -170,29 +170,29 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   Future<String> submitCoverPic() async {
-    StorageReference reference = FirebaseStorage.instance
+    Reference reference = FirebaseStorage.instance
         .ref()
         .child('Users/${widget.uid}/coverPicFile');
-    StorageUploadTask uploadTask = reference.putFile(userCoverPicFile);
-    var downloadUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    UploadTask uploadTask = reference.putFile(userCoverPicFile!);
+    var downloadUrl = await (await uploadTask).ref.getDownloadURL();
     var url = downloadUrl.toString();
     coverPicUrl = url;
     return downloadUrl.toString();
   }
 
   Future<String> submitProfilePic() async {
-    StorageReference reference = FirebaseStorage.instance
+    Reference reference = FirebaseStorage.instance
         .ref()
         .child('Users/${widget.uid}/profilePicFile');
-    StorageUploadTask uploadTask = reference.putFile(userProfilePicFile);
-    var downloadUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    UploadTask uploadTask = reference.putFile(userProfilePicFile!);
+    var downloadUrl = await (await uploadTask).ref.getDownloadURL();
     var url = downloadUrl.toString();
     profilePicUrl = url;
     return downloadUrl.toString();
   }
 
   String _availableCode() {
-    String code = widget.snapshot.data.data()["available_code"].toString();
+    String code = widget.snapshot!.data!.get("available_code").toString();
     return code;
   }
 
@@ -207,7 +207,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       String coverUrl = await submitCoverPic();
       String code = _availableCode();
       FireStoreDatabase(uid: widget.uid).setData(data: {
-        'firstName': capitalize(fullName),
+        'firstName': capitalize(fullName!),
         'aboutYou': aboutYou,
         'number': contact,
         'state': state,
@@ -215,7 +215,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'refCode': "G" + code,
         'profilePicUrl': profileUrl,
         'coverpic': coverUrl,
-        'searchKey': fullName[0].toUpperCase().toString(),
+        'searchKey': fullName![0].toUpperCase().toString(),
         'lastName': city,
         'punditID':
             "RK${DateTime.now().year}$code${DateTime.now().month}${DateTime.now().day}",
@@ -236,13 +236,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
         "langCode": widget.language,
         "lang": Language(code: widget.language).getLang,
         "dateOfProfileCreation": FieldValue.serverTimestamp(),
-        "dateOfProfileUpdate":
-            FieldValue.arrayUnion([DateTime.now()])
+        "dateOfProfileUpdate": FieldValue.arrayUnion([DateTime.now()])
       }).whenComplete(() {
         Auth().updateUser("$fullName", profileUrl);
         FireStoreDatabase(uid: widget.uid).setAvailableCode();
         FireStoreDatabase(uid: widget.uid).setRefCode(ref: "G" + code, data: {
-          'name': capitalize(fullName),
+          'name': capitalize(fullName!),
           'image': profileUrl,
           'punditID':
               "RK${DateTime.now().year}$code${DateTime.now().month}${DateTime.now().day}",
@@ -253,8 +252,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
         if (refBy.isNotEmpty) {
           DocumentSnapshot snap =
               await FirebaseFirestore.instance.doc("referal/$refBy").get();
-          String refUid = snap.data()["uid"];
-          String qtoken = snap.data()["token"];
+          String? refUid = snap.get("uid");
+          String? qtoken = snap.get("token");
           String image = profileUrl;
           String sender = "Referral code applied";
           String content =
@@ -264,7 +263,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 .collection("punditUsers/$refUid/referrals")
                 .doc(widget.uid)
                 .set({
-              'firstName': capitalize(fullName),
+              'firstName': capitalize(fullName!),
               'aboutYou': aboutYou,
               'number': contact,
               'state': state,
@@ -272,7 +271,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               'refCode': "G" + code,
               'profilePicUrl': profileUrl,
               'coverpic': coverUrl,
-              'searchKey': fullName[0].toUpperCase().toString(),
+              'searchKey': fullName![0].toUpperCase().toString(),
               'lastName': city,
               'token': qtoken,
               'image': image,
@@ -287,7 +286,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
         if (this.mounted) {
           setState(() {
             loading = true;
-            BotToast.showText(
+            //TODO: botToast
+            /* BotToast.showText(
               text: Language(code: widget.language, text: [
                 "Information saved ",
                 "पूरा हुआ ",
@@ -295,13 +295,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 "நிறைவு ",
                 "పూర్తయింది "
               ]).getText,
-            );
+            );*/
           });
         }
       });
     } else {
       if (userProfilePicFile == null && userProfilePicFile == null) {
-        BotToast.showText(
+        //TODO: botToast
+        /* BotToast.showText(
           text: Language(code: widget.language, text: [
             "Please add profile and cover picture ",
             "कृपया प्रोफ़ाइल और कवर चित्र जोड़ें ",
@@ -309,10 +310,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
             "சுயவிவரம் மற்றும் அட்டைப் படத்தைச் சேர்க்கவும் ",
             "దయచేసి ప్రొఫైల్ మరియు కవర్ చిత్రాన్ని జోడించండి "
           ]).getText,
-        );
+        );*/
       } else {
         if (userProfilePicFile == null) {
-          BotToast.showText(
+          //TODO: botToast
+          /*   BotToast.showText(
             text: Language(code: widget.language, text: [
               "Please add profile picture ",
               "कृपया प्रोफ़ाइल चित्र जोड़ें ",
@@ -320,10 +322,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
               "சுயவிவரப் படத்தைச் சேர்க்கவும் ",
               "దయచేసి ప్రొఫైల్ చిత్రాన్ని జోడించండి "
             ]).getText,
-          );
+          );*/
         }
         if (userCoverPicFile == null) {
-          BotToast.showText(
+          /* BotToast.showText(
             text: Language(code: widget.language, text: [
               "Please add cover picture ",
               "কভার ছবি যোগ করুন ",
@@ -331,7 +333,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               "அட்டைப் படத்தைச் சேர்க்கவும் ",
               "కవర్ చిత్రాన్ని జోడించండి "
             ]).getText,
-          );
+          );*/
         }
       }
     }
@@ -353,7 +355,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -362,7 +363,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           actions: [
             loading
                 ? SizedBox()
-                : FlatButton(
+                : ElevatedButton(
                     onPressed: () {
                       _submit();
                     },
@@ -425,10 +426,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             blurRadius: 5)
                                       ],
                                       image: DecorationImage(
-                                          image: userCoverPicFile == null
+                                          image: (userCoverPicFile == null
                                               ? AssetImage(
                                                   "images/cover_image.jpg")
-                                              : FileImage(userCoverPicFile),
+                                              : FileImage(userCoverPicFile!)) as ImageProvider<Object>,
                                           fit: BoxFit.fitWidth),
                                       color: Colors.white,
                                       borderRadius: BorderRadius.only(
@@ -438,15 +439,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               ),
                               Align(
                                 alignment: Alignment.bottomCenter,
-                                child: CircularProfileAvatar(
-                                  "",
+                                child: GestureDetector(
                                   child: userProfilePicFile == null
-                                      ? Image.asset("images/placeholder.jpg")
-                                      : Image.file(userProfilePicFile),
-                                  radius:
-                                      MagicScreen(context: context, height: 60)
-                                          .getHeight,
-                                  elevation: 8,
+                                      ? CircularAvatar(
+                                          child: Image.asset(
+                                              "images/placeholder.jpg"))
+                                      : CircularAvatar(
+                                          child:
+                                              Image.file(userProfilePicFile!)),
                                   onTap: () {
                                     getProfilePic(source: ImageSource.gallery);
                                   },
@@ -474,8 +474,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     "*உன் முழு பெயர்",
                                     "*మీ పూర్తి పేరు"
                                   ]).getText),
-                              validator: (String value) {
-                                if (value.isEmpty) {
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
                                   return Language(code: widget.language, text: [
                                     "This field is required",
                                     "यह फ़ील्ड आवश्यक है",
@@ -514,8 +514,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         "கைபேசி எண்",
                                         "మొబైల్ సంఖ్య"
                                       ]).getText),
-                              validator: (String value) {
-                                if (value.isEmpty) {
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
                                   return Language(code: widget.language, text: [
                                     "This field is required",
                                     "यह फ़ील्ड आवश्यक है",
@@ -553,8 +553,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         "உன்னை பற்றி",
                                         "నీ గురించి"
                                       ]).getText),
-                              validator: (String value) {
-                                if (value.isEmpty) {
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
                                   return Language(code: widget.language, text: [
                                     "This field is required",
                                     "यह फ़ील्ड आवश्यक है",
@@ -575,7 +575,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
-                        CustomContainer(
+                       /* CustomContainer(
                             radius: 10,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -591,7 +591,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     }
 
                                     List<dynamic> statesArray =
-                                        snapshot.data.data()['states'];
+                                        snapshot.data!.get('states');
                                     List<DropdownMenuItem<String>> statesList =
                                         [];
                                     for (int i = 0;
@@ -607,7 +607,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       key: UniqueKey(),
                                       validator: (String value) {
                                         value = value == null
-                                            ? UserDetails(snapshot: null).state
+                                            ? UserDetails(snapshot: null).state!
                                             : value;
                                         if (value == null) {
                                           return Language(
@@ -661,15 +661,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       },
                                     );
                                   }),
-                            )),
+                            )),*/
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
                         CustomContainer(
                           radius: 10,
                           child: TextFormField(
-                              validator: (String value) {
-                                if (value.isEmpty) {
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
                                   return Language(code: widget.language, text: [
                                     "This field is required",
                                     "यह फ़ील्ड आवश्यक है",
@@ -704,7 +704,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
-                        CustomContainer(
+                        /*CustomContainer(
                           radius: 10,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -720,7 +720,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   }
 
                                   List<dynamic> typeArray =
-                                      snapshot1.data.data()['punditTypes'];
+                                      snapshot1.data!.get('punditTypes');
 
                                   List<DropdownMenuItem<String>> typeList = [];
                                   for (int i = 0; i < typeArray.length; i++) {
@@ -734,7 +734,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                     disabledHint: true,
                                     validator: (String value) {
                                       value = value == null
-                                          ? UserDetails(snapshot: null).type
+                                          ? UserDetails(snapshot: null).type!
                                           : value;
                                       if (value == null) {
                                         return Language(
@@ -786,13 +786,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   );
                                 }),
                           ),
-                        ),
+                        ),*/
                         SizedBox(
                             height: MagicScreen(context: context, height: 30)
                                 .getHeight),
                         found == null
                             ? SizedBox()
-                            : found
+                            : found!
                                 ? Center(
                                     child: ListTile(
                                       title: Text(
@@ -801,9 +801,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             color: Colors.deepOrangeAccent,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      leading: CircularProfileAvatar(
-                                        "$refPicUrl",
-                                        radius: 20,
+                                      leading: CircularAvatarNetwork(
+                                        url: refPicUrl,
                                       ),
                                     ),
                                   )
@@ -862,21 +861,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             Flexible(
                               flex: 1,
                               fit: FlexFit.loose,
-                              child: FlatButton(
+                              child: ElevatedButton(
                                   onPressed: () async {
                                     DocumentSnapshot snap =
                                         await FirebaseFirestore.instance
                                             .doc("referal/$refBy")
                                             .get();
                                     if (snap.data() != null) {
-                                      String refUid = snap.data()["uid"];
+                                      String? refUid = snap.get("uid");
                                       print("$refUid $refName");
                                       setState(() {
                                         found = true;
-                                        refName = snap.data()["name"];
-                                        refPicUrl = snap.data()["image"];
-                                        refUID = snap.data()["uid"];
-                                        refAbt = snap.data()["aboutYou"];
+                                        refName = snap.get("name");
+                                        refPicUrl = snap.get("image");
+                                        refUID = snap.get("uid");
+                                        refAbt = snap.get("aboutYou");
                                       });
                                     } else {
                                       setState(() {

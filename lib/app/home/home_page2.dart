@@ -1,3 +1,4 @@
+import 'package:brahminapp/app/astrology/calls/index.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/hexa_color.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -6,19 +7,18 @@ import 'package:brahminapp/services/media_querry.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'chat/view/ChatListPageView.dart';
 import 'menu/referals/referals.dart';
 
 class HomePageFolder extends StatefulWidget {
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
-  final AsyncSnapshot<DocumentSnapshot> userDataSnapshot;
-  final UserId userId;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? userDataSnapshot;
+  final UserId? userId;
   final language;
 
   const HomePageFolder(
-      {Key key,
+      {Key? key,
       this.snapshot,
       this.userId,
       this.userDataSnapshot,
@@ -40,26 +40,34 @@ class _HomePageFolderState extends State<HomePageFolder> {
       return MagicScreen(context: context, width: width).getWidth;
     }
 
-    String icon_1 = widget.snapshot.data.data()["icon_1"];
-    String icon_2 = widget.snapshot.data.data()["icon_2"];
-    String icon_3 = widget.snapshot.data.data()["icon_3"];
-    String icon_4 = widget.snapshot.data.data()["icon_4"];
-    String icon_5 = widget.snapshot.data.data()["icon_5"];
-    String icon_6 = widget.snapshot.data.data()["icon_6"];
-    String banner = widget.snapshot.data.data()["banner"];
-    int reward = widget.userDataSnapshot.data.data()['setReward'];
-    double _net = widget.userDataSnapshot.data.data()['setPrice'].toDouble();
+    String? icon_1 = widget.snapshot!.data!.get("icon_1");
+    String? icon_2 = widget.snapshot!.data!.get("icon_2");
+    String? icon_3 = widget.snapshot!.data!.get("icon_3");
+    String? icon_4 = widget.snapshot!.data!.get("icon_4");
+    String? icon_5 = widget.snapshot!.data!.get("icon_5");
+    String? icon_6 = widget.snapshot!.data!.get("icon_6");
+    String banner = widget.snapshot!.data!.get("banner");
+    int? reward = widget.userDataSnapshot!.data!.get('setReward');
+    double? _net = widget.userDataSnapshot!.data!.get('setPrice').toDouble();
     bool claimed = false;
-    List<dynamic> sliderImages = widget.snapshot.data.data()["slider_images"];
+    List<dynamic> sliderImages = widget.snapshot!.data!.get("slider_images");
     String titleColor =
-        widget.snapshot.data.data()["app_title_color"] ?? "#F9FFFB";
+        widget.snapshot!.data!.get("app_title_color")?? "#F9FFFB";
     print("");
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepOrangeAccent,
         onPressed: () {
-          showMaterialModalBottomSheet(
-            backgroundColor: Colors.transparent,
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndexPage(
+                    callType: 'Video',
+                    userId: widget.userId,
+                    channelName: "ifQJEBLW87THMcuSaypDAuCjJlw2",
+                  )));
+      /*    showDialog(
+           // backgroundColor: Colors.transparent,
             context: context,
             builder: (context) {
               return Container(
@@ -72,14 +80,14 @@ class _HomePageFolderState extends State<HomePageFolder> {
                 height: MediaQuery.of(context).size.height * 0.9,
                 child: Provider<DatabaseL>(
                     create: (context) =>
-                        FireStoreDatabase(uid: widget.userId.uid),
+                        FireStoreDatabase(uid: widget.userId!.uid),
                     child: Chat(
                       databaseL: null,
                       user: widget.userId,
                     )),
               );
             },
-          );
+          );*/
         },
         child: Icon(Icons.message),
       ),
@@ -262,14 +270,14 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                     style: TextStyle(
                                         color: Colors.green, fontSize: 12),
                                   ),
-                                  FlatButton(
+                                  ElevatedButton(
                                       onPressed: () {
                                         setState(() {
                                           claimed = true;
                                         });
                                         showDialog(
                                             context: context,
-                                            child: AlertDialog(
+                                            builder:(context)=> AlertDialog(
                                               title: Text(
                                                 Language(
                                                     code: widget.language,
@@ -299,8 +307,8 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                             .set({
                                               'date':
                                                   FieldValue.serverTimestamp(),
-                                              'uid': widget.userId.uid,
-                                              'reward': ((_net / (reward)) * 7),
+                                              'uid': widget.userId!.uid,
+                                              'reward': ((_net! / (reward)) * 7),
                                               'done': false
                                             })
                                             .whenComplete(() => {
@@ -474,17 +482,17 @@ class _HomePageFolderState extends State<HomePageFolder> {
 class CustomGridTile extends StatelessWidget {
   final image;
   final name;
-  final Widget child;
+  final Widget? child;
 
-  const CustomGridTile({Key key, this.image, this.child, this.name})
+  const CustomGridTile({Key? key, this.image, this.child, this.name})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showMaterialModalBottomSheet(
-          backgroundColor: Colors.transparent,
+        showDialog(
+         // backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Container(

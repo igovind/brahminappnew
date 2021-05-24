@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 
 import 'astrology_selection_page.dart';
 
-String name;
-String rate;
-String duration;
-String detail;
-String keyword;
-String imageUrl;
-String offer;
-String name1;
-String rate1;
-String duration1;
-String detail1;
-String keyword1;
-String imageUrl1;
-String offer1;
+String? name;
+String? rate;
+String? duration;
+String? detail;
+String? keyword;
+String? imageUrl;
+String? offer;
+String? name1;
+String? rate1;
+String? duration1;
+String? detail1;
+String? keyword1;
+String? imageUrl1;
+String? offer1;
 
 class AstrologyForm extends StatelessWidget {
   final String uid;
 
-  const AstrologyForm({Key key, @required this.uid}) : super(key: key);
+  const AstrologyForm({Key? key, required this.uid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +43,18 @@ class AstrologyForm extends StatelessWidget {
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
                       childAspectRatio: 1.0 / 1),
-                  itemCount: snapshot.data.size,
+                  itemCount: snapshot.data!.size,
                   itemBuilder: (context, index) {
-                    imageUrl = snapshot.data.docs[index].data()['image'];
-                    name = snapshot.data.docs[index].data()['name'];
-                    keyword = snapshot.data.docs[index].data()['keyword'];
-                    rate = snapshot.data.docs[index].data()['least'];
-                    String id = snapshot.data.docs[index].id;
+                    imageUrl = snapshot.data!.docs[index].get('image');
+                    name = snapshot.data!.docs[index].get('name');
+                    keyword = snapshot.data!.docs[index].get('keyword');
+                    rate = snapshot.data!.docs[index].get('least');
+                    String id = snapshot.data!.docs[index].id;
                     return GestureDetector(
                       onTap: () {
                         showDialog(
                             context: context,
-                            child: Dialog(
+                          builder:(context)=> Dialog(
                               child: Container(
                                 height: 500,
                                 width:
@@ -82,7 +82,7 @@ class AstrologyForm extends StatelessWidget {
                                             child: GridView.builder(
                                                 shrinkWrap: true,
                                                 itemCount:
-                                                snapshot1.data.size,
+                                                snapshot1.data!.size,
                                                 gridDelegate:
                                                 SliverGridDelegateWithFixedCrossAxisCount(
                                                     crossAxisCount: 2,
@@ -93,17 +93,17 @@ class AstrologyForm extends StatelessWidget {
                                                 itemBuilder:
                                                     (context, index) {
                                                   imageUrl1 = snapshot1
-                                                      .data.docs[index]
-                                                      .data()['image'];
+                                                      .data!.docs[index]
+                                                      .get('image');
                                                   name1 = snapshot1
-                                                      .data.docs[index]
-                                                      .data()['name'];
+                                                      .data!.docs[index]
+                                                      .get('name');
                                                   keyword1 = snapshot1
-                                                      .data.docs[index]
-                                                      .data()['keyword'];
+                                                      .data!.docs[index]
+                                                      .get('keyword');
                                                   rate1 = snapshot1
-                                                      .data.docs[index]
-                                                      .data()['least'];
+                                                      .data!.docs[index]
+                                                      .get('least');
 
                                                   return GestureDetector(
                                                     onTap: () {
@@ -111,31 +111,31 @@ class AstrologyForm extends StatelessWidget {
                                                           .pop();
                                                       showDialog(
                                                           context: context,
-                                                          child: AstroSelect(
+                                                        builder:(context)=>AstroSelect(
                                                             uid: uid,
                                                             imageUrl: snapshot1
-                                                                .data
+                                                                .data!
                                                                 .docs[index]
-                                                                .data()[
-                                                            'image'],
+                                                                .get(
+                                                            'image'),
                                                             name: snapshot1
-                                                                .data
+                                                                .data!
                                                                 .docs[index]
-                                                                .data()['name'],
+                                                                .get('name'),
                                                             rate: snapshot1
-                                                                .data
+                                                                .data!
                                                                 .docs[index]
-                                                                .data()[
-                                                            'least'],
+                                                                .get(
+                                                            'least'),
                                                             keyword: snapshot1
-                                                                .data
+                                                                .data!
                                                                 .docs[index]
                                                                 .id,
                                                             details: snapshot1
-                                                                .data
+                                                                .data!
                                                                 .docs[index]
-                                                                .data()[
-                                                            'detail'],
+                                                                .get(
+                                                            'detail'),
                                                           ));
                                                     },
                                                     child: Container(
@@ -156,7 +156,7 @@ class AstrologyForm extends StatelessWidget {
                                                             .center,
                                                         children: [
                                                           Image.network(
-                                                            imageUrl1,
+                                                            imageUrl1!,
                                                             height: 100,
                                                             width: 100,
                                                           ),
@@ -203,7 +203,7 @@ class AstrologyForm extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.network(
-                              imageUrl,
+                              imageUrl!,
                               height: 100,
                               width: 100,
                             ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomSlider extends StatefulWidget {
   final double height;
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool?> onChanged;
   final double width;
   final bool value;
   final String textOff;
@@ -13,13 +13,13 @@ class CustomSlider extends StatefulWidget {
   final Color background;
   final Color buttonColor;
   final Color inactiveColor;
-  final Function onTap;
-  final Function onDoubleTap;
-  final Function onSwipe;
+  final Function? onTap;
+  final Function? onDoubleTap;
+  final Function? onSwipe;
 
   const CustomSlider({
-    @required this.value,
-    @required this.onChanged,
+    required this.value,
+    required this.onChanged,
     this.height = 55,
     this.width = 250,
     this.animationDuration = const Duration(milliseconds: 400),
@@ -40,11 +40,11 @@ class CustomSlider extends StatefulWidget {
 
 class _SlidingSwitch extends State<CustomSlider>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
   double value = 0.0;
 
-  bool turnState;
+  bool? turnState;
 
   @override
   void dispose() {
@@ -76,15 +76,15 @@ class _SlidingSwitch extends State<CustomSlider>
     return GestureDetector(
         onDoubleTap: () {
           _action();
-          if (widget.onDoubleTap != null) widget.onDoubleTap();
+          if (widget.onDoubleTap != null) widget.onDoubleTap!();
         },
         onTap: () {
           _action();
-          if (widget.onTap != null) widget.onTap();
+          if (widget.onTap != null) widget.onTap!();
         },
         onPanEnd: (details) {
           _action();
-          if (widget.onSwipe != null) widget.onSwipe();
+          if (widget.onSwipe != null) widget.onSwipe!();
         },
         child: Container(
           height: widget.height,
@@ -117,7 +117,7 @@ class _SlidingSwitch extends State<CustomSlider>
                     child: Text(
                       widget.textOff,
                       style: TextStyle(
-                          color: turnState
+                          color: turnState!
                               ? widget.inactiveColor
                               : widget.colorOff,
                           fontSize: 14,
@@ -131,7 +131,7 @@ class _SlidingSwitch extends State<CustomSlider>
                       widget.textOn,
                       style: TextStyle(
                           color:
-                          turnState ? widget.colorOn : widget.inactiveColor,
+                          turnState! ? widget.colorOn : widget.inactiveColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w600),
                     ),
@@ -149,8 +149,8 @@ class _SlidingSwitch extends State<CustomSlider>
 
   _determine({bool changeState = false}) {
     setState(() {
-      if (changeState) turnState = !turnState;
-      (turnState)
+      if (changeState) turnState = !turnState!;
+      turnState!
           ? animationController.forward()
           : animationController.reverse();
       if (changeState) widget.onChanged(turnState);

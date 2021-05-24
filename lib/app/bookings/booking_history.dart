@@ -7,11 +7,11 @@ import '../languages.dart';
 import 'booking_tile.dart';
 
 class BookingHistory extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
-  final UserId userId;
+  final AsyncSnapshot<QuerySnapshot>? snapshot;
+  final UserId? userId;
   final language;
 
-  const BookingHistory({Key key, this.snapshot, this.userId, this.language})
+  const BookingHistory({Key? key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class BookingHistory extends StatelessWidget {
       return MagicScreen(context: context, width: width).getWidth;
     }*/
 
-    if (snapshot.data.docs.isEmpty) {
+    if (snapshot!.data!.docs.isEmpty) {
       return Center(
         child: Text(
           Language(code: language, text: [
@@ -39,14 +39,14 @@ class BookingHistory extends StatelessWidget {
     }
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: snapshot.data.docs.length,
+      itemCount: snapshot!.data!.docs.length,
       itemBuilder: (context, index) {
-        DocumentSnapshot ref = snapshot.data.docs[index];
-        final double swastik = ref.data()['swastik'];
-        final String contact = ref.data()['contact'];
-        dynamic cod = ref.data()['cod'];
+        DocumentSnapshot ref = snapshot!.data!.docs[index];
+        final double? swastik = ref.get('swastik');
+        final String? contact = ref.get('contact');
+        dynamic cod = ref.get('cod');
         return BookingTiles(
-          snapshot: snapshot.data.docs[index],
+          snapshot: snapshot!.data!.docs[index],
           onPressLocation: () {},
           child: Column(
             children: [

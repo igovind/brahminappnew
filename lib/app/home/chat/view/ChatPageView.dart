@@ -5,18 +5,18 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:brahminapp/app/home/Chat/Global/Colors.dart' as myColors;
 class ChatPageView extends StatefulWidget {
-  final String username;
-  final String dp;
+  final String? username;
+  final String? dp;
   final String buid;
-  final String uid;
-  final String display;
-  final String uida;
-  final String pic;
-  final String utoken;
+  final String? uid;
+  final String? display;
+  final String? uida;
+  final String? pic;
+  final String? utoken;
 
   const ChatPageView({
-    Key key,
-    this.utoken,this.username, this.dp,@required this.uid,@required this.buid,this.display,this.uida,this.pic
+    Key? key,
+    this.utoken,this.username, this.dp,required this.uid,required this.buid,this.display,this.uida,this.pic
   }) : super(key: key);
 
   @override
@@ -25,10 +25,10 @@ class ChatPageView extends StatefulWidget {
 
 class _ChatPageViewState extends State<ChatPageView> {
   TextEditingController _text = new TextEditingController();
-  final FirebaseMessaging _messaging = FirebaseMessaging();
-  String messege;
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  String? messege;
   int counter=0;
-  String tokenA;
+  String? tokenA;
   @override
   void initState() {
     // TODO: implement initState
@@ -129,12 +129,12 @@ class _ChatPageViewState extends State<ChatPageView> {
                                         child: CircularProgressIndicator(),
                                       );
                                     }
-                                    final messeges = snapshot.data.docs.reversed;
+                                    final messeges = snapshot.data!.docs.reversed;
                                     List<Widget> messegeWidgets=[];
                                     for(var mess in messeges){
-                                      final messegecontent=mess.data()['content'];
-                                      final time= mess.data()['time'];
-                                      final sender=mess.data()['sender'];
+                                      final messegecontent=mess.get('content');
+                                      final time= mess.get('time');
+                                      final sender=mess.get('sender');
                                       if(sender==widget.display){
                                         final messagewidget=sendMessage(context, messegecontent, time);
                                         messegeWidgets.add(messagewidget);

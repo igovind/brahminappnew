@@ -15,11 +15,11 @@ import '../account/gallery_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   final uid;
-  final int startingIndex;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final int? startingIndex;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
 
   const RegistrationPage(
-      {Key key, @required this.uid, this.snapshot, this.startingIndex})
+      {Key? key, required this.uid, this.snapshot, this.startingIndex})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    int _currentIndex = widget.startingIndex;
+    int? _currentIndex = widget.startingIndex;
     Widget body() {
       switch (_currentIndex) {
         case 0:
@@ -42,7 +42,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               uid: widget.uid,
             ),
           );
-          break;
         case 1:
           return Container(
             child: astrology
@@ -71,7 +70,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            FlatButton(
+                            ElevatedButton(
                               onPressed: () {
                                 setState(() {
                                   astrology = true;
@@ -100,10 +99,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ),
                               ),
                             ),
-                            FlatButton(
+                            ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  _currentIndex++;
+                                  _currentIndex=_currentIndex! +1;
                                   FireStoreDatabase(uid: widget.uid)
                                       .updateData(data: {
                                     'astrologer': false,
@@ -135,12 +134,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
           );
-          break;
+
         case 2:
           return Column(
             children: [
               Container(height: 620, child: EditAdhaarDetails(uid: widget.uid)),
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 3});
@@ -153,7 +152,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   )),
             ],
           );
-          break;
         case 3:
           return Column(
             children: [
@@ -163,7 +161,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 4});
@@ -176,7 +174,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   )),
             ],
           );
-          break;
+
         case 4:
           return Column(
             children: [
@@ -186,7 +184,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 5});
@@ -199,7 +197,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   )),
             ],
           );
-          break;
+
         case 5:
           return Column(
             children: [
@@ -209,7 +207,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'ready': true});
@@ -222,7 +220,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   )),
             ],
           );
-          break;
+
       }
       return Text("error");
     }
@@ -249,7 +247,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     _currentIndex = value.toInt();
                   });
                 },
-                position: _currentIndex.toDouble(),
+                position: _currentIndex!.toDouble(),
                 dotsCount: 6,
                 decorator: DotsDecorator(
                   size: Size.fromRadius(5),

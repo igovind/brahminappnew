@@ -1,14 +1,12 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChooseLanguage extends StatefulWidget {
   final uid;
   final language;
 
-  const ChooseLanguage({Key key, this.uid, this.language}) : super(key: key);
+  const ChooseLanguage({Key? key, this.uid, this.language}) : super(key: key);
 
   @override
   _ChooseLanguageState createState() => _ChooseLanguageState();
@@ -28,13 +26,14 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                   "langCode": Language(language: selLanguage).getCode,
                   "lang": selLanguage
                 }).whenComplete(() {
-                  BotToast.showText(text: Language(code: Language(language: selLanguage).getCode, text: [
+                  //TODO: botToast
+                  /*BotToast.showText(text: Language(code: Language(language: selLanguage).getCode, text: [
                     "Language updated ",
                     "भाषा अपडेट की गई ",
                     "ভাষা আপডেট হয়েছে ",
                     "மொழி புதுப்பிக்கப்பட்டது ",
                     "భాష నవీకరించబడింది "
-                  ]).getText);
+                  ]).getText);*/
                   setState(() {
 
                   });

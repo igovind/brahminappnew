@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/services_given/claim_reward.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/common_widgets/hexa_color.dart';
@@ -7,16 +6,15 @@ import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../languages.dart';
 import 'booking_tile.dart';
 
 class Upcoming extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
-  final UserId userId;
+  final AsyncSnapshot<QuerySnapshot>? snapshot;
+  final UserId? userId;
   final language;
 
-  const Upcoming({Key key, this.snapshot, this.userId, this.language})
+  const Upcoming({Key? key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
   @override
@@ -25,7 +23,7 @@ class Upcoming extends StatelessWidget {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    if (snapshot.data.docs.isEmpty) {
+    if (snapshot!.data!.docs.isEmpty) {
       return Center(
         child: Text(
           Language(code: language, text: [
@@ -40,28 +38,29 @@ class Upcoming extends StatelessWidget {
     }
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: snapshot.data.docs.length,
+      itemCount: snapshot!.data!.docs.length,
       itemBuilder: (context, index) {
-        final DocumentSnapshot ref = snapshot.data.docs[index];
-        final String link = ref.data()['Link'];
-        final String otp = ref.data()['otp'];
-        dynamic cod = ref.data()['cod'];
-        final bool samagri = ref.data()['samagri'];
-        final double samagriPrice = ref.data()['samagri_price'];
-        final String tuid = ref.data()['clientuid'];
-        final double net = ref.data()['benefit'];
+        final DocumentSnapshot ref = snapshot!.data!.docs[index];
+        final String? link = ref.get('Link');
+        final String? otp = ref.get('otp');
+        dynamic cod = ref.get('cod');
+        final bool? samagri = ref.get('samagri');
+        final double? samagriPrice = ref.get('samagri_price');
+        final String? tuid = ref.get('clientuid');
+        final double? net = ref.get('benefit');
         final String serviceId = ref.id;
-        final String contact = ref.data()['contact'];
+        final String? contact = ref.get('contact');
 
         return Column(
           children: [
             BookingTiles(
-                snapshot: snapshot.data.docs[index],
+                snapshot: snapshot!.data!.docs[index],
                 onPressLocation: () async {
                   var url = '$link';
                   if (await canLaunch(url)) {
                     await launch(url);
-                    BotToast.showText(
+                    //TODO: botToast
+                  /*  BotToast.showText(
                       text: Language(code: language, text: [
                         "Google Maps is opening ",
                         "Google मानचित्र खुल रहा है ",
@@ -69,7 +68,7 @@ class Upcoming extends StatelessWidget {
                         "கூகிள் மேப்ஸ் திறக்கிறது ",
                         "గూగుల్ మ్యాప్స్ తెరవబడుతున్నాయి "
                       ]).getText,
-                    );
+                    );*/
                   } else {
                     throw 'Could not launch $url';
                   }
@@ -137,9 +136,9 @@ class Upcoming extends StatelessWidget {
                             height: height(40),
                             onPressed: () => showDialog(
                                 context: context,
-                                child: ClaimReward(
+        builder:(context)=> ClaimReward(
                                   realOTP: otp,
-                                  uid: userId.uid,
+                                  uid: userId!.uid,
                                   tuid: tuid,
                                   samagri: samagri,
                                   net: net,
@@ -164,7 +163,8 @@ class Upcoming extends StatelessWidget {
                                 var url = 'tel://$contact';
                                 if (await canLaunch(url)) {
                                   await launch(url);
-                                  BotToast.showText(text: "calling $contact");
+                                  //TODO: botToast
+                                  /*BotToast.showText(text: "calling $contact");*/
                                 } else {
                                   throw 'Could not launch $url';
                                 }

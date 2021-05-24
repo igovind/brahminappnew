@@ -2,25 +2,24 @@ import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:scratcher/widgets.dart';
-
+import 'package:scratcher/scratcher.dart';
 class ClaimReward extends StatefulWidget {
   final realOTP;
   final String uid;
   final String serviceId;
-  final bool samagri;
-  final double samagriPrice;
-  final double net;
-  final String tuid;
+  final bool? samagri;
+  final double? samagriPrice;
+  final double? net;
+  final String? tuid;
 
   const ClaimReward(
-      {Key key,
-      @required this.realOTP,
-      @required this.uid,
-      @required this.serviceId,
-      @required this.samagri,
-      @required this.samagriPrice,
-      @required this.tuid,
+      {Key? key,
+      required this.realOTP,
+      required this.uid,
+      required this.serviceId,
+      required this.samagri,
+      required this.samagriPrice,
+      required this.tuid,
       this.net})
       : super(key: key);
 
@@ -29,14 +28,14 @@ class ClaimReward extends StatefulWidget {
 }
 
 class _ClaimRewardState extends State<ClaimReward> {
-  String tempOTP;
+  String? tempOTP;
   final _formKey = GlobalKey<FormState>();
-  double won;
+  double? won;
 
   @override
   Widget build(BuildContext context) {
     bool _validateAndSaveForm() {
-      final form = _formKey.currentState;
+      final form = _formKey.currentState!;
       if (form.validate()) {
         form.save();
         return true;
@@ -51,7 +50,6 @@ class _ClaimRewardState extends State<ClaimReward> {
           width: MediaQuery.of(context).size.width * 0.9,
           child: Scaffold(
               resizeToAvoidBottomInset: false,
-              resizeToAvoidBottomPadding: false,
               body: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
@@ -70,7 +68,7 @@ class _ClaimRewardState extends State<ClaimReward> {
                           keyboardType: TextInputType.number,
                           obscureText: true,
                           validator: (value) {
-                            return value.isNotEmpty
+                            return value!.isNotEmpty
                                 ? value.length < 6
                                     ? 'Code should be of six digits'
                                     : value == widget.realOTP ||
@@ -96,9 +94,9 @@ class _ClaimRewardState extends State<ClaimReward> {
                           print('out');
                           if (_validateAndSaveForm()) {
                             //sevenPujaClaimReward(widget.uid, widget.net);
-                            double net = widget.samagri
-                                ? (widget.net * 15) / 100
-                                : (widget.net * 80) / 100;
+                            double net = widget.samagri!
+                                ? (widget.net! * 15) / 100
+                                : (widget.net! * 80) / 100;
                             print('in function 1');
                             FirebaseFirestore.instance
                                 .doc(

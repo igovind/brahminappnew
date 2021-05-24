@@ -5,14 +5,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/app/home/Chat/Global/Colors.dart' as myColors;
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../ChatListModal.dart';
 
 class ChatListViewItem extends StatelessWidget {
-  final ChatListModal chatListModal;
-  final UserId tuser;
+  final ChatListModal? chatListModal;
+  final UserId? tuser;
 
-  const ChatListViewItem({this.chatListModal, @required this.tuser});
+  const ChatListViewItem({this.chatListModal, required this.tuser});
 
   @override
   Widget build(BuildContext context) {
@@ -30,27 +29,27 @@ class ChatListViewItem extends StatelessWidget {
                 flex: 10,
                 child: ListTile(
                   title: Text(
-                    chatListModal.name,
+                    chatListModal!.name!,
                     style: TextStyle(fontSize: 16),
                   ),
                   subtitle: Text(
-                    chatListModal.lastMessage,
+                    chatListModal!.lastMessage!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12),
                   ),
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(chatListModal.photoUrl),
+                    backgroundImage: NetworkImage(chatListModal!.photoUrl!),
                   ),
                   trailing: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        chatListModal.time,
+                        chatListModal!.time!,
                         style: TextStyle(fontSize: 12),
                       ),
-                      chatListModal.hasUnreadMessage
+                      chatListModal!.hasUnreadMessage!
                           ? Container(
                               margin: const EdgeInsets.only(top: 5.0),
                               height: 18,
@@ -62,7 +61,7 @@ class ChatListViewItem extends StatelessWidget {
                                   )),
                               child: Center(
                                   child: Text(
-                                chatListModal.newMesssageCount.toString(),
+                                chatListModal!.newMesssageCount.toString(),
                                 style: TextStyle(fontSize: 11),
                               )),
                             )
@@ -70,17 +69,17 @@ class ChatListViewItem extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
-                    final UserId user = tuser;
+                    final UserId user = tuser!;
                     FirebaseFirestore.instance
-                        .doc('messeges/${user.uid}/samvad/${chatListModal.id}')
+                        .doc('messeges/${user.uid}/samvad/${chatListModal!.id}')
                         .update({
                       'time': newFormat,
                       'hasUnreadMessage': false,
                       'newMesssageCount': 0,
                       'timestrap': FieldValue.serverTimestamp(),
                     });
-                    showMaterialModalBottomSheet(
-                      backgroundColor: Colors.transparent,
+                    showDialog(
+                      //backgroundColor: Colors.transparent,
                       context: context,
                       builder: (context) {
                         return Container(
@@ -92,14 +91,14 @@ class ChatListViewItem extends StatelessWidget {
                                     topRight: Radius.circular(30))),
                             height: MediaQuery.of(context).size.height * 0.9,
                             child: ChatPageView(
-                              utoken: chatListModal.token,
+                              utoken: chatListModal!.token,
                               buid: user.uid,
                               pic: user.photoUrl,
                               uida: user.uid,
                               display: user.displayName,
-                              username: chatListModal.name,
-                              dp: chatListModal.photoUrl,
-                              uid: chatListModal.id,
+                              username: chatListModal!.name,
+                              dp: chatListModal!.photoUrl,
+                              uid: chatListModal!.id,
                             ));
                       },
                     );
@@ -123,7 +122,7 @@ class ChatListViewItem extends StatelessWidget {
           icon: Icons.delete,
           onTap: () async {
             await FirebaseFirestore.instance
-                .doc('/messeges/${user.uid}/samvad/${chatListModal.id}')
+                .doc('/messeges/${user!.uid}/samvad/${chatListModal!.id}')
                 .delete();
           },
         )

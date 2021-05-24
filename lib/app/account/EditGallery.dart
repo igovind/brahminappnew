@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import '../languages.dart';
 
@@ -17,12 +17,14 @@ class EditGallery extends StatefulWidget {
   final set;
   final num;
   final language;
+
   const EditGallery(
-      {Key key,
-      @required this.imageUrl,
-      @required this.uid,
-      this.num,
-      this.set, this.language})
+      {Key? key,
+      required this.imageUrl,
+      required this.uid,
+      required this.num,
+      this.set,
+      this.language})
       : super(key: key);
 
   @override
@@ -31,17 +33,16 @@ class EditGallery extends StatefulWidget {
 
 class _EditGalleryState extends State<EditGallery> {
   bool inProcess = false;
-  File imageFile;
-  String imageUrlP;
+  File? imageFile;
+  String? imageUrlP;
 
   Future<void> _submit() async {
     Future.delayed(Duration(milliseconds: 10)).whenComplete(() async {
-      StorageReference reference = FirebaseStorage.instance
+      Reference reference = FirebaseStorage.instance
           .ref()
           .child('Users/${widget.uid}/${widget.num}');
-      StorageUploadTask uploadTask = reference.putFile(imageFile);
-      var downloadUrlt =
-          await (await uploadTask.onComplete).ref.getDownloadURL();
+      UploadTask uploadTask = reference.putFile(imageFile!);
+      var downloadUrlt = await (await uploadTask).ref.getDownloadURL();
       var url = downloadUrlt.toString();
 
       imageUrlP = url;
@@ -96,14 +97,14 @@ class _EditGalleryState extends State<EditGallery> {
     Navigator.of(context).pop();
   }
 
-  getImagezFromDevice({ImageSource source, int num}) async {
+  getImagezFromDevice({required ImageSource source, int? num}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
         compressQuality: 100,
@@ -128,7 +129,7 @@ class _EditGalleryState extends State<EditGallery> {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-   /* double width(double width) {
+    /* double width(double width) {
       return MagicScreen(context: context, width: width).getWidth;
     }*/
     imageUrlP = widget.imageUrl;
@@ -144,7 +145,7 @@ class _EditGalleryState extends State<EditGallery> {
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [
-            FlatButton(
+            ElevatedButton(
               onPressed: () => _submit(),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -190,8 +191,7 @@ class _EditGalleryState extends State<EditGallery> {
                         );
                       },
                       child: Container(
-                        height:
-                            height(200),
+                        height: height(200),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -201,11 +201,11 @@ class _EditGalleryState extends State<EditGallery> {
                             image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: imageFile == null
-                                    ? imageUrlP == null
+                                    ? (imageUrlP == null
                                         ? AssetImage(
                                             "images/chat-background-1.jpg")
-                                        : NetworkImage(imageUrlP)
-                                    : FileImage(imageFile))),
+                                        : NetworkImage(imageUrlP!)) as ImageProvider<Object>
+                                    : FileImage(imageFile!))),
                       ),
                     ),
                     Row(

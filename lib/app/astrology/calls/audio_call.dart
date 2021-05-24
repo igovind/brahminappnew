@@ -2,23 +2,24 @@ import 'dart:async';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/astrology/calls/settings.dart';
 import 'package:brahminapp/services/database.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class VoiceCallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
-  final String channelName;
+  final String? channelName;
 
   /// non-modifiable client role of the page
   //final ClientRole role;
-  final String userId;
-  final String bid;
+  final String? userId;
+  final String? bid;
 
   /// Creates a call page with given channel name.
-  const VoiceCallPage({Key key, this.channelName, this.userId, this.bid})
+  const VoiceCallPage({Key? key, this.channelName, this.userId, this.bid})
       : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
-  RtcEngine _engine;
+  late RtcEngine _engine;
 
   @override
   void dispose() {
@@ -65,7 +66,7 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
     _engine = await RtcEngine.create(APP_ID);
     // ignore: deprecated_member_use
     await _engine.enableWebSdkInteroperability(true);
-    await _engine.joinChannel(null, widget.channelName, null, 0);
+    await _engine.joinChannel(null, widget.channelName!, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -191,7 +192,7 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
             itemCount: _infoStrings.length,
             itemBuilder: (BuildContext context, int index) {
               if (_infoStrings.isEmpty) {
-                return null;
+                return SizedBox();
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -228,11 +229,12 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   }
 
   void _onCallEnd(BuildContext context) async {
-    /*FirebaseFirestore.instance.collection('calls/${widget.Userid}/${widget.bid}').get().then((value) {
+FirebaseFirestore.instance.collection('calls/${widget.userId}/${widget.bid}').get().then((value) {
       for (DocumentSnapshot ds in value.docs){
         ds.reference.delete();
       }
-    });*/
+    });
+
     FireStoreDatabase(uid: widget.userId).updateData(data: {
       'busy': false,
     });
@@ -255,8 +257,10 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       // ignore: missing_return
-      onWillPop: (){
-        _onCallEnd(context);},
+      onWillPop: ()async{
+        _onCallEnd(context);
+        return true;
+        } ,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: StreamBuilder<QuerySnapshot>(
@@ -267,16 +271,15 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
                   child: CircularProgressIndicator(),
                 );
               }
-              String image = snapshot.data.docs[0].data()["image"];
+              String? image = snapshot.data!.docs[0].get("image");
               return Center(
                 child: Stack(
                   children: <Widget>[
                     _panel(),
                     _toolbar(),
                     Center(
-                      child: CircularProfileAvatar(
-                        image,
-                        radius: 70,
+                      child: CircularAvatarNetwork(
+                        url: image,
                       ),
                     )
                   ],

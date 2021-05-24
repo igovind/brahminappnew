@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/services_given/new_add_edit_puja.dart';
 import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/services/database.dart';
@@ -6,17 +5,16 @@ import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 
 import '../languages.dart';
 
 class PujaOffering extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
+  final AsyncSnapshot<QuerySnapshot>? snapshot;
   final language;
   final uid;
 
-  const PujaOffering({Key key, this.snapshot, this.uid, this.language}) : super(key: key);
+  const PujaOffering({Key? key, this.snapshot, this.uid, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +25,8 @@ class PujaOffering extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showMaterialModalBottomSheet(
-              backgroundColor: Colors.transparent,
+            showDialog(
+             // backgroundColor: Colors.transparent,
               context: context,
               builder: (context) {
                 return Container(
@@ -53,7 +51,7 @@ class PujaOffering extends StatelessWidget {
           ),
           backgroundColor: Colors.red,
         ),
-        body: snapshot.data.docs.isEmpty
+        body: snapshot!.data!.docs.isEmpty
             ? Center(
                 child: Text(
                   Language(code:language, text: [
@@ -68,20 +66,20 @@ class PujaOffering extends StatelessWidget {
               )
             : ListView.builder(
                 shrinkWrap: true,
-                itemCount: snapshot.data.size + 1,
+                itemCount: snapshot!.data!.size + 1,
                 itemBuilder: (context, index) {
-                  if (index == snapshot.data.size) {
+                  if (index == snapshot!.data!.size) {
                     return Container(
                       height: 100,
                     );
                   }
-                  DocumentSnapshot documentSnapshot = snapshot.data.docs[index];
-                  String name = documentSnapshot.data()["puja"];
-                  String samagri = documentSnapshot.data()["Pujan Samagri"];
-                  double price = documentSnapshot.data()["price"];
-                  int swastik = documentSnapshot.data()["swastik"];
-                  int subscriber = documentSnapshot.data()["subscriber"];
-                  String time = documentSnapshot.data()["time"];
+                  DocumentSnapshot documentSnapshot = snapshot!.data!.docs[index];
+                  String? name = documentSnapshot.get("puja");
+                  String? samagri = documentSnapshot.get("Pujan Samagri");
+                  double? price = documentSnapshot.get("price");
+                  int? swastik = documentSnapshot.get("swastik");
+                  int? subscriber = documentSnapshot.get("subscriber");
+                  String? time = documentSnapshot.get("time");
                   String id = documentSnapshot.id;
                   return Dismissible(
                     confirmDismiss: (DismissDirection direction) async {
@@ -105,7 +103,7 @@ class PujaOffering extends StatelessWidget {
                                 "మీరు ఖచ్చితంగా ఈ సేవను తొలగించాలనుకుంటున్నారా? "
                               ]).getText,),
                             actions: <Widget>[
-                              FlatButton(
+                              ElevatedButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
                                   child: Text(Language(code:language, text: [
@@ -115,7 +113,7 @@ class PujaOffering extends StatelessWidget {
                                     "அழி ",
                                     "తొలగించు "
                                   ]).getText,)),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
                                 child: Text(Language(code:language, text: [
@@ -165,21 +163,22 @@ class PujaOffering extends StatelessWidget {
                     onDismissed: (direction) {
                       direction.index.toString();
                       FireStoreDatabase(uid: uid).deletepuja(
-                          id, snapshot.data.docs[index].data()['keyword']);
-                      BotToast.showText(text: Language(code:language, text: [
+                          id, snapshot!.data!.docs[index].get('keyword'));
+                      //TODO: botToast
+                    /*  BotToast.showText(text: Language(code:language, text: [
                         "Deleted successfully ",
                         "सफलतापूर्वक मिटाया गया ",
                         "সফলভাবে মোছা হয়েছে ",
                         "வெற்றிகரமாக நீக்கப்பட்டது ",
                         "విజయవంతంగా తొలగించబడింది "
-                      ]).getText,);
+                      ]).getText,);*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
                       child: GestureDetector(
                         onTap: () {
-                          showMaterialModalBottomSheet(
-                            backgroundColor: Colors.transparent,
+                          showDialog(
+                            //backgroundColor: Colors.transparent,
                             context: context,
                             builder: (context) {
                               return Container(
@@ -192,7 +191,7 @@ class PujaOffering extends StatelessWidget {
                                   height:
                                       MediaQuery.of(context).size.height * 0.9,
                                   child: NewAddAndEditPuja(
-                                    docSnap: snapshot.data.docs[index],
+                                    docSnap: snapshot!.data!.docs[index],
                                     uid: uid,
                                   ));
                             },
@@ -276,7 +275,7 @@ class PujaOffering extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                   onPressed: () {},
                                   child: AccountTile(
                                     onPress: () {

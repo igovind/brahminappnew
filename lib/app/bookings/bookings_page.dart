@@ -12,10 +12,10 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import '../languages.dart';
 
 class BookingsPage extends StatefulWidget {
-  final UserId userId;
+  final UserId? userId;
   final language;
 
-  BookingsPage({Key key, this.userId, this.language}) : super(key: key);
+  BookingsPage({Key? key, this.userId, this.language}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,9 +25,9 @@ class BookingsPage extends StatefulWidget {
 
 class HomeWidgetState extends State<BookingsPage>
     with SingleTickerProviderStateMixin {
-  List<Tab> tabs;
+  late List<Tab> tabs;
 
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class HomeWidgetState extends State<BookingsPage>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 
@@ -97,7 +97,7 @@ class HomeWidgetState extends State<BookingsPage>
       ),
       //backgroundColor: Colors.grey[100],
       body: StreamBuilder<QuerySnapshot>(
-          stream: FireStoreDatabase(uid: widget.userId.uid).getBookingRequest,
+          stream: FireStoreDatabase(uid: widget.userId!.uid).getBookingRequest,
           builder: (context, bookingRequestSnapshot) {
             if (bookingRequestSnapshot.data == null) {
               return Center(
@@ -106,7 +106,7 @@ class HomeWidgetState extends State<BookingsPage>
             }
             return StreamBuilder<QuerySnapshot>(
                 stream:
-                    FireStoreDatabase(uid: widget.userId.uid).getUpComingPuja,
+                    FireStoreDatabase(uid: widget.userId!.uid).getUpComingPuja,
                 builder: (context, upcomingPujaSnapshot) {
                   if (upcomingPujaSnapshot.data == null) {
                     return Center(
@@ -115,7 +115,7 @@ class HomeWidgetState extends State<BookingsPage>
                   }
                   return StreamBuilder<QuerySnapshot>(
                       stream:
-                          FireStoreDatabase(uid: widget.userId.uid).getHistory,
+                          FireStoreDatabase(uid: widget.userId!.uid).getHistory,
                       builder: (context, bookingHistorySnapshot) {
                         if (bookingHistorySnapshot.data == null) {
                           return Center(

@@ -5,27 +5,26 @@ import 'package:brahminapp/app/account/edit_profile.dart';
 import 'package:brahminapp/app/account/gallery_page.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/languages.dart';
+import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'adhaar_details_page.dart';
 
 class AccountPage extends StatefulWidget {
-  final UserId userId;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
-  final AsyncSnapshot<DocumentSnapshot> adhaarSnapshot;
-  final AsyncSnapshot<DocumentSnapshot> bankSnapshot;
+  final UserId? userId;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? adhaarSnapshot;
+  final AsyncSnapshot<DocumentSnapshot>? bankSnapshot;
 
   const AccountPage(
-      {Key key,
+      {Key? key,
       this.userId,
       this.snapshot,
       this.adhaarSnapshot,
@@ -37,7 +36,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  Position userLocation;
+  Position? userLocation;
   bool locationLoading = false;
   Geoflutterfire geo = Geoflutterfire();
   GeolocatorPlatform geoLocator = GeolocatorPlatform.instance;
@@ -85,7 +84,7 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-  Future<Position> _getLocation() async {
+  Future<Position?> _getLocation() async {
     var currentLocation;
     try {
       currentLocation = await geoLocator.getCurrentPosition(
@@ -102,7 +101,7 @@ class _AccountPageState extends State<AccountPage> {
       return null;
     }
     GeoFirePoint point = geo.point(
-        latitude: userLocation.latitude, longitude: userLocation.longitude);
+        latitude: userLocation!.latitude, longitude: userLocation!.longitude);
     return point.data;
   }
 
@@ -150,13 +149,14 @@ class _AccountPageState extends State<AccountPage> {
         locationLoading = true;
       });
       _getLocation().whenComplete(() {
-        FireStoreDatabase(uid: widget.userId.uid).updateData(data: {
+        FireStoreDatabase(uid: widget.userId!.uid).updateData(data: {
           'location': addGeoPoint(),
         }).whenComplete(() {
           setState(() {
             locationLoading = false;
           });
-          BotToast.showText(
+
+           BotToast.showText(
               text: Language(
                   code: UserDetails(snapshot: widget.snapshot).language,
                   text: [
@@ -215,7 +215,7 @@ class _AccountPageState extends State<AccountPage> {
                                 image: DecorationImage(
                                     image: NetworkImage(
                                         UserDetails(snapshot: widget.snapshot)
-                                            .coverPhoto),
+                                            .coverPhoto!),
                                     fit: BoxFit.fitWidth),
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
@@ -223,10 +223,11 @@ class _AccountPageState extends State<AccountPage> {
                                     bottomRight: Radius.circular(50))),
                             child: Align(
                               alignment: Alignment.topRight,
-                              child: FlatButton(
+                              child: ElevatedButton(
                                 onPressed: () {
-                                  showMaterialModalBottomSheet(
-                                    backgroundColor: Colors.transparent,
+                                  //TODO:problem
+                                   showDialog(
+                                    //backgroundColor: Colors.transparent,
                                     context: context,
                                     builder: (context) {
                                       return Container(
@@ -244,7 +245,7 @@ class _AccountPageState extends State<AccountPage> {
                                               0.95,
                                           child: EditProfile(
 
-                                            uid: widget.userId.uid,
+                                            uid: widget.userId!.uid,
                                             snapshot: widget.snapshot,
                                           ));
                                     },
@@ -300,12 +301,11 @@ class _AccountPageState extends State<AccountPage> {
                                   SizedBox(
                                     height: height(20),
                                   ),
-                                  CircularProfileAvatar(
-                                    UserDetails(snapshot: widget.snapshot)
-                                        .profilePhoto,
-                                    elevation: 5,
-                                    radius: height(60),
-                                  ),
+                                  CircularProfilePic(
+                                      imageUrl:
+                                          UserDetails(snapshot: widget.snapshot)
+                                              .profilePhoto,
+                                      ),
                                   SizedBox(
                                     height: height(10),
                                   ),
@@ -320,7 +320,7 @@ class _AccountPageState extends State<AccountPage> {
                                             fontSize: 20),
                                       ),
                                       UserDetails(snapshot: widget.snapshot)
-                                              .verified
+                                              .verified!
                                           ? Icon(
                                               Icons.verified,
                                               color: Colors.deepOrangeAccent,
@@ -394,7 +394,7 @@ class _AccountPageState extends State<AccountPage> {
                       child: GalleryPage(
                         language:
                             UserDetails(snapshot: widget.snapshot).language,
-                        uid: widget.userId.uid,
+                        uid: widget.userId!.uid,
                       ),
                     ),
                     SizedBox(
@@ -402,7 +402,7 @@ class _AccountPageState extends State<AccountPage> {
                           MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
-                      height: widget.bankSnapshot.data.data() == null
+                      height: widget.bankSnapshot!.data!.data() == null
                           ? MagicScreen(height: 500, context: context).getHeight
                           : MagicScreen(height: 400, context: context)
                               .getHeight,
@@ -419,7 +419,7 @@ class _AccountPageState extends State<AccountPage> {
                       child: BankDetailsPage(
                         language:
                             UserDetails(snapshot: widget.snapshot).language,
-                        uid: widget.userId.uid,
+                        uid: widget.userId!.uid,
                       ),
                     ),
                     SizedBox(
@@ -427,7 +427,7 @@ class _AccountPageState extends State<AccountPage> {
                           MagicScreen(height: 20, context: context).getHeight,
                     ),
                     AccountTile(
-                      height: widget.adhaarSnapshot.data.data() == null
+                      height: widget.adhaarSnapshot!.data!.data() == null
                           ? MagicScreen(height: 660, context: context).getHeight
                           : MagicScreen(height: 500, context: context)
                               .getHeight,
@@ -444,7 +444,7 @@ class _AccountPageState extends State<AccountPage> {
                       child: AdhaarDetailsPage(
                         language:
                             UserDetails(snapshot: widget.snapshot).language,
-                        uid: widget.userId.uid,
+                        uid: widget.userId!.uid,
                       ),
                     ),
                     SizedBox(
@@ -466,7 +466,7 @@ class _AccountPageState extends State<AccountPage> {
                             ]).getText,
                         icon: Icons.language,
                         child: ChooseLanguage(
-                          uid: widget.userId.uid,
+                          uid: widget.userId!.uid,
                           language:
                               UserDetails(snapshot: widget.snapshot).language,
                         )),
@@ -515,14 +515,14 @@ class _AccountPageState extends State<AccountPage> {
 }
 
 class AccountTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Widget child;
-  final VoidCallback onPress;
-  final double height;
+  final IconData? icon;
+  final String? title;
+  final Widget? child;
+  final VoidCallback? onPress;
+  final double? height;
 
   const AccountTile(
-      {Key key, this.icon, this.title, this.child, this.onPress, this.height})
+      {Key? key, this.icon, this.title, this.child, this.onPress, this.height})
       : super(key: key);
 
   @override
@@ -530,7 +530,7 @@ class AccountTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPress ??
           () {
-            showMaterialModalBottomSheet(
+            /* showMaterialModalBottomSheet(
               backgroundColor: Colors.transparent,
               context: context,
               builder: (context) {
@@ -545,7 +545,9 @@ class AccountTile extends StatelessWidget {
                         .getHeight,
                     child: child);
               },
-            );
+            );*/
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => child!));
           },
       child: Row(
         children: [

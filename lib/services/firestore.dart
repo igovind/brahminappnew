@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class FirestoreService{
-  Future<void> setData({String path, Map<String, dynamic>data}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
+  Future<void> setData({required String path, Map<String, dynamic>?data}) async {
+    final DocumentReference<Map<String, dynamic>?> reference = FirebaseFirestore.instance.doc(path);
     await reference.set(data);
   }
   Stream<List<T>> collectionStream<T>({
-    @required String path,
-    @required T builder(Map<String, dynamic> data),
+    required String path,
+    required T builder(Map<String, dynamic> data),
   }) {
     final reference =FirebaseFirestore.instance.collection(path).orderBy('timestrap');
     final snapshots = reference.snapshots();

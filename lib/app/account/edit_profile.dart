@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
+import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,34 +13,35 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../languages.dart';
 import 'account_page.dart';
+import 'okay_button.dart';
 
 class EditProfile extends StatefulWidget {
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
   final uid;
 
-  const EditProfile({Key key, this.snapshot, this.uid}) : super(key: key);
+  const EditProfile({Key? key, this.snapshot, this.uid}) : super(key: key);
 
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  File userProfilePicFile;
-  File userCoverPicFile;
+  File? userProfilePicFile;
+  File? userCoverPicFile;
   bool inProcess = false;
   bool loading = false;
-  String fullName;
-  String aboutYou;
-  String state;
-  String city;
-  String contact;
-  String profilePicUrl;
-  String coverPicUrl;
-  String punditType;
+  String? fullName;
+  String? aboutYou;
+  String? state;
+  String? city;
+  String? contact;
+  String? profilePicUrl;
+  String? coverPicUrl;
+  String? punditType;
   final _sTFormKey = GlobalKey<FormState>();
 
   bool _validateAndSaveForm() {
-    final form = _sTFormKey.currentState;
+    final form = _sTFormKey.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -51,22 +52,22 @@ class _EditProfileState extends State<EditProfile> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   Future<String> submitCoverPic() async {
-    StorageReference reference = FirebaseStorage.instance
+    Reference reference = FirebaseStorage.instance
         .ref()
         .child('Users/${widget.uid}/coverPicFile');
-    StorageUploadTask uploadTask = reference.putFile(userCoverPicFile);
-    var downloadUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    UploadTask uploadTask = reference.putFile(userCoverPicFile!);
+    var downloadUrl = await (await uploadTask).ref.getDownloadURL();
     var url = downloadUrl.toString();
     coverPicUrl = url;
     return downloadUrl.toString();
   }
 
   Future<String> submitProfilePic() async {
-    StorageReference reference = FirebaseStorage.instance
+    Reference reference = FirebaseStorage.instance
         .ref()
         .child('Users/${widget.uid}/profilePicFile');
-    StorageUploadTask uploadTask = reference.putFile(userProfilePicFile);
-    var downloadUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    UploadTask uploadTask = reference.putFile(userProfilePicFile!);
+    var downloadUrl = await (await uploadTask).ref.getDownloadURL();
     var url = downloadUrl.toString();
     profilePicUrl = url;
     return downloadUrl.toString();
@@ -97,11 +98,10 @@ class _EditProfileState extends State<EditProfile> {
         'number': contact ?? UserDetails(snapshot: widget.snapshot).aboutYou,
         'state': state ?? UserDetails(snapshot: widget.snapshot).state,
         'type': punditType ?? UserDetails(snapshot: widget.snapshot).type,
-        "dateOfProfileUpdate":
-            FieldValue.arrayUnion([DateTime.now()]),
+        "dateOfProfileUpdate": FieldValue.arrayUnion([DateTime.now()]),
         'searchKey': fullName == null
-            ? UserDetails(snapshot: widget.snapshot).name[0]
-            : fullName[0].toUpperCase().toString(),
+            ? UserDetails(snapshot: widget.snapshot).name![0]
+            : fullName![0].toUpperCase().toString(),
         'lastName': city ?? UserDetails(snapshot: widget.snapshot).city,
       }).whenComplete(() {
         setState(() {
@@ -113,14 +113,14 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  getProfilePic({ImageSource source}) async {
+  getProfilePic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         compressQuality: 100,
@@ -140,14 +140,14 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  getCoverPic({ImageSource source}) async {
+  getCoverPic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
         compressQuality: 100,
@@ -177,7 +177,7 @@ class _EditProfileState extends State<EditProfile> {
           actions: [
             loading
                 ? SizedBox()
-                : FlatButton(
+                : ElevatedButton(
                     onPressed: () {
                       _submit();
                     },
@@ -240,19 +240,20 @@ class _EditProfileState extends State<EditProfile> {
                                           color: Colors.black54, blurRadius: 5)
                                     ],
                                     image: DecorationImage(
-                                        image: userCoverPicFile == null
-                                            ? UserDetails(
+                                        image: (userCoverPicFile == null
+                                                ? UserDetails(
+                                                                snapshot: widget
+                                                                    .snapshot)
+                                                            .coverPhoto ==
+                                                        null
+                                                    ? NetworkImage(
+                                                        "https://cdn.safetyskills.com/wp-content/uploads/2016/08/18115356/person-placeholder.jpg")
+                                                    : NetworkImage(UserDetails(
                                                             snapshot:
                                                                 widget.snapshot)
-                                                        .coverPhoto ==
-                                                    null
-                                                ? NetworkImage(
-                                                    "https://cdn.safetyskills.com/wp-content/uploads/2016/08/18115356/person-placeholder.jpg")
-                                                : NetworkImage(UserDetails(
-                                                        snapshot:
-                                                            widget.snapshot)
-                                                    .coverPhoto)
-                                            : FileImage(userCoverPicFile),
+                                                        .coverPhoto!)
+                                                : FileImage(userCoverPicFile!))
+                                            as ImageProvider<Object>,
                                         fit: BoxFit.fitWidth),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.only(
@@ -261,23 +262,42 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ),
                             Align(
-                              alignment: Alignment.bottomCenter,
-                              child: CircularProfileAvatar(
-                                "",
-                                child: userProfilePicFile == null
-                                    ? Image.network(
-                                        UserDetails(snapshot: widget.snapshot)
-                                            .profilePhoto)
-                                    : Image.file(userProfilePicFile),
-                                radius:
-                                    MagicScreen(context: context, height: 60)
-                                        .getHeight,
-                                elevation: 8,
-                                onTap: () {
-                                  getProfilePic(source: ImageSource.gallery);
-                                },
-                              ),
-                            )
+                                alignment: Alignment.bottomCenter,
+                                child:GestureDetector(
+                                  onTap: () {getProfilePic(source: ImageSource.gallery);},
+                                  child: userProfilePicFile !=
+                                      null
+                                      ? Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        image: DecorationImage(
+                                            image: FileImage(
+                                                userProfilePicFile!)),
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black38,
+                                              blurRadius: 5)
+                                        ]),
+                                  )
+                                      : Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                UserDetails(
+                                                    snapshot: widget
+                                                        .snapshot)
+                                                    .profilePhoto!)),
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black38,
+                                              blurRadius: 5)
+                                        ]),
+                                  ),
+                                ))
                           ],
                         ),
                       ),
@@ -302,8 +322,8 @@ class _EditProfileState extends State<EditProfile> {
                                       "*உன் முழு பெயர்",
                                       "*మీ పూర్తి పేరు"
                                     ]).getText),
-                            validator: (String value) {
-                              if (value.isEmpty) {
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
                                 return Language(
                                     code: UserDetails(snapshot: widget.snapshot)
                                         .language,
@@ -348,8 +368,8 @@ class _EditProfileState extends State<EditProfile> {
                                       "கைபேசி எண்",
                                       "మొబైల్ సంఖ్య"
                                     ]).getText),
-                            validator: (String value) {
-                              if (value.isEmpty) {
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
                                 return Language(
                                     code: UserDetails(snapshot: widget.snapshot)
                                         .language,
@@ -393,8 +413,8 @@ class _EditProfileState extends State<EditProfile> {
                                       "உன்னை பற்றி",
                                       "నీ గురించి"
                                     ]).getText),
-                            validator: (String value) {
-                              if (value.isEmpty) {
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
                                 return Language(
                                     code: UserDetails(snapshot: widget.snapshot)
                                         .language,
@@ -420,7 +440,7 @@ class _EditProfileState extends State<EditProfile> {
                       SizedBox(
                           height: MagicScreen(context: context, height: 10)
                               .getHeight),
-                      CustomContainer(
+                      /*CustomContainer(
                           radius: 10,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -436,7 +456,7 @@ class _EditProfileState extends State<EditProfile> {
                                   }
 
                                   List<dynamic> statesArray =
-                                      snapshot.data.data()['states'];
+                                      snapshot.data!.get('states');
                                   print(
                                       'statesArray.... ......... $statesArray');
                                   List<DropdownMenuItem<String>> statesList =
@@ -454,7 +474,7 @@ class _EditProfileState extends State<EditProfile> {
                                       value = value == null
                                           ? UserDetails(
                                                   snapshot: widget.snapshot)
-                                              .state
+                                              .state!
                                           : value;
                                       if (value == null) {
                                         return Language(
@@ -514,15 +534,15 @@ class _EditProfileState extends State<EditProfile> {
                                     },
                                   );
                                 }),
-                          )),
+                          )),*/
                       SizedBox(
                           height: MagicScreen(context: context, height: 10)
                               .getHeight),
                       CustomContainer(
                         radius: 10,
                         child: TextFormField(
-                            validator: (String value) {
-                              if (value.isEmpty) {
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
                                 return Language(
                                     code: UserDetails(snapshot: widget.snapshot)
                                         .language,
@@ -562,7 +582,7 @@ class _EditProfileState extends State<EditProfile> {
                       SizedBox(
                           height: MagicScreen(context: context, height: 10)
                               .getHeight),
-                      CustomContainer(
+                      /*CustomContainer(
                         radius: 10,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
@@ -577,7 +597,7 @@ class _EditProfileState extends State<EditProfile> {
                                   );
                                 }
                                 List<dynamic> typeArray =
-                                    snapshot1.data.data()['punditTypes'];
+                                    snapshot1.data!.get('punditTypes');
                                 List<DropdownMenuItem<String>> typeList = [];
                                 for (int i = 0; i < typeArray.length; i++) {
                                   String name = typeArray[i];
@@ -591,7 +611,7 @@ class _EditProfileState extends State<EditProfile> {
                                   validator: (String value) {
                                     value = value == null
                                         ? UserDetails(snapshot: widget.snapshot)
-                                            .type
+                                            .type!
                                         : value;
                                     if (value == null) {
                                       return Language(
@@ -652,7 +672,7 @@ class _EditProfileState extends State<EditProfile> {
                                 );
                               }),
                         ),
-                      ),
+                      ),*/
                       SizedBox(
                         height: 10,
                       ),
@@ -663,7 +683,7 @@ class _EditProfileState extends State<EditProfile> {
                       SizedBox(
                         height: 10,
                       ),
-                      UserDetails(snapshot: widget.snapshot).astrologer
+                      UserDetails(snapshot: widget.snapshot).astrologer!
                           ? SizedBox()
                           : AccountTile(
                               title: Language(

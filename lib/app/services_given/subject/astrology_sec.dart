@@ -1,14 +1,12 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'astrology_selection_page.dart';
 
 class AstrologySection extends StatelessWidget {
   final String uid;
 
-  const AstrologySection({Key key, @required this.uid}) : super(key: key);
+  const AstrologySection({Key? key, required this.uid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +21,18 @@ class AstrologySection extends StatelessWidget {
           return Container(
             padding: EdgeInsets.all(8),
             child: ListView.builder(
-                itemCount: snapshot.data.size,
+                itemCount: snapshot.data!.size,
 
                 //padding: EdgeInsets.all(10),
                 itemBuilder: (context, index) {
-                  String imageUrl = snapshot.data.docs[index].data()['image'];
-                  String name = snapshot.data.docs[index].data()['name'];
-                  String keyword = snapshot.data.docs[index].data()['keyword'];
-                  String price = snapshot.data.docs[index].data()['price'];
-                  String duration =
-                      snapshot.data.docs[index].data()['Duration'];
-                  String details = snapshot.data.docs[index].data()['detail'];
-                  String additional = snapshot.data.docs[index].data()['offer'];
+                  String imageUrl = snapshot.data!.docs[index].get('image');
+                  String? name = snapshot.data!.docs[index].get('name');
+                  String? keyword = snapshot.data!.docs[index].get('keyword');
+                  String? price = snapshot.data!.docs[index].get('price');
+                  String? duration =
+                      snapshot.data!.docs[index].get('Duration');
+                  String? details = snapshot.data!.docs[index].get('detail');
+                  String? additional = snapshot.data!.docs[index].get('offer');
                   return Dismissible(
                     confirmDismiss: (DismissDirection direction) async {
                       return await showDialog(
@@ -45,11 +43,11 @@ class AstrologySection extends StatelessWidget {
                             content: const Text(
                                 "Are you sure you wish to delete this service?"),
                             actions: <Widget>[
-                              FlatButton(
+                              ElevatedButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
                                   child: const Text("DELETE")),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
                                 child: const Text("CANCEL"),
@@ -87,7 +85,8 @@ class AstrologySection extends StatelessWidget {
                     onDismissed: (direction) {
                       direction.index.toString();
                       FireStoreDatabase(uid: uid).deleteAstro(keyword);
-                      BotToast.showText(text: "Deleted Successfully");
+                      //TODO: botToast
+                      /*BotToast.showText(text: "Deleted Successfully");*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -95,7 +94,7 @@ class AstrologySection extends StatelessWidget {
                         onTap: () {
                           showDialog(
                               context: context,
-                              child: AstroSelect(
+                            builder:(context)=> AstroSelect(
                                 uid: uid,
                                 name: name,
                                 rate: price,
@@ -143,7 +142,7 @@ class AstrologySection extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                        color: Colors.deepOrange[100],
+                                        color: Colors.deepOrange[100]!,
                                         width: 1,
                                         style: BorderStyle.solid)),
                                 padding: EdgeInsets.all(8),
@@ -157,7 +156,7 @@ class AstrologySection extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                        color: Colors.deepOrange[100],
+                                        color: Colors.deepOrange[100]!,
                                         width: 1,
                                         style: BorderStyle.solid)),
                                 padding: EdgeInsets.all(8),

@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 class ServicesPage extends StatefulWidget {
-  final UserId userId;
+  final UserId? userId;
   final language;
-  const ServicesPage({Key key, this.userId, this.language}) : super(key: key);
+  const ServicesPage({Key? key, this.userId, this.language}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,9 +20,9 @@ class ServicesPage extends StatefulWidget {
 
 class HomeWidgetState extends State<ServicesPage>
     with SingleTickerProviderStateMixin {
-   List<Tab> tabs;
+   late List<Tab> tabs;
 
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class HomeWidgetState extends State<ServicesPage>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 
@@ -79,7 +79,7 @@ class HomeWidgetState extends State<ServicesPage>
 
         body: StreamBuilder<QuerySnapshot>(
             stream:
-                FireStoreDatabase(uid: widget.userId.uid).getPujaOfferingList,
+                FireStoreDatabase(uid: widget.userId!.uid).getPujaOfferingList,
             builder: (context, pujaOfferingSnapshot) {
               if (pujaOfferingSnapshot.data == null) {
                 return Center(
@@ -88,7 +88,7 @@ class HomeWidgetState extends State<ServicesPage>
               }
               return StreamBuilder<QuerySnapshot>(
                   stream:
-                      FireStoreDatabase(uid: widget.userId.uid).getAstroList,
+                      FireStoreDatabase(uid: widget.userId!.uid).getAstroList,
                   builder: (context, astroOfferingSnapshot) {
                     if (astroOfferingSnapshot.data == null) {
                       return Center(
@@ -96,7 +96,7 @@ class HomeWidgetState extends State<ServicesPage>
                       );
                     }
                     return TabBarView(controller: _tabController, children: [
-                      PujaOffering(snapshot: pujaOfferingSnapshot,uid: widget.userId.uid,language: widget.language,),
+                      PujaOffering(snapshot: pujaOfferingSnapshot,uid: widget.userId!.uid,language: widget.language,),
                      // AstroOffering(snapshot: pujaOfferingSnapshot,userId: widget.userId,),
                     ]);
                   });

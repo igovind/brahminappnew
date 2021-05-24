@@ -3,11 +3,11 @@ import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 
 class SocialSignInButton extends CustomRaisedButton {
   SocialSignInButton({
-    @required String assetName,
-    @required String text,
-    Color color,
-    Color textColor,
-    VoidCallback onPressed,
+    required String assetName,
+    required String text,
+    Color? color,
+    Color? textColor,
+    VoidCallback? onPressed,
   })  : assert(assetName != null),
         assert(text != null),
         super(

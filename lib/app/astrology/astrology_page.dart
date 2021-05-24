@@ -1,18 +1,16 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:multiselect_dropdown/multiple_select.dart';
 import '../../common_widgets/custom_multi_select_file.dart';
 import '../languages.dart';
 
 class AstrologyPage extends StatefulWidget {
   final language;
   final uid;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
 
-  const AstrologyPage({Key key, this.snapshot, this.uid, this.language})
+  const AstrologyPage({Key? key, this.snapshot, this.uid, this.language})
       : super(key: key);
 
   @override
@@ -20,13 +18,13 @@ class AstrologyPage extends StatefulWidget {
 }
 
 class _AstrologyPageState extends State<AstrologyPage> {
-  String messagePrice = "0";
-  String audioPrice = "0";
-  String videoPrice = "0";
-  String description = "";
-  String expertise = "";
-  String experience = "";
-  String languages = "";
+  String? messagePrice = "0";
+  String? audioPrice = "0";
+  String? videoPrice = "0";
+  String? description = "";
+  String? expertise = "";
+  String? experience = "";
+  String? languages = "";
   bool astrologer = false;
   final _formKeyNK = GlobalKey<FormState>();
   List<DropdownMenuItem> dropdownMenuItem = [
@@ -47,7 +45,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
     ),
   ];
 
-  List<MultipleSelectItem> elements = [
+/*  List<MultipleSelectItem> elements = [
     MultipleSelectItem.build(
       value: 1,
       display: 'Hindi',
@@ -108,7 +106,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
       display: 'Bengali',
       content: 'Bengali',
     ),
-  ];
+  ];*/
 
   List _selectedValues = [];
 
@@ -116,27 +114,27 @@ class _AstrologyPageState extends State<AstrologyPage> {
   void initState() {
     // TODO: implement initState
     messagePrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["chat"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("chat");
     audioPrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["call"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("call");
     videoPrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["video"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("video");
     description = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["description"];
+        : widget.snapshot!.data!.get("description");
     expertise = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["expertise"];
+        : widget.snapshot!.data!.get("expertise");
     experience = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["experience"].toString();
+        : widget.snapshot!.data!.get("experience").toString();
     languages =
-        widget.snapshot == null ? "" : widget.snapshot.data.data()["language"];
+        widget.snapshot == null ? "" : widget.snapshot!.data!.get("language");
     super.initState();
   }
 
   bool _validateAndSaveForm() {
-    final form = _formKeyNK.currentState;
+    final form = _formKeyNK.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -147,9 +145,10 @@ class _AstrologyPageState extends State<AstrologyPage> {
   _submit() {
     if (_validateAndSaveForm() && _selectedValues.isNotEmpty) {
       String string = "";
-      for (int i = 0; i < _selectedValues.length; i++) {
+      //TODO: multiple
+   /*   for (int i = 0; i < _selectedValues.length; i++) {
         string = elements[i].content + "," + string;
-      }
+      }*/
       FirebaseFirestore.instance
           .doc("punditUsers/${widget.uid}/user_profile/user_data")
           .update({
@@ -201,7 +200,8 @@ class _AstrologyPageState extends State<AstrologyPage> {
       });
     } else {
       if (_selectedValues.isEmpty) {
-        BotToast.showText(
+        //TODO: botToast
+       /* BotToast.showText(
           text: Language(code: widget.language, text: [
             "Please select your languages ",
             "कृपया अपनी भाषाओं का चयन करें ",
@@ -209,7 +209,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
             "உங்கள் மொழிகளைத் தேர்ந்தெடுக்கவும் ",
             "దయచేసి మీ భాషలను ఎంచుకోండి "
           ]).getText,
-        );
+        );*/
       }
     }
   }
@@ -251,7 +251,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
               backgroundColor: Colors.white,
               elevation: 0,
               actions: [
-                FlatButton(
+                ElevatedButton(
                   onPressed: () {
                     _submit();
                   },
@@ -307,7 +307,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
-                                      validator: (value) {
+                                      validator: (dynamic value) {
                                         if (value == null) {
                                           return Language(
                                               code: widget.language,
@@ -331,7 +331,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                       style: TextStyle(color: Colors.green),
                                       //value: price,
                                       items: dropdownMenuItem,
-                                      onChanged: (value) {
+                                      onChanged: (dynamic value) {
                                         setState(() {
                                           messagePrice = value;
                                         });
@@ -354,7 +354,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
-                                      validator: (value) {
+                                      validator: (dynamic value) {
                                         if (value == null) {
                                           Language(
                                               code: widget.language,
@@ -378,7 +378,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                       style: TextStyle(color: Colors.green),
                                       //value: price,
                                       items: dropdownMenuItem,
-                                      onChanged: (value) {
+                                      onChanged: (dynamic value) {
                                         setState(() {
                                           audioPrice = value;
                                         });
@@ -401,7 +401,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                 Container(
                                   width: 100,
                                   child: DropdownButtonFormField(
-                                      validator: (value) {
+                                      validator: (dynamic value) {
                                         if (value == null) {
                                           Language(
                                               code: widget.language,
@@ -425,7 +425,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                       style: TextStyle(color: Colors.green),
                                       //value: price,
                                       items: dropdownMenuItem,
-                                      onChanged: (value) {
+                                      onChanged: (dynamic value) {
                                         setState(() {
                                           videoPrice = value;
                                         });
@@ -456,7 +456,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             Container(
                               width: 100,
                               child: DropdownButtonFormField(
-                                  validator: (value) {
+                                  validator: (dynamic value) {
                                     if (value == null) {
                                       Language(code: widget.language, text: [
                                         "This field is required",
@@ -478,7 +478,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                   style: TextStyle(color: Colors.green),
                                   //value: price,
                                   items: dropdownMenuItemExperience,
-                                  onChanged: (value) {
+                                  onChanged: (dynamic value) {
                                     setState(() {
                                       experience = value;
                                     });
@@ -512,7 +512,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                     color: Colors.black54,
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.bold)),
-                            CustomMultipleDropDown(
+                          /*  CustomMultipleDropDown(
                               icon: Icon(
                                 Icons.arrow_drop_down_circle_outlined,
                                 color: Colors.deepOrangeAccent,
@@ -528,8 +528,8 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                   ]).getText,
                               disabled: false,
                               values: _selectedValues,
-                              elements: elements,
-                            ),
+                              elements: [],//TODO: multiple
+                            ),*/
                           ],
                         ),
                       ),
@@ -741,7 +741,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FlatButton(
+                    ElevatedButton(
                       onPressed: () {
                         FireStoreDatabase(uid: widget.uid).updateData(data: {
                           'astrologer': true,
@@ -774,7 +774,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                         ),
                       ),
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       onPressed: () {
                         if (widget.snapshot != null) {
                           Navigator.of(context).pop();

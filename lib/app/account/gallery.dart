@@ -6,8 +6,8 @@ class Gallery extends StatefulWidget {
   final uid;
 
   const Gallery({
-    Key key,
-    @required this.uid,
+    Key? key,
+    required this.uid,
   }) : super(key: key);
 
   @override
@@ -28,23 +28,23 @@ class _GalleryState extends State<Gallery> {
               .doc('punditUsers/${widget.uid}/user_profile/galleryPic')
               .snapshots(),
           builder: (context, snapshot) {
-            String imageUrl1;
-            String imageUrl2;
-            String imageUrl3;
-            String imageUrl4;
+            String? imageUrl1;
+            String? imageUrl2;
+            String? imageUrl3;
+            String? imageUrl4;
 
-            String check;
+            String? check;
             if (snapshot.data == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (snapshot.data.data() != null) {
-              imageUrl1 = snapshot.data.data()['link1'];
-              imageUrl2 = snapshot.data.data()['link2'];
-              imageUrl3 = snapshot.data.data()['link3'];
-              imageUrl4 = snapshot.data.data()['link4'];
-              check = snapshot.data.data()['set'];
+            if (snapshot.data!.data() != null) {
+              imageUrl1 = snapshot.data!.get('link1');
+              imageUrl2 = snapshot.data!.get('link2');
+              imageUrl3 = snapshot.data!.get('link3');
+              imageUrl4 = snapshot.data!.get('link4');
+              check = snapshot.data!.get('set');
             }
             return Padding(
               padding: const EdgeInsets.all(16),
@@ -98,16 +98,16 @@ class _GalleryState extends State<Gallery> {
 }
 
 Widget _galleryBox(
-    {BuildContext context,
-    String uid,
-    String check,
-    String imageUrl,
-    int num}) {
+    {BuildContext? context,
+    String? uid,
+    String? check,
+    String? imageUrl,
+    int? num}) {
   return GestureDetector(
     onTap: () {
       showDialog(
-          context: context,
-          child: EditGallery(
+          context: context!,
+        builder:(context)=> EditGallery(
             imageUrl: imageUrl,
             set: check,
             uid: uid,
@@ -126,7 +126,7 @@ Widget _galleryBox(
               Icons.image,
               size: 30,
             ),
-            width: MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context!).size.width * 0.9,
             height: 200,
           )
         : Container(
@@ -136,7 +136,7 @@ Widget _galleryBox(
               border: Border.all(
                   color: Colors.black, width: 2, style: BorderStyle.solid),
             ),
-            width: MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context!).size.width * 0.9,
             height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
@@ -144,13 +144,13 @@ Widget _galleryBox(
                 imageUrl,
                 fit: BoxFit.fill,
                 loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent loadingProgress) {
+                    ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Center(
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes
+                              loadingProgress.expectedTotalBytes!
                           : null,
                     ),
                   );

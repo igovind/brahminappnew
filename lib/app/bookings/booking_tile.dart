@@ -1,16 +1,16 @@
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class BookingTiles extends StatelessWidget {
-  final DocumentSnapshot snapshot;
-  final Widget child;
-  final VoidCallback onPressLocation;
+  final DocumentSnapshot? snapshot;
+  final Widget? child;
+  final VoidCallback? onPressLocation;
   final language;
-  const BookingTiles({Key key, this.snapshot, this.child, this.onPressLocation, this.language})
+  const BookingTiles({Key? key, this.snapshot, this.child, this.onPressLocation, this.language})
       : super(key: key);
 
   @override
@@ -19,14 +19,14 @@ class BookingTiles extends StatelessWidget {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    DocumentSnapshot ref = snapshot;
-    final String date = ref.data()['date'];
-    final Timestamp dateOfBooking = ref.data()['dt'];
-    final String time = ref.data()['time'];
-    final String pic = ref.data()['pic'];
-    final String service = ref.data()['service'];
-    final String client = ref.data()['client'];
-    final String location = ref.data()['Location'];
+    DocumentSnapshot ref = snapshot!;
+    final String? date = ref.get('date');
+    final Timestamp dateOfBooking = ref.get('dt');
+    final String? time = ref.get('time');
+    final String? pic = ref.get('pic');
+    final String service = ref.get('service');
+    final String client = ref.get('client');
+    final String? location = ref.get('Location');
     final String tid = ref.id;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -50,13 +50,8 @@ class BookingTiles extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CircularProfileAvatar(
-                  '',
-                  child: Image.network(pic),
-                  borderWidth: 0.5,
-                  elevation: 3,
-                  radius: height(40),
-                  borderColor: Colors.deepOrange,
+                CircularAvatarNetwork(
+                  url: pic,
                 ),
                 Column(
                   children: <Widget>[
@@ -137,7 +132,7 @@ class BookingTiles extends StatelessWidget {
             SizedBox(
               height: height(5),
             ),
-            child,
+            child!,
             SizedBox(
               height: height(8),
             ),

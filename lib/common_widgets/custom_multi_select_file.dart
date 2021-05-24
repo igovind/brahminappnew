@@ -1,12 +1,12 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:multiselect_dropdown/multiple_select.dart';
 
 typedef OnConfirm(List selectedValues);
 
 class CustomMultipleDropDown extends StatefulWidget {
   final List values;
-  final List<MultipleSelectItem> elements;
+  //final List<MultipleSelectItem> elements;
   final String placeholder;
   final bool disabled;
   final Icon icon;
@@ -14,7 +14,7 @@ class CustomMultipleDropDown extends StatefulWidget {
   CustomMultipleDropDown({
     Key key,
     @required this.values,
-    @required this.elements,
+  //  @required this.elements,
     this.placeholder,
     this.disabled = false,
     this.icon,
@@ -107,3 +107,4 @@ class CustomMultipleDropDownState extends State<CustomMultipleDropDown> {
     }
   }
 }
+*/

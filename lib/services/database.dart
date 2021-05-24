@@ -8,16 +8,16 @@ abstract class DatabaseL {
   Stream<List<ChatListModal>> readChatlist();
 
   Future<void> setData({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   });
 
   Future<void> updateBooking(
-      {@required String tuid,
-      @required String tid,
-      @required bool bookingAccepted,
-      @required String serviceId,
-      @required String pPic,
-      @required String service});
+      {required String tuid,
+      required String tid,
+      required bool bookingAccepted,
+      required String serviceId,
+      required String pPic,
+      required String service});
 
   Stream<QuerySnapshot> get getTrendingList;
 
@@ -32,23 +32,23 @@ abstract class DatabaseL {
   Stream<QuerySnapshot> get getOrderdPujaOfferingListByProfit;
 
   Future<void> setUserUid({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   });
 
   Future<void> setPujaOffering({
-    @required Map<String, dynamic> data,
-    @required String pid,
+    required Map<String, dynamic> data,
+    required String pid,
   });
 
   Future<void> updatePujaOffering({
-    @required Map<String, dynamic> data,
-    @required String pid,
+    required Map<String, dynamic> data,
+    required String pid,
   });
 
   Future<void> bookingStatus(
-      {@required Map<String, dynamic> data,
-      @required String tuid,
-      @required tid});
+      {required Map<String, dynamic> data,
+      required String tuid,
+      required tid});
 
   Stream<DocumentSnapshot> get getUserData;
 
@@ -58,7 +58,7 @@ abstract class DatabaseL {
 }
 
 class FireStoreDatabase implements DatabaseL {
-  FireStoreDatabase({@required this.uid});
+  FireStoreDatabase({required this.uid});
 
   final dynamic uid;
   final id = DateTime.now();
@@ -66,7 +66,7 @@ class FireStoreDatabase implements DatabaseL {
   final fireStore = FirebaseFirestore.instance;
 
   Future<void> setData({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   }) async {
     String path = 'punditUsers/$uid/user_profile/user_data';
     String path1 = 'Avaliable_pundit/$uid';
@@ -77,7 +77,7 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   Future<void> updateData({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   }) async {
     String path = 'punditUsers/$uid/user_profile/user_data';
     String path1 = 'Avaliable_pundit/$uid';
@@ -92,7 +92,7 @@ class FireStoreDatabase implements DatabaseL {
       path: APIPath.readChatlist(uid),
       builder: (data) => ChatListModal.fromMap(data));
 
-  Future<void> deletepuja(String pid, String keyword) async {
+  Future<void> deletepuja(String pid, String? keyword) async {
     String path1 = 'Avaliable_pundit/$uid/puja_offering/$pid';
     String path = 'punditUsers/$uid/puja_offering/$pid';
     final reference1 = fireStore.doc(path1);
@@ -104,7 +104,7 @@ class FireStoreDatabase implements DatabaseL {
     });
   }
 
-  Future<void> deleteAstro(String keyword) async {
+  Future<void> deleteAstro(String? keyword) async {
     fireStore
         .doc('punditUsers/$uid/astro_offering/$keyword')
         .delete()
@@ -119,7 +119,7 @@ class FireStoreDatabase implements DatabaseL {
 
   @override
   Future<void> setUserUid({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   }) async {
     String path = 'Avaliable_pundit/$uid';
     final reference = fireStore.doc(path);
@@ -129,9 +129,9 @@ class FireStoreDatabase implements DatabaseL {
 
   @override
   Future<void> bookingStatus(
-      {@required Map<String, dynamic> data,
-      @required String tuid,
-      @required tid}) async {
+      {required Map<String, dynamic> data,
+      required String tuid,
+      required tid}) async {
     String path = 'users/$tuid/bookings/$tid';
     String path1 = 'punditUsers/$uid/bookingrequest/$tid';
 
@@ -144,8 +144,8 @@ class FireStoreDatabase implements DatabaseL {
 
   @override
   Future<void> setPujaOffering({
-    @required Map<String, dynamic> data,
-    @required String pid,
+    required Map<String, dynamic> data,
+    required String pid,
   }) async {
     String path1 = 'Avaliable_pundit/$uid/puja_offering/$pid';
     String path = 'punditUsers/$uid/puja_offering/$pid';
@@ -158,8 +158,8 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   Future<void> updatePujaOffering({
-    @required Map<String, dynamic> data,
-    @required String pid,
+    required Map<String, dynamic> data,
+    required String pid,
   }) async {
     String path1 = 'Avaliable_pundit/$uid/puja_offering/$pid';
     String path = 'punditUsers/$uid/puja_offering/$pid';
@@ -256,7 +256,7 @@ class FireStoreDatabase implements DatabaseL {
     });
   }
 
-  setRefCode({Map<String ,dynamic> data, String ref}) {
+  setRefCode({required Map<String ,dynamic> data, String? ref}) {
     fireStore.doc("referal/$ref").set(data);
   }
 
@@ -273,7 +273,7 @@ class FireStoreDatabase implements DatabaseL {
         .snapshots();
   }
 
-  setPujaStatus({String bookingId, String tuid}) {
+  setPujaStatus({String? bookingId, String? tuid}) {
     fireStore
         .doc('users/$tuid/bookings/$bookingId')
         .update({'puja_status': true}).whenComplete(() => print("yess"));
@@ -282,7 +282,7 @@ class FireStoreDatabase implements DatabaseL {
         .update({'puja_status': true}).whenComplete(() => print("oh yes"));
   }
 
-  setOnlineStatus({bool value}) {
+  setOnlineStatus({required bool value}) {
     fireStore
         .doc('punditUsers/$uid/user_profile/user_data')
         .update({'online': value}).whenComplete(() {
@@ -295,7 +295,7 @@ class FireStoreDatabase implements DatabaseL {
     }
   }
 
-  setMessageStatus({bool value}) {
+  setMessageStatus({bool? value}) {
     fireStore
         .doc('punditUsers/$uid/user_profile/user_data')
         .update({'chatOk': value}).whenComplete(() {
@@ -303,7 +303,7 @@ class FireStoreDatabase implements DatabaseL {
     });
   }
 
-  setCallStatus({bool value}) {
+  setCallStatus({bool? value}) {
     fireStore
         .doc('punditUsers/$uid/user_profile/user_data')
         .update({'callOk': value}).whenComplete(() {
@@ -311,7 +311,7 @@ class FireStoreDatabase implements DatabaseL {
     });
   }
 
-  setVideoStatus({bool value}) {
+  setVideoStatus({bool? value}) {
     fireStore
         .doc('punditUsers/$uid/user_profile/user_data')
         .update({'videoOk': value}).whenComplete(() {
@@ -320,13 +320,13 @@ class FireStoreDatabase implements DatabaseL {
   }
 
   setAstrology(
-      {String details,
-      String description,
-      String keyword,
-      String price,
-      String imageUrl,
-      String duration,
-      String name}) {
+      {String? details,
+      String? description,
+      String? keyword,
+      String? price,
+      String? imageUrl,
+      String? duration,
+      String? name}) {
     fireStore.doc('Avaliable_pundit/$uid/astro/$keyword').set({
       'name': name,
       'price': price,
@@ -361,12 +361,12 @@ class FireStoreDatabase implements DatabaseL {
       fireStore
           .collection('punditUsers/$uid/history')
           .doc(bookingId)
-          .set(event.data())
+          .set(event.data()!)
           .whenComplete(() {
         fireStore
             .collection('inventories/totalPuja/folder')
             .doc('${DateTime.now()}')
-            .set(event.data());
+            .set(event.data()!);
       }).whenComplete(() {
         fireStore
             .doc('inventories/totalPuja')
@@ -375,7 +375,7 @@ class FireStoreDatabase implements DatabaseL {
         fireStore
             .collection('inventories/purohitBookingHistory/$uid')
             .doc(bookingId)
-            .set(event.data());
+            .set(event.data()!);
       }).whenComplete(() {
         Future.delayed(const Duration(milliseconds: 2000)).whenComplete(() {
           fireStore
@@ -394,7 +394,7 @@ class FireStoreDatabase implements DatabaseL {
         .delete();
   }
 
-  setReward({String bookingId, double price}) {
+  setReward({String? bookingId, double? price}) {
     fireStore
         .doc('punditUsers/$uid/history/$bookingId')
         .snapshots()
@@ -402,7 +402,7 @@ class FireStoreDatabase implements DatabaseL {
       fireStore
           .collection('punditUsers/$uid/reward')
           .doc(bookingId)
-          .set(event.data());
+          .set(event.data()!);
     });
   }
 
@@ -478,12 +478,12 @@ class FireStoreDatabase implements DatabaseL {
 
   @override
   Future<void> updateBooking(
-      {@required String tuid,
-      @required String tid,
-      @required bool bookingAccepted,
-      @required String serviceId,
-      @required String pPic,
-      @required String service}) async {
+      {required String? tuid,
+      required String tid,
+      required bool bookingAccepted,
+      required String? serviceId,
+      required String? pPic,
+      required String? service}) async {
     final String bookingResponce = bookingAccepted ? 'request' : 'rejected';
     fireStore
         .collection('punditUsers/$uid/bookingrequest')
@@ -525,8 +525,8 @@ class FireStoreDatabase implements DatabaseL {
       'content': bookingAccepted ? acceptText : rejectText,
       'sender': service,
       'image': pPic,
-      'token': dSnapshot.data()['utoken'],
-      'btoken': dSnapshot.data()['token'],
+      'token': dSnapshot.get('utoken'),
+      'btoken': dSnapshot.get('token'),
       'clientuid': tuid
     });
   }

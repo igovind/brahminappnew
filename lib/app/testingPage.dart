@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TestingPage extends StatelessWidget {
   final uid;
 
-  const TestingPage({Key key, this.uid}) : super(key: key);
+  const TestingPage({Key? key, this.uid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class TestingPage extends StatelessWidget {
                     return CircularProgressIndicator();
                   }
                   return Center(
-                      child: FlatButton(
+                      child: ElevatedButton(
                     onPressed: () async {
-                      print("hii ${snapshot.data.size}");
-                      for (int i = 0; i < snapshot.data.size; i++) {
-                        String uid = snapshot.data.docs[i].id;
+                      print("hii ${snapshot.data!.size}");
+                      for (int i = 0; i < snapshot.data!.size; i++) {
+                        String uid = snapshot.data!.docs[i].id;
                         String refralCode = "G" + (100 + i).toString();
                         String punditId =
                             "RK${DateTime.now().year}${100 + i}${DateTime.now().month}${DateTime.now().day}";
@@ -39,10 +39,10 @@ class TestingPage extends StatelessWidget {
                             .doc(refralCode)
                             .set({
                           "uid": uid,
-                          "name": snapshot.data.docs[i].data()["firstName"],
+                          "name": snapshot.data!.docs[i].get("firstName"),
                           "image":
-                              snapshot.data.docs[i].data()["profilePicUrl"],
-                          "token": snapshot.data.docs[i].data()["token"],
+                              snapshot.data!.docs[i].get("profilePicUrl"),
+                          "token": snapshot.data!.docs[i].get("token"),
                           "punditID": punditId
                         });
                         FirebaseFirestore.instance

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AstrologerForm extends StatefulWidget {
   final uid;
 
-  const AstrologerForm({Key key, this.uid}) : super(key: key);
+  const AstrologerForm({Key? key, this.uid}) : super(key: key);
 
   @override
   _AstrologerFormState createState() => _AstrologerFormState();

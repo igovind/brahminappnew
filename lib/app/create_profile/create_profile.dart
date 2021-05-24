@@ -16,12 +16,12 @@ class CreateProfile extends StatelessWidget {
   final uid;
   final language;
 
-  const CreateProfile({Key key, @required this.uid, @required this.language})
+  const CreateProfile({Key? key, required this.uid, required this.language})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int _currentIndex;
+    int? _currentIndex;
 
     Future<void> _signOut(context) async {
       try {
@@ -54,11 +54,11 @@ class CreateProfile extends StatelessWidget {
               ),
             );
           }
-          if (snapshot.data.data() == null) {
+          if (snapshot.data!.data() == null) {
             _currentIndex = 0;
           }
-          if (snapshot.data.data() != null) {
-            _currentIndex = snapshot.data.data()["index"] ?? 0;
+          if (snapshot.data!.data() != null) {
+            _currentIndex = snapshot.data!.get("index") ?? 0;
           }
           return Scaffold(
             appBar: AppBar(
@@ -73,7 +73,7 @@ class CreateProfile extends StatelessWidget {
                 style: TextStyle(color: Colors.black),
               ),
               actions: [
-                FlatButton(
+                ElevatedButton(
                     onPressed: () => _confirmSignOut(context),
                     child: Text(
                       Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
@@ -86,7 +86,7 @@ class CreateProfile extends StatelessWidget {
             body: body(_currentIndex, uid,language),
             bottomNavigationBar: DotsIndicator(
                 onTap: (value) {},
-                position: _currentIndex.toDouble(),
+                position: _currentIndex!.toDouble(),
                 dotsCount: 6,
                 decorator: DotsDecorator(
                   size: Size.fromRadius(5),
@@ -100,7 +100,7 @@ class CreateProfile extends StatelessWidget {
   }
 }
 
-Widget body(int value, uid,language) {
+Widget body(int? value, uid,language) {
   switch (value) {
     case 0:
       return StreamBuilder<DocumentSnapshot>(

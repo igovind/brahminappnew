@@ -26,11 +26,11 @@ class EditAdhaarDetails extends StatefulWidget {
   final language;
 
   const EditAdhaarDetails({
-    Key key,
+    Key? key,
     this.adhaarName,
     this.adhaarNumber,
     this.address,
-    @required this.uid,
+    required this.uid,
     this.frontAdhaarUrl,
     this.backAdhaarUrl,
     this.check,
@@ -43,17 +43,17 @@ class EditAdhaarDetails extends StatefulWidget {
 
 class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
   final _tMformKey = GlobalKey<FormState>();
-  String _name;
-  String _adhaarNumber;
-  String _address;
-  File _frontAdhaarFile;
-  String _frontAdhaarUrl;
-  File _backAdhaarFile;
-  String _backAdhaarUrl;
+  String? _name;
+  String? _adhaarNumber;
+  String? _address;
+  File? _frontAdhaarFile;
+  String? _frontAdhaarUrl;
+  File? _backAdhaarFile;
+  String? _backAdhaarUrl;
   bool inProcess = false;
 
   bool _validateAndSaveForm() {
-    final form = _tMformKey.currentState;
+    final form = _tMformKey.currentState!;
 
     if (form.validate() &&
         (_frontAdhaarFile != null || _frontAdhaarUrl != null) &&
@@ -65,14 +65,14 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
     return false;
   }
 
-  getbackAdhaarPic({ImageSource source}) async {
+  getbackAdhaarPic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
         compressQuality: 100,
@@ -92,14 +92,14 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
     }
   }
 
-  getAdhaarFrontPic({ImageSource source}) async {
+  getAdhaarFrontPic({required ImageSource source}) async {
     this.setState(() {
       inProcess = true;
     });
     // ignore: invalid_use_of_visible_for_testing_member
-    PickedFile image = await ImagePicker.platform.pickImage(source: source);
+    PickedFile? image = await ImagePicker.platform.pickImage(source: source);
     if (image != null) {
-      File cropped = await ImageCropper.cropImage(
+      File? cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
         compressQuality: 100,
@@ -124,25 +124,25 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
       try {
         Future.delayed(Duration(milliseconds: 10)).whenComplete(() async {
           if (_backAdhaarFile != null) {
-            StorageReference reference = FirebaseStorage.instance
+            Reference reference = FirebaseStorage.instance
                 .ref()
                 .child('Users/${widget.uid}/backAdhaar');
-            StorageUploadTask uploadTask = reference.putFile(_backAdhaarFile);
+            UploadTask uploadTask = reference.putFile(_backAdhaarFile!);
             var downloadUrl =
-                await (await uploadTask.onComplete).ref.getDownloadURL();
+                await (await uploadTask).ref.getDownloadURL();
             var url = downloadUrl.toString();
             _backAdhaarUrl = url;
             print('eirj $_backAdhaarUrl');
           }
         }).whenComplete(() async {
           if (_frontAdhaarFile != null) {
-            StorageReference referencet = FirebaseStorage.instance
+            Reference referencet = FirebaseStorage.instance
                 .ref()
                 .child('Users/${widget.uid}/frontadhaar');
-            StorageUploadTask uploadTaskt =
-                referencet.putFile(_frontAdhaarFile);
+            UploadTask uploadTaskt =
+                referencet.putFile(_frontAdhaarFile!);
             var downloadUrlt =
-                await (await uploadTaskt.onComplete).ref.getDownloadURL();
+                await (await uploadTaskt).ref.getDownloadURL();
             var urlt = downloadUrlt.toString();
 
             _frontAdhaarUrl = urlt;
@@ -188,7 +188,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
     } else {
       showDialog(
           context: context,
-          child: AlertDialog(
+          builder:(context)=>AlertDialog(
             title: Text(Language(code: widget.language, text: [
               "Please upload photo of adhaar card ",
               "कृपया आधार कार्ड की फोटो अपलोड करें ",
@@ -221,7 +221,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
         toolbarHeight: height(30),
         actions: [
           widget.check != null
-              ? FlatButton(
+              ? ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {"ready": true});
@@ -239,7 +239,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                         color: Colors.deepOrange, fontWeight: FontWeight.bold),
                   ))
               : SizedBox(),
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               _submit();
             },
@@ -300,7 +300,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                       ]).getText,
                     ),
                     initialValue: widget.adhaarName,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "Name can't be empty ",
@@ -330,7 +330,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                     ),
                     initialValue: widget.address,
                     keyboardType: TextInputType.name,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",
@@ -362,7 +362,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                     initialValue: widget.adhaarNumber,
                     keyboardType: TextInputType.number,
                     obscureText: true,
-                    validator: (value) => value.isNotEmpty
+                    validator: (value) => value!.isNotEmpty
                         ? null
                         : Language(code: widget.language, text: [
                             "This field is required",
@@ -420,11 +420,11 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                                       ),
                                     )
                                   : Image.network(
-                                      _frontAdhaarUrl,
+                                      _frontAdhaarUrl!,
                                       fit: BoxFit.fill,
                                     )
                               : Image.file(
-                                  _frontAdhaarFile,
+                                  _frontAdhaarFile!,
                                   fit: BoxFit.fill,
                                 ),
                         ),
@@ -503,11 +503,11 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                                       ),
                                     )
                                   : Image.network(
-                                      _backAdhaarUrl,
+                                      _backAdhaarUrl!,
                                       fit: BoxFit.fill,
                                     )
                               : Image.file(
-                                  _backAdhaarFile,
+                                  _backAdhaarFile!,
                                   fit: BoxFit.fill,
                                 ),
                         ),

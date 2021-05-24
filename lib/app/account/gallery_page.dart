@@ -4,7 +4,6 @@ import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../languages.dart';
 
@@ -13,7 +12,7 @@ class GalleryPage extends StatelessWidget {
   final uid;
   final done;
 
-  const GalleryPage({Key key, this.uid, this.done, this.language})
+  const GalleryPage({Key? key, this.uid, this.done, this.language})
       : super(key: key);
 
   @override
@@ -36,7 +35,7 @@ class GalleryPage extends StatelessWidget {
         actions: [
           done == null
               ? SizedBox()
-              : FlatButton(
+              : ElevatedButton(
                   onPressed: () {
                     FireStoreDatabase(uid: uid).updateData(data: {'index': 3});
                   },
@@ -68,25 +67,24 @@ class GalleryPage extends StatelessWidget {
               .doc('punditUsers/$uid/user_profile/galleryPic')
               .snapshots(),
           builder: (context, snapshot) {
-            String imageUrl1;
-            String imageUrl2;
-            String imageUrl3;
-            String imageUrl4;
+            String? imageUrl1;
+            String? imageUrl2;
+            String? imageUrl3;
+            String? imageUrl4;
 
-            String check;
+            String? check;
             if (snapshot.data == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (snapshot.data.data() != null) {
-              imageUrl1 = snapshot.data.data()['link1'];
-              imageUrl2 = snapshot.data.data()['link2'];
-              imageUrl3 = snapshot.data.data()['link3'];
-              imageUrl4 = snapshot.data.data()['link4'];
-              check = snapshot.data.data()['set'];
+            if (snapshot.data!.data() != null) {
+              imageUrl1 = snapshot.data!.get('link1');
+              imageUrl2 = snapshot.data!.get('link2');
+              imageUrl3 = snapshot.data!.get('link3');
+              imageUrl4 = snapshot.data!.get('link4');
+              check = snapshot.data!.get('set');
             }
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>..$imageUrl1");
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -143,17 +141,24 @@ class ImageBox extends StatelessWidget {
   final image;
   final uid;
   final check;
-  final int num;
+  final int? num;
   final language;
 
-  const ImageBox({Key key, this.image, this.uid, this.check, this.num, this.language})
+  const ImageBox({Key? key, this.image, this.uid, this.check, this.num, this.language})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showMaterialModalBottomSheet(
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditGallery(
+          language: language,
+          set: check,
+          imageUrl: image,
+          uid: uid,
+          num: num,
+        ),));
+       /* showMaterialModalBottomSheet(
           backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
@@ -174,7 +179,7 @@ class ImageBox extends StatelessWidget {
               ),
             );
           },
-        );
+        );*/
       },
       child: Container(
         height: MagicScreen(height: 200, context: context).getHeight,
@@ -184,9 +189,9 @@ class ImageBox extends StatelessWidget {
             boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 1)],
             image: DecorationImage(
                 fit: BoxFit.fill,
-                image: image == null
+                image: (image == null
                     ? AssetImage("images/cover_image.jpg")
-                    : NetworkImage(image))),
+                    : NetworkImage(image)) as ImageProvider<Object>)),
       ),
     );
   }

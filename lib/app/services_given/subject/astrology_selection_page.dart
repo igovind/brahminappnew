@@ -1,26 +1,25 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:flutter/material.dart';
 
 class AstroSelect extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final String rate;
-  final String keyword;
-  final String time;
+  final String? imageUrl;
+  final String? name;
+  final String? rate;
+  final String? keyword;
+  final String? time;
 
   final String uid;
-  final String details;
-  final String offer;
+  final String? details;
+  final String? offer;
 
   const AstroSelect(
-      {Key key,
+      {Key? key,
       this.imageUrl,
       this.name,
       this.rate,
       this.keyword,
-      @required this.uid,
+      required this.uid,
       this.details,
       this.time,
       this.offer})
@@ -28,12 +27,12 @@ class AstroSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String yourRate;
-    String duration;
-    String additional;
+    String? yourRate;
+    String? duration;
+    String? additional;
     final _astroFormKey = GlobalKey<FormState>();
     bool _validateAndSaveForm() {
-      final form = _astroFormKey.currentState;
+      final form = _astroFormKey.currentState!;
       if (form.validate()) {
         form.save();
         return true;
@@ -52,8 +51,9 @@ class AstroSelect extends StatelessWidget {
           duration: duration,
           keyword: keyword,
         );
-        BotToast.showText(
-            text: offer == null ? "$name is added" : "$name is updated");
+        //TODO: botToast
+     /*   BotToast.showText(
+            text: offer == null ? "$name is added" : "$name is updated");*/
         Navigator.of(context).pop();
         // Navigator.of(context).pop();
       }
@@ -79,7 +79,7 @@ class AstroSelect extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.network(imageUrl),
+                        Image.network(imageUrl!),
                         Text(
                           '$name',
                           style: TextStyle(
@@ -122,7 +122,7 @@ class AstroSelect extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                          color: Colors.deepOrange[100],
+                          color: Colors.deepOrange[100]!,
                           width: 1,
                           style: BorderStyle.solid),
                     ),
@@ -132,7 +132,7 @@ class AstroSelect extends StatelessWidget {
                       initialValue: offer == null ? '' : '$rate',
                       keyboardType: TextInputType.number,
                       validator: (value) =>
-                          value.isNotEmpty ? null : 'Price can\'t be empty',
+                          value!.isNotEmpty ? null : 'Price can\'t be empty',
                       onSaved: (value) => yourRate = value,
                     ),
                   ),
@@ -143,7 +143,7 @@ class AstroSelect extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                          color: Colors.deepOrange[100],
+                          color: Colors.deepOrange[100]!,
                           width: 1,
                           style: BorderStyle.solid),
                     ),
@@ -152,7 +152,7 @@ class AstroSelect extends StatelessWidget {
                       decoration: InputDecoration(labelText: 'Duration'),
                       initialValue: offer == null ? '' : '$time',
                       validator: (value) =>
-                          value.isNotEmpty ? null : 'Duration can\'t be empty',
+                          value!.isNotEmpty ? null : 'Duration can\'t be empty',
                       onSaved: (value) => duration = value,
                     ),
                   ),
@@ -163,7 +163,7 @@ class AstroSelect extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                          color: Colors.deepOrange[100],
+                          color: Colors.deepOrange[100]!,
                           width: 1,
                           style: BorderStyle.solid),
                     ),
@@ -173,7 +173,7 @@ class AstroSelect extends StatelessWidget {
                           InputDecoration(labelText: 'Additional details'),
                       initialValue: offer == null ? '' : '$offer',
                       validator: (value) =>
-                          value.isNotEmpty ? null : 'Details can\'t be empty',
+                          value!.isNotEmpty ? null : 'Details can\'t be empty',
                       onSaved: (value) => additional = value,
                     ),
                   ),

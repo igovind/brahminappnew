@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/bookings/booking_tile.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -10,11 +9,11 @@ import 'package:flutter/material.dart';
 import '../languages.dart';
 
 class BookingRequest extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
+  final AsyncSnapshot<QuerySnapshot>? snapshot;
   final language;
-  final UserId userId;
+  final UserId? userId;
 
-  const BookingRequest({Key key, this.snapshot, this.userId, this.language})
+  const BookingRequest({Key? key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
   @override
@@ -23,8 +22,8 @@ class BookingRequest extends StatelessWidget {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    String url = userId.photoUrl;
-    if (snapshot.data.docs.isEmpty) {
+    String? url = userId!.photoUrl;
+    if (snapshot!.data!.docs.isEmpty) {
       return Center(
         child: Text(
           Language(code: language, text: [
@@ -39,19 +38,19 @@ class BookingRequest extends StatelessWidget {
     }
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: snapshot.data.docs.length,
+      itemCount: snapshot!.data!.docs.length,
       itemBuilder: (context, index) {
-        DocumentSnapshot ref = snapshot.data.docs[index];
-        final String service = ref.data()['service'];
-        final String client = ref.data()['client'];
-        final String tuid = ref.data()['clientuid'];
-        final String serviceId = ref.data()['serviceId'];
-        final bool accepted = ref.data()['request'];
-        final bool cancel = ref.data()['cancel'];
+        DocumentSnapshot ref = snapshot!.data!.docs[index];
+        final String? service = ref.get('service');
+        final String? client = ref.get('client');
+        final String? tuid = ref.get('clientuid');
+        final String? serviceId = ref.get('serviceId');
+        final bool? accepted = ref.get('request');
+        final bool cancel = ref.get('cancel');
         final String tid = ref.id;
         return BookingTiles(
           language: language,
-          snapshot: snapshot.data.docs[index],
+          snapshot: snapshot!.data!.docs[index],
           onPressLocation: () {},
           child: cancel
               ? Container(
@@ -74,7 +73,7 @@ class BookingRequest extends StatelessWidget {
                           color: Colors.white,
                           icon: Icon(Icons.delete_forever),
                           onPressed: () {
-                            FireStoreDatabase(uid: userId.uid)
+                            FireStoreDatabase(uid: userId!.uid)
                                 .deleteBooking(tid);
                           })
                     ],
@@ -83,7 +82,7 @@ class BookingRequest extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.orange),
                 )
-              : accepted
+              : accepted!
                   ? Container(
                       padding: EdgeInsets.all(10),
                       child: Text(
@@ -120,20 +119,21 @@ class BookingRequest extends StatelessWidget {
                           ),
                           height: height(40),
                           onPressed: () {
-                            FireStoreDatabase(uid: userId.uid).updateBooking(
+                            FireStoreDatabase(uid: userId!.uid).updateBooking(
                                 serviceId: serviceId,
                                 service: service,
                                 pPic: url,
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: true);
-                            BotToast.showText(text: Language(code:language, text: [
+                            //TODO: botToast
+                           /* BotToast.showText(text: Language(code:language, text: [
                               "Accepted ",
                               "स्वीकार किया ",
                               "স্বীকৃত ",
                               "ஏற்றுக்கொள்ளப்பட்டது ",
                               "ఆమోదించబడిన "
-                            ]).getText,);
+                            ]).getText,);*/
                           },
                         ),
                         CustomRaisedButton(
@@ -152,20 +152,21 @@ class BookingRequest extends StatelessWidget {
                           ),
                           height: height(40),
                           onPressed: () {
-                            FireStoreDatabase(uid: userId.uid).updateBooking(
+                            FireStoreDatabase(uid: userId!.uid).updateBooking(
                                 serviceId: serviceId,
                                 pPic: url,
                                 service: service,
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: false);
-                            BotToast.showText(text:  Language(code:language, text: [
+                            //TODO: botToast
+                           /* BotToast.showText(text:  Language(code:language, text: [
                               "Rejected ",
                               "अस्वीकृत ",
                               "প্রত্যাখ্যাত ",
                               "நிராகரிக்கப்பட்டது ",
                               "తిరస్కరించబడింది "
-                            ]).getText,);
+                            ]).getText,);*/
                           },
                         )
                       ],

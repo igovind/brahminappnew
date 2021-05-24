@@ -6,20 +6,20 @@ import 'package:brahminapp/common_widgets/platform_widget.dart';
 
 class PlatformAlertDialog extends PlatformWidget {
   PlatformAlertDialog({
-    @required this.title,
-    @required this.content,
+    required this.title,
+    required this.content,
     this.cancelActionText,
-    @required this.defaultActionText,
+    required this.defaultActionText,
   })  : assert(title != null),
         assert(content != null),
         assert(defaultActionText != null);
 
   final String title;
   final String content;
-  final String cancelActionText;
+  final String? cancelActionText;
   final String defaultActionText;
 
-  Future<bool> show(BuildContext context) async {
+  Future<bool?> show(BuildContext context) async {
     return Platform.isIOS
         ? await showCupertinoDialog<bool>(
             context: context,
@@ -55,7 +55,7 @@ class PlatformAlertDialog extends PlatformWidget {
     if (cancelActionText != null) {
       actions.add(
         PlatformAlertDialogAction(
-          child: Text(cancelActionText),
+          child: Text(cancelActionText!),
           onPressed: () => Navigator.of(context).pop(false),
         ),
       );
@@ -72,13 +72,13 @@ class PlatformAlertDialog extends PlatformWidget {
 
 class PlatformAlertDialogAction extends PlatformWidget {
   PlatformAlertDialogAction({this.child, this.onPressed});
-  final Widget child;
-  final VoidCallback onPressed;
+  final Widget? child;
+  final VoidCallback? onPressed;
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoDialogAction(
-      child: child,
+      child: child!,
       onPressed: onPressed,
     );
   }
@@ -86,7 +86,7 @@ class PlatformAlertDialogAction extends PlatformWidget {
   @override
   Widget buildMaterialWidget(BuildContext context) {
     return FlatButton(
-      child: child,
+      child: child!,
       onPressed: onPressed,
     );
   }

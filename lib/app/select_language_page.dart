@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SelectLanguage extends StatelessWidget {
-  final UserId userId;
+  final UserId? userId;
 
-  const SelectLanguage({Key key, @required this.userId}) : super(key: key);
+  const SelectLanguage({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class SelectLanguage extends StatelessWidget {
                     builder: (context) => Provider<AuthBase>(
                       create: (context)=>Auth(),
                       child: CreateProfile(
-                            uid: userId.uid,
+                            uid: userId!.uid,
                             language: Language(language: language).getCode,
                           ),
                     )));

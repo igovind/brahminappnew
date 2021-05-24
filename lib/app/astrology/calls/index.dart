@@ -1,25 +1,24 @@
 import 'dart:async';
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/astrology/calls/audio_call.dart';
 import 'package:brahminapp/app/astrology/calls/video_call.dart';
+import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:photo_view/photo_view.dart';
 
 class IndexPage extends StatefulWidget {
-  final UserId userId;
-  final String bid;
-  final String channelName;
-  final String callType;
+  final UserId? userId;
+  final String? bid;
+  final String? channelName;
+  final String? callType;
 
   /// Creates a call page with given channel name.
   const IndexPage(
-      {Key key, this.channelName, this.userId, this.bid, this.callType})
+      {Key? key, this.channelName, this.userId, this.bid, this.callType})
       : super(key: key);
 
   @override
@@ -45,18 +44,18 @@ class IndexState extends State<IndexPage> {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    String profilePic =
+    String? profilePic =
         "https://a10.gaanacdn.com/images/albums/4/1879604/crop_175x175_1879604.jpg";
-    String kundaliPic = "https://i.stack.imgur.com/vKpJn.jpg";
-    String rightHand =
+    String? kundaliPic = "https://i.stack.imgur.com/vKpJn.jpg";
+    String? rightHand =
         "https://m0.her.ie/wp-content/uploads/2016/08/09170056/HandLines1.jpg";
-    String leftHand =
+    String? leftHand =
         "https://m0.her.ie/wp-content/uploads/2016/08/09170056/HandLines1.jpg";
-    String name = "govind mishra";
-    Timestamp time;
+    String? name = "govind mishra";
+    Timestamp? time;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-          stream: FireStoreDatabase(uid: widget.userId.uid).getTempCall,
+          stream: FireStoreDatabase(uid: widget.userId!.uid).getTempCall,
           builder: (context, snapshot) {
             if (snapshot.data == null) {
               return Center(
@@ -65,14 +64,14 @@ class IndexState extends State<IndexPage> {
             }
             print(
                 "yes this is present?????????????????????????????????????????????/${snapshot.data}");
-            if (snapshot.data.docs.isNotEmpty) {
-              DocumentSnapshot documentSnapshot = snapshot.data.docs[0];
-              profilePic = documentSnapshot.data()["image"];
-              kundaliPic = documentSnapshot.data()["kundali"];
-              rightHand = documentSnapshot.data()["righthand"];
-              leftHand = documentSnapshot.data()["lefthand"];
-              name = documentSnapshot.data()["sender"];
-              time = documentSnapshot.data()["time"];
+            if (snapshot.data!.docs.isNotEmpty) {
+              DocumentSnapshot documentSnapshot = snapshot.data!.docs[0];
+              profilePic = documentSnapshot.get("image");
+              kundaliPic = documentSnapshot.get("kundali");
+              rightHand = documentSnapshot.get("righthand");
+              leftHand = documentSnapshot.get("lefthand");
+              name = documentSnapshot.get("sender");
+              time = documentSnapshot.get("time");
               print(
                   "yes this is present?????????????????????????????????????????????/");
             }
@@ -84,12 +83,12 @@ class IndexState extends State<IndexPage> {
                     SizedBox(
                       height: height(50),
                     ),
-                    CircularProfileAvatar(profilePic),
+                    CircularAvatarNetwork(url: profilePic),
                     Text("$name"),
                     SizedBox(
                       height: height(5),
                     ),
-                   // Text("$time"),
+                    // Text("$time"),
                     SizedBox(
                       height: height(10),
                     ),
@@ -134,30 +133,28 @@ class IndexState extends State<IndexPage> {
                     Row(
                       children: <Widget>[
                         Expanded(
-                          child: RaisedButton(
+                          child: CustomRaisedButton(
                             onPressed: () {
                               onJoin();
                             },
                             child: Text('Accept'),
                             color: Colors.green,
-                            textColor: Colors.white,
                           ),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         Expanded(
-                          child: RaisedButton(
+                          child: CustomRaisedButton(
                             onPressed: () {
-                              /* FirebaseFirestore.instance
-                                  .collection(
-                                      "punditUsers/${widget.userId.uid}/tempcall")
-                                  .update({"reject": true});*/
+                              FirebaseFirestore.instance
+                                  .doc(
+                                      "punditUsers/${widget.userId!.uid}/tempcall")
+                                  .update({"reject": true});
                               Navigator.of(context).pop();
                             },
                             child: Text('Reject'),
                             color: Colors.red,
-                            textColor: Colors.white,
                           ),
                         )
                       ],
@@ -184,7 +181,7 @@ class IndexState extends State<IndexPage> {
           MaterialPageRoute(
               builder: (context) => CallPage(
                     bid: widget.bid,
-                    userId: widget.userId.uid,
+                    userId: widget.userId!.uid,
                     channelName: widget.channelName,
                     //role: ClientRole.Broadcaster,
                   )));
@@ -193,8 +190,7 @@ class IndexState extends State<IndexPage> {
           context,
           MaterialPageRoute(
               builder: (context) => VoiceCallPage(
-                    bid: widget.bid,
-                    userId: widget.userId.uid,
+                    userId: widget.userId!.uid,
                     channelName: widget.channelName,
                     //role: ClientRole.Broadcaster,
                   )));
@@ -208,33 +204,30 @@ class IndexState extends State<IndexPage> {
 }
 
 class ImageViev extends StatelessWidget {
-  final String image;
-  final double height;
-  final double width;
+  final String? image;
+  final double? height;
+  final double? width;
 
-  const ImageViev({Key key, this.image, this.height, this.width})
+  const ImageViev({Key? key, this.image, this.height, this.width})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showMaterialModalBottomSheet(
-          backgroundColor: Colors.transparent,
+        showDialog(
           context: context,
           builder: (context) {
             return Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: PhotoView(
-                  tightMode: true,
-                  imageProvider: NetworkImage(image),
-                ));
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30))),
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Image.network(image!),
+            );
           },
         );
       },
@@ -247,7 +240,7 @@ class ImageViev extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
                 color: Colors.black54, style: BorderStyle.solid, width: 0.5),
-            image: DecorationImage(image: NetworkImage(image))),
+            image: DecorationImage(image: NetworkImage(image!))),
       ),
     );
   }

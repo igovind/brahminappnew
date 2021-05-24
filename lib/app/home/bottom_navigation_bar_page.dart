@@ -1,221 +1,41 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/app/astrology/calls/index.dart';
+import 'package:brahminapp/app/astrology/edit_astrology_price.dart';
 import 'package:brahminapp/app/bookings/bookings_page.dart';
-import 'package:brahminapp/app/home/home_page2.dart';
 import 'package:brahminapp/app/services_given/services_page.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
-import 'package:brahminapp/services/media_querry.dart';
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:circle_bottom_navigation_bar/circle_bottom_navigation_bar.dart';
+import 'package:circle_bottom_navigation_bar/widgets/tab_data.dart';
 
 import '../languages.dart';
+import 'home_page2.dart';
 
-class BottomNavygationBar extends StatefulWidget {
-  final AsyncSnapshot<DocumentSnapshot> userDataSnapshot;
-  final UserId user;
+class ExtBotNavBar extends StatefulWidget {
+  final AsyncSnapshot<DocumentSnapshot>? userDataSnapshot;
+  final UserId? user;
   final language;
 
-  const BottomNavygationBar(
-      {Key key, this.user, this.userDataSnapshot, this.language})
+  const ExtBotNavBar(
+      {Key? key, this.user, this.userDataSnapshot, this.language})
       : super(key: key);
 
   @override
-  _BottomNavygationBarState createState() => _BottomNavygationBarState();
+  _ExtBotNavBarState createState() => _ExtBotNavBarState();
 }
 
-class _BottomNavygationBarState extends State<BottomNavygationBar> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  List<TabItem> tabItems;
-
-  void initState() {
-    super.initState();
-    _navigationController = new CircularBottomNavigationController(selectedPos);
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        final notification = message['notification'];
-        final notificationa = message['data'];
-
-        switch (notificationa['type']) {
-          case 'Booking':
-            BotToast.showSimpleNotification(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BookingsPage()));
-              },
-              animationDuration: Duration(seconds: 2),
-              hideCloseButton: true,
-              title: notification['title'],
-              subTitle: notification['body'],
-              duration: Duration(seconds: 5),
-            );
-            break;
-          case 'Message':
-            BotToast.showSimpleNotification(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BookingsPage()));
-              },
-              animationDuration: Duration(seconds: 2),
-              hideCloseButton: true,
-              title: notification['title'],
-              subTitle: notification['body'],
-              duration: Duration(seconds: 5),
-            );
-            break;
-          case 'VCall':
-            BotToast.showSimpleNotification(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => IndexPage(
-                              channelName: notificationa['channel'],
-                            )));
-              },
-              animationDuration: Duration(seconds: 2),
-              hideCloseButton: true,
-              title: notification['title'],
-              subTitle: notification['body'],
-              duration: Duration(seconds: 10),
-            );
-        }
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        // print("onLaunch: $message");
-        final notificationa = message['data'];
-        handleRouting(notificationa);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        //  print("onResume: $message");
-        final notificationa = message['data'];
-        handleRouting(notificationa);
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-  }
-
-  void handleRouting(dynamic notification) {
-    //final database = Provider.of<DatabaseL>(context, listen: false);
-    switch (notification['type']) {
-      case 'Booking':
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BookingsPage()));
-        break;
-      case 'VCall':
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => IndexPage(
-                      channelName: notification['channel'],
-                    )));
-        break;
-    }
-  }
-
-  int selectedPos = 0;
-  CircularBottomNavigationController _navigationController;
-
-  @override
-  Widget build(BuildContext context) {
-    tabItems = List.of([
-      new TabItem(
-          Icons.home,
-          Language(
-              code: widget.language,
-              text: ["Home ", "घर ", "বাড়ি ", "வீடு ", "హోమ్ "]).getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      /* new TabItem(Icons.dynamic_feed_outlined, "Feed", Colors.deepOrangeAccent,
-        labelStyle: TextStyle(fontWeight: FontWeight.normal)),*/
-      new TabItem(
-          Icons.person_add_alt_1,
-          Language(code: widget.language, text: [
-            "Booking ",
-            "बुकिंग ",
-            "সংরক্ষণ ",
-            "பதிவு ",
-            "బుకింగ్ "
-          ]).getText,
-          Colors.orange,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      new TabItem(
-          Icons.layers,
-          Language(
-              code: widget.language,
-              text: ["Service ", "सेवा ", "সেবা ", "சேவை ", "సేవ "]).getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-      new TabItem(
-          Icons.account_circle,
-          Language(
-              code: widget.language,
-              text: ["Account ", "खाता ", "হিসাব ", "கணக்கு ", "ఖాతా "])
-              .getText,
-          Colors.deepOrangeAccent,
-          labelStyle: TextStyle(fontWeight: FontWeight.normal)),
-    ]);
-    double height(double height) {
-      return MagicScreen(context: context, height: height).getHeight;
-    }
-
-    return Scaffold(
-      body: Container(
-        child: StreamBuilder<DocumentSnapshot>(
-            stream: FireStoreDatabase(uid: widget.user.uid).getTabImages,
-            builder: (context, tabImageSnapshot) {
-              if (tabImageSnapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return AnnotatedRegion<SystemUiOverlayStyle>(
-                value: SystemUiOverlayStyle.dark,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      child: bodyContainer(
-                          userDataSnapshot: widget.userDataSnapshot,
-                          tabImageSnapshot: tabImageSnapshot),
-                      padding: EdgeInsets.only(bottom: height(55)),
-                    ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: CircularBottomNavigation(
-                          tabItems,
-                          circleSize: 40,
-                          iconsSize: 20,
-                          controller: _navigationController,
-                          barHeight: MediaQuery.of(context).size.height * 0.075,
-                          //bottomNavBarHeight,
-                          barBackgroundColor: Colors.white,
-                          animationDuration: Duration(milliseconds: 200),
-                          selectedCallback: (int selectedPos) {
-                            setState(() {
-                              this.selectedPos = selectedPos;
-
-                              /// print(_navigationController.value);
-                            });
-                          },
-                        ))
-                  ],
-                ),
-              );
-            }),
-      ),
-    );
-  }
+class _ExtBotNavBarState extends State<ExtBotNavBar> {
+  int currentPage = 0;
 
   Widget bodyContainer(
-      {AsyncSnapshot<DocumentSnapshot> tabImageSnapshot,
-      AsyncSnapshot<DocumentSnapshot> userDataSnapshot}) {
-    switch (selectedPos) {
+      {AsyncSnapshot<DocumentSnapshot>? tabImageSnapshot,
+      AsyncSnapshot<DocumentSnapshot>? userDataSnapshot}) {
+    switch (currentPage) {
       case 0:
         //slogan = "Familly, Happiness, Food";
         return HomePageFolder(
@@ -225,8 +45,10 @@ class _BottomNavygationBarState extends State<BottomNavygationBar> {
           userDataSnapshot: userDataSnapshot,
         );
         break;
-      /*case 1:
-        return NewsFeedSextion(uid: null,);
+/*      case 1:
+        return NewsFeedSextion(
+          uid: null,
+        );
         break;*/
       case 1:
         return BookingsPage(
@@ -241,8 +63,15 @@ class _BottomNavygationBarState extends State<BottomNavygationBar> {
         );
         break;
       case 3:
+        return EditAstrologyPrices(
+          language: widget.language,
+          snapshot: userDataSnapshot,
+          userId: widget.user,
+        );
+        break;
+      case 4:
         return StreamBuilder<DocumentSnapshot>(
-            stream: FireStoreDatabase(uid: widget.user.uid).getAdhaarDetails,
+            stream: FireStoreDatabase(uid: widget.user!.uid).getAdhaarDetails,
             builder: (context, adhaarsnapshot) {
               if (adhaarsnapshot.data == null) {
                 return Center(
@@ -251,7 +80,7 @@ class _BottomNavygationBarState extends State<BottomNavygationBar> {
               }
               return StreamBuilder<DocumentSnapshot>(
                   stream:
-                      FireStoreDatabase(uid: widget.user.uid).getBankDetails,
+                      FireStoreDatabase(uid: widget.user!.uid).getBankDetails,
                   builder: (context, bankSnapshot) {
                     if (bankSnapshot.data == null) {
                       return Center(
@@ -271,29 +100,201 @@ class _BottomNavygationBarState extends State<BottomNavygationBar> {
     return Text("error");
   }
 
-//http://pujapurohit.app.link/4F6tXdp1cfb
-  Widget bottomNav(bool astrologer) {
-    return CircularBottomNavigation(
-      tabItems,
-      circleSize: 40,
-      iconsSize: 20,
-      controller: _navigationController,
-      barHeight: MediaQuery.of(context).size.height * 0.075,
-      //bottomNavBarHeight,
-      barBackgroundColor: Colors.white,
-      animationDuration: Duration(milliseconds: 200),
-      selectedCallback: (int selectedPos) {
-        setState(() {
-          this.selectedPos = selectedPos;
-          print(_navigationController.value);
-        });
-      },
+  List<TabData> getTabsData() {
+    return [
+      TabData(
+        icon: Icons.home,
+        iconSize: 18.0,
+        title: Language(
+            code: widget.language,
+            text: ["Home ", "घर ", "বাড়ি ", "வீடு ", "హోమ్ "]).getText,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      TabData(
+        icon: Icons.person_add_alt_1,
+        iconSize: 18,
+        title: Language(
+                code: widget.language,
+                text: ["Booking ", "बुकिंग ", "সংরক্ষণ ", "பதிவு ", "బుకింగ్ "])
+            .getText,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      TabData(
+        icon: Icons.layers,
+        iconSize: 25,
+        title: Language(
+            code: widget.language,
+            text: ["Service ", "सेवा ", "সেবা ", "சேவை ", "సేవ "]).getText,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      TabData(
+        icon: Icons.star,
+        iconSize: 18,
+        title: Language(code: widget.language, text: [
+          "Astrology ",
+          "ज्योतिष",
+          "জ্যোতিষ ",
+          "ஜோதிடம் ",
+          "జ్యోతిషశాస్త్రం"
+        ]).getText,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      TabData(
+        icon: Icons.account_circle,
+        iconSize: 18,
+        title: Language(
+            code: widget.language,
+            text: ["Account ", "खाता ", "হিসাব ", "கணக்கு ", "ఖాతా "]).getText,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+    ];
+  }
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState()  {
+    super.initState();
+    _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
     );
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
+    void handleRouting(dynamic notification) {
+      //final database = Provider.of<DatabaseL>(context, listen: false);
+      switch (notification['type']) {
+        case 'Booking':
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => BookingsPage()));
+          break;
+        case 'VCall':
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndexPage(
+                        channelName: notification['channel'],
+                      )));
+          break;
+      }
+    }
+
+    FirebaseMessaging.onMessage.listen((message) {
+      final notification = message.data['notification'];
+      final notificationData = message.data['data'];
+      switch (notificationData['type']) {
+        case 'Booking':
+          BotToast.showSimpleNotification(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BookingsPage()));
+            },
+            animationDuration: Duration(seconds: 2),
+            hideCloseButton: true,
+            title: notification['title'],
+            subTitle: notification['body'],
+            duration: Duration(seconds: 5),
+          );
+          break;
+        case 'Message':
+          BotToast.showSimpleNotification(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BookingsPage()));
+            },
+            animationDuration: Duration(seconds: 2),
+            hideCloseButton: true,
+            title: notification['title'],
+            subTitle: notification['body'],
+            duration: Duration(seconds: 5),
+          );
+          break;
+        case 'VCall':
+          BotToast.showSimpleNotification(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => IndexPage(
+                            channelName: notificationData['channel'],
+                          )));
+            },
+            animationDuration: Duration(seconds: 2),
+            hideCloseButton: true,
+            title: notification['title'],
+            subTitle: notification['body'],
+            duration: Duration(seconds: 10),
+          );
+      }
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        final notificationData = message.data['data'];
+        handleRouting(notificationData);
+      });
+      //FirebaseMessaging.onBackgroundMessage((message) =>handleRouting(message.data['data']));
+    });
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _navigationController.dispose();
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final viewPadding = MediaQuery.of(context).viewPadding;
+    double barHeight;
+    double barHeightWithNotch = 67;
+    double arcHeightWithNotch = 67;
+
+    if (size.height > 700) {
+      barHeight = 60;
+    } else {
+      barHeight = size.height * 0.1;
+    }
+
+    if (viewPadding.bottom > 0) {
+      barHeightWithNotch = (size.height * 0.07) + viewPadding.bottom;
+      arcHeightWithNotch = (size.height * 0.075) + viewPadding.bottom;
+    }
+
+    return Scaffold(
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: FireStoreDatabase(uid: widget.user!.uid).getTabImages,
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return bodyContainer(
+                userDataSnapshot: widget.userDataSnapshot,
+                tabImageSnapshot: snapshot);
+          }),
+      bottomNavigationBar: CircleBottomNavigationBar(
+        initialSelection: currentPage,
+        barHeight: viewPadding.bottom > 0 ? barHeightWithNotch : barHeight,
+        arcHeight: viewPadding.bottom > 0 ? arcHeightWithNotch : barHeight,
+        itemTextOff: viewPadding.bottom > 0 ? 0 : 1,
+        itemTextOn: viewPadding.bottom > 0 ? 0 : 1,
+        circleOutline: 15.0,
+        shadowAllowance: 3.0,
+        circleSize: 30.0,
+        blurShadowRadius: 50.0,
+        circleColor: Colors.deepOrangeAccent,
+        activeIconColor: Colors.white,
+        inactiveIconColor: Colors.grey,
+        tabs: getTabsData(),
+        onTabChangedListener: (index) => setState(() => currentPage = index),
+      ),
+    );
   }
 }

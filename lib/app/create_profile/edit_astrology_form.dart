@@ -4,16 +4,15 @@ import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:multiselect_dropdown/multiple_select.dart';
 
 import '../languages.dart';
 
 class EditAstrologyForm extends StatefulWidget {
   final uid;
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
   final language;
 
-  const EditAstrologyForm({Key key, this.uid, this.snapshot, this.language})
+  const EditAstrologyForm({Key? key, this.uid, this.snapshot, this.language})
       : super(key: key);
 
   @override
@@ -21,19 +20,19 @@ class EditAstrologyForm extends StatefulWidget {
 }
 
 class _EditAstrologyFormState extends State<EditAstrologyForm> {
-  String messagePrice = "0";
+  String? messagePrice = "0";
 
-  String audioPrice = "0";
+  String? audioPrice = "0";
 
-  String videoPrice = "0";
+  String? videoPrice = "0";
 
-  String description = "";
+  String? description = "";
 
-  String expertise = "";
+  String? expertise = "";
 
-  String experience = "";
+  String? experience = "";
 
-  String languages = "";
+  String? languages = "";
 
   bool astrologer = false;
 
@@ -57,7 +56,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
     ),
   ];
 
-  List<MultipleSelectItem> elements = [
+ /* List<MultipleSelectItem> elements = [
     MultipleSelectItem.build(
       value: 1,
       display: 'Hindi',
@@ -118,7 +117,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
       display: 'Bengali',
       content: 'Bengali',
     ),
-  ];
+  ];*/
 
   List _selectedValues = [];
 
@@ -126,27 +125,27 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
   void initState() {
     // TODO: implement initState
     messagePrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["chat"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("chat");
     audioPrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["call"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("call");
     videoPrice =
-        widget.snapshot == null ? null : widget.snapshot.data.data()["video"];
+        widget.snapshot == null ? null : widget.snapshot!.data!.get("video");
     description = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["description"];
+        : widget.snapshot!.data!.get("description");
     expertise = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["expertise"];
+        : widget.snapshot!.data!.get("expertise");
     experience = widget.snapshot == null
         ? null
-        : widget.snapshot.data.data()["experience"].toString();
+        : widget.snapshot!.data!.get("experience").toString();
     languages =
-        widget.snapshot == null ? "" : widget.snapshot.data.data()["language"];
+        widget.snapshot == null ? "" : widget.snapshot!.data!.get("language");
     super.initState();
   }
 
   bool _validateAndSaveForm() {
-    final form = _formKeyNK.currentState;
+    final form = _formKeyNK.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -157,9 +156,10 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
   _submit() {
     if (_validateAndSaveForm()) {
       String string = "";
-      for (int i = 0; i < _selectedValues.length; i++) {
+      //TODO: multiple dropdown
+     /* for (int i = 0; i < _selectedValues.length; i++) {
         string = elements[i].content + "," + string;
-      }
+      }*/
       FireStoreDatabase(uid: widget.uid).updateData(data: {
         "chat": messagePrice,
         "call": audioPrice,
@@ -225,7 +225,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               _submit();
             },
@@ -279,7 +279,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                           Container(
                             width: width(100),
                             child: DropdownButtonFormField(
-                                validator: (value) {
+                                validator: (dynamic value) {
                                   if (value == null) {
                                     return Language(
                                         code: widget.language,
@@ -303,7 +303,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                                 style: TextStyle(color: Colors.green),
                                 //value: price,
                                 items: dropdownMenuItem,
-                                onChanged: (value) {
+                                onChanged: (dynamic value) {
                                   setState(() {
                                     messagePrice = value;
                                   });
@@ -326,7 +326,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                           Container(
                             width: width(100),
                             child: DropdownButtonFormField(
-                                validator: (value) {
+                                validator: (dynamic value) {
                                   if (value == null) {
                                     return Language(
                                         code: widget.language,
@@ -350,7 +350,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                                 style: TextStyle(color: Colors.green),
                                 //value: price,
                                 items: dropdownMenuItem,
-                                onChanged: (value) {
+                                onChanged: (dynamic value) {
                                   setState(() {
                                     audioPrice = value;
                                   });
@@ -373,7 +373,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                           Container(
                             width: width(100),
                             child: DropdownButtonFormField(
-                                validator: (value) {
+                                validator: (dynamic value) {
                                   if (value == null) {
                                     return Language(
                                         code: widget.language,
@@ -397,7 +397,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                                 style: TextStyle(color: Colors.green),
                                 //value: price,
                                 items: dropdownMenuItem,
-                                onChanged: (value) {
+                                onChanged: (dynamic value) {
                                   setState(() {
                                     videoPrice = value;
                                   });
@@ -428,7 +428,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                       Container(
                         width: width(100),
                         child: DropdownButtonFormField(
-                            validator: (value) {
+                            validator: (dynamic value) {
                               if (value == null) {
                                 return Language(code: widget.language, text: [
                                   "This field is required",
@@ -449,7 +449,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                             ),
                             style: TextStyle(color: Colors.green),
                             items: dropdownMenuItemExperience,
-                            onChanged: (value) {
+                            onChanged: (dynamic value) {
                               setState(() {
                                 experience = value;
                               });
@@ -483,7 +483,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                               color: Colors.black54,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.bold)),
-                      CustomMultipleDropDown(
+                     /* CustomMultipleDropDown(
                         icon: Icon(
                           Icons.arrow_drop_down_circle_outlined,
                           color: Colors.deepOrangeAccent,
@@ -497,8 +497,9 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                         ]).getText,
                         disabled: false,
                         values: _selectedValues,
-                        elements: elements,
-                      ),
+
+                        elements: [],
+                      ),*/
                     ],
                   ),
                 ),
@@ -546,7 +547,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                 CustomContainer(
                     radius: 10,
                     child: CustomTextField(
-                      onSaved: (String newValue) {},
+                      onSaved: (newValue) {},
                       lableText: Language(code: widget.language, text: [
                         "Additional description ",
                         "अतिरिक्त विवरण ",

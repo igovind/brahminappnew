@@ -1,11 +1,9 @@
-import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_bank_details.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../languages.dart';
 
@@ -13,7 +11,7 @@ class BankDetailsPage extends StatelessWidget {
   final uid;
   final language;
 
-  const BankDetailsPage({Key key, @required this.uid, this.language})
+  const BankDetailsPage({Key? key, required this.uid, this.language})
       : super(key: key);
 
   @override
@@ -26,11 +24,11 @@ class BankDetailsPage extends StatelessWidget {
       return MagicScreen(context: context, width: width).getWidth;
     }*/
 
-    String name;
-    String bankName;
+    String? name;
+    String? bankName;
     // ignore: non_constant_identifier_names
-    String IFSC;
-    String accountNumber;
+    String? IFSC;
+    String? accountNumber;
     return StreamBuilder<DocumentSnapshot>(
         stream: FireStoreDatabase(uid: uid).getBankDetails,
         builder: (context, snapshot) {
@@ -39,15 +37,15 @@ class BankDetailsPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.data.data() == null) {
+          if (snapshot.data!.data() == null) {
             return EditBankDetails(uid: uid,language: language,);
           }
 
-          if (snapshot.data.data() != null) {
-            name = snapshot.data.data()['name'];
-            bankName = snapshot.data.data()['bankName'];
-            IFSC = snapshot.data.data()['IFSC'];
-            accountNumber = snapshot.data.data()['accountNumber'];
+          if (snapshot.data!.data() != null) {
+            name = snapshot.data!.get('name');
+            bankName = snapshot.data!.get('bankName');
+            IFSC = snapshot.data!.get('IFSC');
+            accountNumber = snapshot.data!.get('accountNumber');
           }
           return Scaffold(
             backgroundColor: Colors.white,
@@ -63,9 +61,17 @@ class BankDetailsPage extends StatelessWidget {
                     fontSize: 18),
               ),*/
               actions: [
-                FlatButton(
+                ElevatedButton(
                   onPressed: () {
-                    showMaterialModalBottomSheet(
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditBankDetails(
+                      uid: uid,
+                      name: name,
+                      bankName: bankName,
+                      ifscCode: IFSC,
+                      accountNumber: accountNumber,
+                      language: language,
+                    ),));
+                   /* showMaterialModalBottomSheet(
                       backgroundColor: Colors.transparent,
                       context: context,
                       builder: (context) {
@@ -87,7 +93,7 @@ class BankDetailsPage extends StatelessWidget {
                           ),
                         );
                       },
-                    );
+                    );*/
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomContainer extends StatelessWidget {
-  final double radius;
-  final Widget child;
+  final double? radius;
+  final Widget? child;
 
 
   const CustomContainer(
-      {Key key, this.radius, this.child,})
+      {Key? key, this.radius, this.child,})
       : super(key: key);
 
   @override
@@ -19,24 +19,24 @@ class CustomContainer extends StatelessWidget {
               style: BorderStyle.solid,
               width: 0.5),
 
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius!),
         ),
         child: child);
   }
 }
 
 class CustomTextField extends StatelessWidget {
-  final String initialValue;
+  final String? initialValue;
   final lableText;
   final FormFieldSetter<String> onSaved;
-  final int maxLength;
+  final int? maxLength;
 
 
   const CustomTextField(
-      {Key key,
+      {Key? key,
       this.initialValue,
       this.lableText,
-      @required this.onSaved,
+      required this.onSaved,
       this.maxLength,})
       : super(key: key);
 
@@ -56,11 +56,11 @@ class CustomTextField extends StatelessWidget {
 
 class CustomDropdownContainer extends Container {
   final String title;
-  final String value;
-  final Widget child;
+  final String? value;
+  final Widget? child;
 
   CustomDropdownContainer(
-      {Key key, @required this.title, this.value, this.child})
+      {Key? key, required this.title, this.value, this.child})
       : super(key: key);
 
   @override
@@ -74,11 +74,11 @@ class CustomDropdownContainer extends Container {
           Row(
             children: [
               Text(
-                value,
+                value!,
                 style:
                     TextStyle(fontWeight: FontWeight.w700, color: Colors.green),
               ),
-              child,
+              child!,
             ],
           )
         ],
@@ -90,13 +90,13 @@ class CustomDropdownContainer extends Container {
 typedef ValueChanged<T> = void Function(T value);
 
 class CustomDropdown extends DropdownButton {
-  final Colors iconColor;
-  final List<DropdownMenuItem> items;
-  final ValueChanged<dynamic> function;
+  final Colors? iconColor;
+  final List<DropdownMenuItem>? items;
+  final ValueChanged<dynamic>? function;
 
-  CustomDropdown({Key key, this.iconColor, this.items, this.function})
+  CustomDropdown({Key? key, this.iconColor, this.items, this.function})
       // ignore: missing_required_param
-      : super(key: key);
+      : super(key: key,items: items);
 
   Widget build(BuildContext context) {
     return DropdownButton(

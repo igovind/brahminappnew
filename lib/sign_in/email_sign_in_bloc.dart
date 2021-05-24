@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'email_sign_in_model.dart';
 
 class EmailSignInBloc {
-  EmailSignInBloc({@required this.auth});
+  EmailSignInBloc({required this.auth});
   final AuthBase auth;
 
   final StreamController<EmailSignInModel> _modelController =
@@ -49,11 +49,11 @@ class EmailSignInBloc {
   void updatePassword(String password) => updateWith(password: password);
 
   void updateWith({
-    String email,
-    String password,
-    EmailSignInFormType formType,
-    bool isLoading,
-    bool submitted,
+    String? email,
+    String? password,
+    EmailSignInFormType? formType,
+    bool? isLoading,
+    bool? submitted,
   }) {
     // update model
     _model = _model.copyWith(

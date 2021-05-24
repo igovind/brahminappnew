@@ -1,11 +1,11 @@
 class Language {
-  final String language;
-  final String code;
-  final List<String> text;
+  final String? language;
+  final String? code;
+  final List<String>? text;
 
   Language({this.text, this.language, this.code});
 
-  String get getCode {
+  String? get getCode {
     switch (language) {
       case "English":
         return "ENG";
@@ -29,25 +29,25 @@ class Language {
   String get getText {
     switch (code) {
       case "ENG":
-        return "${text[0]}";
+        return "${text![0]}";
         break;
       case "HIN":
-        return "${text[1]}";
+        return "${text![1]}";
         break;
       case "BAN":
-        return "${text[2]}";
+        return "${text![2]}";
         break;
       case "TAM":
-        return "${text[3]}";
+        return "${text![3]}";
         break;
       case "TEL":
-        return "${text[4]}";
+        return "${text![4]}";
         break;
     }
-    return text[0];
+    return text![0];
   }
 
-  String get getLang {
+  String? get getLang {
     switch (code) {
       case "ENG":
         return "English";

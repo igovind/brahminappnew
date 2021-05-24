@@ -4,16 +4,16 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class NewsFeedSextion extends StatelessWidget {
   final uid;
 
-  const NewsFeedSextion({Key key, @required this.uid}) : super(key: key);
+  const NewsFeedSextion({Key? key, required this.uid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String videoId;
+    String? videoId;
     videoId = YoutubePlayer.convertUrlToId(
         "https://www.youtube.com/watch?v=Clt8Exonaus");
     print(videoId);
     YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: videoId,
+      initialVideoId: videoId!,
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: true,

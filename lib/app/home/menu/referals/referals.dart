@@ -1,17 +1,18 @@
+import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/database.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
+
 class Referals extends StatelessWidget {
-  final AsyncSnapshot<DocumentSnapshot> snapshot;
-  final AsyncSnapshot<DocumentSnapshot> refSnap;
+  final AsyncSnapshot<DocumentSnapshot>? snapshot;
+  final AsyncSnapshot<DocumentSnapshot>? refSnap;
   final language;
 
-  const Referals({Key key, this.snapshot, this.refSnap, this.language})
+  const Referals({Key? key, this.snapshot, this.refSnap, this.language})
       : super(key: key);
 
   @override
@@ -47,30 +48,30 @@ class Referals extends StatelessWidget {
             bottomNavigationBar: GestureDetector(
               onTap: () {
                 String st = Language(code: language, text: [
-                  "${refSnap.data.data()["ref_text1"]} *${UserDetails(
-                      snapshot: snapshot).name}* ${refSnap.data
-                      .data()["ref_text"]} \n \n \n *Link:* ${refSnap.data
-                      .data()["link"]} \n\n REFERAL CODE: *${UserDetails(
+                  "${refSnap!.data!.get("ref_text1")} *${UserDetails(
+                      snapshot: snapshot).name}* ${refSnap!.data!
+                      .get("ref_text")} \n \n \n *Link:* ${refSnap!.data!
+                      .get("link")} \n\n REFERAL CODE: *${UserDetails(
                       snapshot: snapshot).refCode}*  ",
-                  "${refSnap.data.data()["ref_text_hin1"]} *${UserDetails(
-                      snapshot: snapshot).name}* ${refSnap.data
-                      .data()["ref_text_hin"]} \n \n \n *Link:* ${refSnap.data
-                      .data()["link"]} \n\n REFERAL CODE: *${UserDetails(
+                  "${refSnap!.data!.get("ref_text_hin1")} *${UserDetails(
+                      snapshot: snapshot).name}* ${refSnap!.data!
+                      .get("ref_text_hin")} \n \n \n *Link:* ${refSnap!.data!
+                      .get("link")} \n\n REFERAL CODE: *${UserDetails(
                       snapshot: snapshot).refCode}*  ",
-                  "${refSnap.data.data()["ref_text_ben1"]} *${UserDetails(
-                      snapshot: snapshot).name}* ${refSnap.data
-                      .data()["ref_text_ben"]} \n \n \n *Link:* ${refSnap.data
-                      .data()["link"]} \n\n REFERAL CODE: *${UserDetails(
+                  "${refSnap!.data!.get("ref_text_ben1")} *${UserDetails(
+                      snapshot: snapshot).name}* ${refSnap!.data!
+                      .get("ref_text_ben")} \n \n \n *Link:* ${refSnap!.data!
+                      .get("link")} \n\n REFERAL CODE: *${UserDetails(
                       snapshot: snapshot).refCode}*  ",
-                  "${refSnap.data.data()["ref_text_tam1"]} *${UserDetails(
-                      snapshot: snapshot).name}* ${refSnap.data
-                      .data()["ref_text_tam"]} \n \n \n *Link:* ${refSnap.data
-                      .data()["link"]} \n\n REFERAL CODE: *${UserDetails(
+                  "${refSnap!.data!.get("ref_text_tam1")} *${UserDetails(
+                      snapshot: snapshot).name}* ${refSnap!.data!
+                      .get("ref_text_tam")} \n \n \n *Link:* ${refSnap!.data!
+                      .get("link")} \n\n REFERAL CODE: *${UserDetails(
                       snapshot: snapshot).refCode}*  ",
-                  "${refSnap.data.data()["ref_text_tel1"]} *${UserDetails(
-                      snapshot: snapshot).name}* ${refSnap.data
-                      .data()["ref_text_tel"]} \n \n \n *Link:* ${refSnap.data
-                      .data()["link"]} \n\n REFERAL CODE: *${UserDetails(
+                  "${refSnap!.data!.get("ref_text_tel1")} *${UserDetails(
+                      snapshot: snapshot).name}* ${refSnap!.data!
+                      .get("ref_text_tel")} \n \n \n *Link:* ${refSnap!.data!
+                      .get("link")} \n\n REFERAL CODE: *${UserDetails(
                       snapshot: snapshot).refCode}*  "
                 ]).getText;
                 Share.share(st);
@@ -108,7 +109,7 @@ class Referals extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
               ),
             ),
-            body: refSnapshot.data.docs.isEmpty
+            body: refSnapshot.data!.docs.isEmpty
                 ? Center(
               child: Text(
                 Language(code: language,
@@ -123,22 +124,21 @@ class Referals extends StatelessWidget {
               ),
             )
                 : ListView.builder(
-                itemCount: refSnapshot.data.size,
+                itemCount: refSnapshot.data!.size,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {},
-                    leading: CircularProfileAvatar(
-                      "${refSnapshot.data.docs[index].data()["profilePicUrl"]}",
-                      radius: 30,
+                    leading: CircularAvatarNetwork(
+                      url: "${refSnapshot.data!.docs[index].get("profilePicUrl")}",
                     ),
                     title: Text(
-                        "${refSnapshot.data.docs[index].data()["firstName"]}",
+                        "${refSnapshot.data!.docs[index].get("firstName")}",
                         style: TextStyle(
                             color: Colors.deepOrangeAccent,
                             fontWeight: FontWeight.bold)),
                     subtitle: Text(
-                      "${refSnapshot.data.docs[index].data()["aboutYou"]}",
+                      "${refSnapshot.data!.docs[index].get("aboutYou")}",
                       style: TextStyle(fontSize: 12),
                     ),
                   );

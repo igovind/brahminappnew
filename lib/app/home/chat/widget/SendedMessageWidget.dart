@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:brahminapp/app/home/Chat/Global/Colors.dart' as myColors;
 
 class SendedMessageWidget extends StatelessWidget {
-  final String content;
-  final String time;
+  final String? content;
+  final String? time;
   const SendedMessageWidget({
-    Key key,
+    Key? key,
     this.content,
     this.time,
   }) : super(key: key);
@@ -29,14 +29,14 @@ class SendedMessageWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 12.0, left: 23.0, top: 8.0, bottom: 15.0),
                 child: Text(
-                  content,
+                  content!,
                 ),
               ),
               Positioned(
                 bottom: 1,
                 left: 10,
                 child: Text(
-                  time,
+                  time!,
                   style: TextStyle(
                       fontSize: 10, color: Colors.black.withOpacity(0.6)),
                 ),

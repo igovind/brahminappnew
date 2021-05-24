@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/services_given/catagories.dart';
 import 'package:brahminapp/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:brahminapp/services/database.dart';
@@ -7,20 +6,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 import '../languages.dart';
 
 List<Category> trendingPujaList = [];
-List<String> trendingPujaNameList = [];
+List<String?> trendingPujaNameList = [];
 
 class NewAddAndEditPuja extends StatefulWidget {
   final uid;
-  final DocumentSnapshot docSnap;
+  final DocumentSnapshot? docSnap;
   final language;
 
   const NewAddAndEditPuja(
-      {Key key, @required this.uid, @required this.docSnap, this.language})
+      {Key? key, required this.uid, required this.docSnap, this.language})
       : super(key: key);
 
   @override
@@ -29,15 +27,15 @@ class NewAddAndEditPuja extends StatefulWidget {
 
 class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
   final _formKey = GlobalKey<FormState>();
-  String puja = "Select puja";
+  String? puja = "Select puja";
   bool other = false;
-  String _name;
-  double _rate;
-  String _benefits;
-  String samagri;
-  String _additionalDisctription;
-  String _time;
-  String hr;
+  String? _name;
+  double? _rate;
+  String? _benefits;
+  String? samagri;
+  String? _additionalDisctription;
+  String? _time;
+  String? hr;
   Map keymap = {};
   Map samMap = {};
   dynamic keyword;
@@ -46,7 +44,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
 
   //String _serviceId=widget.database
   bool _validateAndSaveForm() {
-    final form = _formKey.currentState;
+    final form = _formKey.currentState!;
     if (form.validate()) {
       form.save();
       return true;
@@ -66,16 +64,17 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
             'PanditD': _additionalDisctription,
             'Pujan Samagri': samagri,
             'time': _time,
-            'keyword': keyword == null ? '#' + _name + '/' : keyword,
+            'keyword': keyword == null ? '#' + _name! + '/' : keyword,
             'subscriber': 0,
             'profit': 0.1,
             'serviceId': serviceId,
           }, pid: serviceId)
           .whenComplete(() => FireStoreDatabase(uid: widget.uid).updateKeyword(
-                keyword == null ? '#' + _name + '/' : keyword,
+                keyword == null ? '#' + _name! + '/' : keyword,
               ))
           .whenComplete(() {
-            BotToast.showText(
+        //TODO: botToast
+           /* BotToast.showText(
               text: Language(code: widget.language, text: [
                 "$_name Added in your puja service ",
                 "$_name आपकी पूजा सेवा में जोड़ा गया ",
@@ -83,7 +82,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                 "$_name உங்கள் பூஜை சேவையில் சேர்க்கப்பட்டது ",
                 "$_name మీ పూజా సేవలో చేర్చబడింది "
               ]).getText,
-            );
+            );*/
           });
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
@@ -101,15 +100,16 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'Benefit': _benefits,
         'PanditD': _additionalDisctription,
         'time': _time,
-      }, pid: widget.docSnap.id);
-      BotToast.showText(
+      }, pid: widget.docSnap!.id);
+      //TODO: botToast
+   /*   BotToast.showText(
           text: Language(code: widget.language, text: [
         "$_name is updated ",
         "$_name अपडेट किया गया है ",
         "$_name আপডেট হয়েছে ",
         "$_name புதுப்பிக்கப்பட்டது ",
         "$_name నవీకరించబడింది "
-      ]).getText);
+      ]).getText);*/
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -135,19 +135,19 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
     }*/
 
     if (widget.docSnap != null) {
-      _name = widget.docSnap.data()['puja'];
-      _rate = widget.docSnap.data()['price'];
-      _benefits = widget.docSnap.data()['Benefit'];
-      samagri = widget.docSnap.data()['Pujan Samagri'];
-      _additionalDisctription = widget.docSnap.data()['PanditD'];
-      _time = widget.docSnap.data()['time'];
+      _name = widget.docSnap!.get('puja');
+      _rate = widget.docSnap!.get('price');
+      _benefits = widget.docSnap!.get('Benefit');
+      samagri = widget.docSnap!.get('Pujan Samagri');
+      _additionalDisctription = widget.docSnap!.get('PanditD');
+      _time = widget.docSnap!.get('time');
     }
     return SingleChildScrollView(
       child: Column(
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: FlatButton(
+            child: ElevatedButton(
                 onPressed: () {
                   if (widget.docSnap == null) {
                     if (_validateAndSaveForm() && keyword != null) {
@@ -155,14 +155,15 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       Navigator.of(context).pop();
                     }
                     if (keyword == null) {
-                      BotToast.showText(
+                      //TODO: botToast
+                      /*BotToast.showText(
                           text: Language(code: widget.language, text: [
                         "Please select puja type ",
                         "कृपया पूजा प्रकार चुनें ",
                         "পূজা টাইপ নির্বাচন করুন ",
                         "பூஜா வகையைத் தேர்ந்தெடுக்கவும் ",
                         "దయచేసి పూజా రకాన్ని ఎంచుకోండి "
-                      ]).getText);
+                      ]).getText);*/
                     }
                   } else {
                     if (_validateAndSaveForm()) {
@@ -218,9 +219,9 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
           trendingPujaNameList.clear();
           keymap.clear();
 
-          snapshot.data.docs.forEach((element) {
-            keymap.addAll({element.data()['name']: element.id});
-            samMap.addAll({element.data()['name']: element.data()['Samagri']});
+          snapshot.data!.docs.forEach((element) {
+            keymap.addAll({element.get('name'): element.id});
+            samMap.addAll({element.get('name'): element.get('Samagri')});
           });
           print(keymap);
           keymap.forEach((key, value) {
@@ -259,7 +260,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
             border: InputBorder.none,
           ),
           initialValue: _name,
-          validator: (value) => value.isNotEmpty
+          validator: (value) => value!.isNotEmpty
               ? null
               : Language(code: widget.language, text: [
                   "This field is required",
@@ -298,7 +299,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
             signed: false,
             decimal: false,
           ),
-          validator: (value) => value.isNotEmpty
+          validator: (value) => value!.isNotEmpty
               ? null
               : Language(code: widget.language, text: [
                   "This field is required",
@@ -307,7 +308,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                   "இந்த புலம் தேவை",
                   "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
                 ]).getText,
-          onSaved: (value) => _rate = double.tryParse(value) ?? 0,
+          onSaved: (value) => _rate = double.tryParse(value!) ?? 0,
         ),
       ),
       SizedBox(
@@ -332,7 +333,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                 "பூஜை எவ்வளவு காலம் நீடிக்கும்? ",
                 "పూజ ఎంతకాలం ఉంటుంది? "
               ]).getText),
-          validator: (value) => value.isNotEmpty
+          validator: (value) => value!.isNotEmpty
               ? null
               : Language(code: widget.language, text: [
                   "This field is required",
@@ -369,7 +370,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       "పూజా పదార్థం "
                     ]).getText),
                 initialValue: samagri,
-                validator: (value) => value.isNotEmpty
+                validator: (value) => value!.isNotEmpty
                     ? null
                     : Language(code: widget.language, text: [
                         "This field is required",
@@ -460,7 +461,8 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   SizedBox(width: 25),
-                  SearchableDropdown.single(
+                  //TODO: Searchable dropdown
+                  DropdownButtonFormField(
                     hint: Text(Language(code: widget.language, text: [
                       "Type of puja ",
                       "पूजा का प्रकार ",
@@ -469,15 +471,15 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       "పూజ రకం "
                     ]).getText),
                     isExpanded: true,
-                    displayClearIcon: false,
+                   // displayClearIcon: false,
                     items:
-                        trendingPujaNameList.map((String dropDownStringItem) {
+                        trendingPujaNameList.map((String? dropDownStringItem) {
                       return DropdownMenuItem<String>(
                         value: dropDownStringItem,
-                        child: Text(dropDownStringItem),
+                        child: Text(dropDownStringItem!),
                       );
                     }).toList(),
-                    onChanged: (String value) {
+                    onChanged: (String? value) {
                       setState(() {
                         puja = value;
                         if (value == "Others") {

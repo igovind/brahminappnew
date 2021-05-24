@@ -3,24 +3,23 @@ import 'package:brahminapp/app/services_given/subject/astrology_sec.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AstroOffering extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
-  final UserId userId;
+  final AsyncSnapshot<QuerySnapshot>? snapshot;
+  final UserId? userId;
 
-  const AstroOffering({Key key, this.snapshot, this.userId}) : super(key: key);
+  const AstroOffering({Key? key, this.snapshot, this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AstrologySection(
-        uid: userId.uid,
+        uid: userId!.uid,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showMaterialModalBottomSheet(
-            backgroundColor: Colors.transparent,
+          showDialog(
+            //backgroundColor: Colors.transparent,
             context: context,
             builder: (context) {
               return Container(
@@ -32,7 +31,7 @@ class AstroOffering extends StatelessWidget {
                           topRight: Radius.circular(30))),
                   height: MediaQuery.of(context).size.height * 0.9,
                   child: AstrologyForm(
-                    uid: userId.uid,
+                    uid: userId!.uid,
                   ));
             },
           );

@@ -3,8 +3,8 @@ import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 
 class FormSubmitButton extends CustomRaisedButton {
   FormSubmitButton({
-    @required String text,
-    VoidCallback onPressed,
+    required String text,
+    VoidCallback? onPressed,
   }) : super(
           child: Text(
             text,

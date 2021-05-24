@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:brahminapp/services/auth.dart';
 
 class SignInBloc {
-  SignInBloc({@required this.auth});
+  SignInBloc({required this.auth});
   final AuthBase auth;
 
   final StreamController<bool> _isLoadingController = StreamController<bool>();
@@ -16,7 +16,7 @@ class SignInBloc {
 
   void _setIsLoading(bool isLoading) => _isLoadingController.add(isLoading);
 
-  Future<UserId> _signIn(Future<UserId> Function() signInMethod) async {
+  Future<UserId?> _signIn(Future<UserId?> Function() signInMethod) async {
     try {
       _setIsLoading(true);
       return await signInMethod();
@@ -26,8 +26,8 @@ class SignInBloc {
     }
   }
 
-  Future<UserId> signInAnonymously() async => await _signIn(auth.signInAnonymously);
+  Future<UserId?> signInAnonymously() async => await _signIn(auth.signInAnonymously);
 
-  Future<UserId> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
+  Future<UserId?> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
 
 }

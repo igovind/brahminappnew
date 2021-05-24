@@ -7,10 +7,10 @@ import 'package:brahminapp/services/auth.dart';
 import '../ChatListModal.dart';
 
 class Chat extends StatefulWidget {
-  final UserId user;
-  final DatabaseL databaseL;
+  final UserId? user;
+  final DatabaseL? databaseL;
 
-  const Chat({Key key, @required this.user, @required this.databaseL})
+  const Chat({Key? key, required this.user, required this.databaseL})
       : super(key: key);
 
   @override
@@ -43,10 +43,10 @@ class _ChatState extends State<Chat> {
             color: Colors.white,
             child: StreamBuilder<List<ChatListModal>>(
                 stream:
-                    database.readChatlist() ?? widget.databaseL.readChatlist(),
+                    database.readChatlist() ,//?? widget.databaseL!.readChatlist(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
-                    if (snapshot.data.isEmpty == true) {
+                    if (snapshot.data!.isEmpty == true) {
                       return Center(
                         child: Column(
                           children: [
@@ -67,7 +67,7 @@ class _ChatState extends State<Chat> {
                       );
                     }
                     if (snapshot.data != null) {
-                      final pd = snapshot.data;
+                      final pd = snapshot.data!;
                       final pdata = pd
                           .map((chatListModal) => ChatListViewItem(
                                 chatListModal: chatListModal,

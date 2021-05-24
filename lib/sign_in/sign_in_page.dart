@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.bloc}) : super(key: key);
+  const SignInPage({Key? key, required this.bloc}) : super(key: key);
   final SignInBloc bloc;
 
   static Widget create(BuildContext context) {
@@ -69,7 +69,7 @@ class SignInPage extends StatelessWidget {
           stream: bloc.isLoadingStream,
           initialData: false,
           builder: (context, snapshot) {
-            return _buildContent(context, snapshot.data);
+            return _buildContent(context, snapshot.data!);
           }),
       //backgroundColor: Colors.white,
     );
@@ -200,7 +200,7 @@ class SignInPage extends StatelessWidget {
               else {
                 final servicess = snapshot.data;
                 void hindilauncher()async{
-                  var url = '${servicess.data()['purohit']}';
+                  var url = '${servicess!.get('purohit')}';
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {

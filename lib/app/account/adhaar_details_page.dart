@@ -4,22 +4,20 @@ import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
 import '../languages.dart';
 
 class AdhaarDetailsPage extends StatelessWidget {
   final uid;
   final language;
-  const AdhaarDetailsPage({Key key, this.uid, this.language}) : super(key: key);
+  const AdhaarDetailsPage({Key? key, this.uid, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String name;
-    String address;
-    String adhaarNumber;
-    String front;
-    String back;
+    String? name;
+    String? address;
+    String? adhaarNumber;
+    String? front;
+    String? back;
     return StreamBuilder<DocumentSnapshot>(
         stream: FireStoreDatabase(uid: uid).getAdhaarDetails,
         builder: (context, snapshot) {
@@ -28,17 +26,18 @@ class AdhaarDetailsPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.data.data() == null) {
+          if (snapshot.data!.data() == null) {
             return EditAdhaarDetails(
               language: language,
               uid: uid,
             );
           } else {
-            name = snapshot.data.data()["name"];
-            address = snapshot.data.data()["address"];
-            adhaarNumber = snapshot.data.data()["adhaarNumber"];
-            front = snapshot.data.data()["frontAdhaarPicUrl"];
-            back = snapshot.data.data()["backAdhaarPicUrl"];
+
+            name = snapshot.data!.get("name");
+            address = snapshot.data!.get("address");
+            adhaarNumber = snapshot.data!.get("adhaarNumber");
+            front = snapshot.data!.get("frontAdhaarPicUrl");
+            back = snapshot.data!.get("backAdhaarPicUrl");
           }
           return Scaffold(
               appBar: AppBar(
@@ -46,9 +45,18 @@ class AdhaarDetailsPage extends StatelessWidget {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 actions: [
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () {
-                      showMaterialModalBottomSheet(
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditAdhaarDetails(
+                        language: language,
+                        adhaarName: name,
+                        adhaarNumber: adhaarNumber,
+                        frontAdhaarUrl: front,
+                        backAdhaarUrl: back,
+                        address: address,
+                        uid: uid,
+                      )));
+                     /* showMaterialModalBottomSheet(
                         backgroundColor: Colors.transparent,
                         context: context,
                         builder: (context) {
@@ -71,7 +79,7 @@ class AdhaarDetailsPage extends StatelessWidget {
                                 uid: uid,
                               ));
                         },
-                      );
+                      );*/
                     },
                     child: Container(
                       padding:

@@ -23,7 +23,7 @@ class _LandingPageState extends State<LandingPage> {
     return StreamBuilder<UserId>(
         stream: FirebaseAuth.instance.authStateChanges().map((event) {
           return UserId(
-              userEmail: event.email,
+              userEmail: event!.email,
               uid: event.uid,
               photoUrl: event.photoURL,
               displayName: event.displayName,
@@ -31,7 +31,7 @@ class _LandingPageState extends State<LandingPage> {
         }),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-            UserId user = snapshot.data;
+            UserId? user = snapshot.data;
             if (user == null) {
               return SignInPage.create(context);
             }
