@@ -158,7 +158,7 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     _firebaseMessaging.requestPermission(
       alert: true,
@@ -169,16 +169,9 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
       provisional: false,
       sound: true,
     );
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
-    void handleRouting(dynamic notification) {
+/*    void handleRouting(RemoteNotification notification) {
       //final database = Provider.of<DatabaseL>(context, listen: false);
-      switch (notification['type']) {
+      switch (notification.) {
         case 'Booking':
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => BookingsPage()));
@@ -188,16 +181,18 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
               context,
               MaterialPageRoute(
                   builder: (context) => IndexPage(
-                        channelName: notification['channel'],
+                        channelName: notification,
                       )));
           break;
       }
-    }
+    }*/
 
     FirebaseMessaging.onMessage.listen((message) {
-      final notification = message.data['notification'];
-      final notificationData = message.data['data'];
-      switch (notificationData['type']) {
+      final notification = message.notification;
+      final notificationData = message.data;
+      print(
+          "${message.notification!.title}|||| ${message.data}??????????????????????????????????????????");
+      switch (message.data['type']) {
         case 'Booking':
           BotToast.showSimpleNotification(
             onTap: () {
@@ -206,9 +201,9 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
             },
             animationDuration: Duration(seconds: 2),
             hideCloseButton: true,
-            title: notification['title'],
-            subTitle: notification['body'],
-            duration: Duration(seconds: 5),
+            title: notification!.title as String,
+            subTitle: notification.body as String,
+            duration: Duration(seconds: 10),
           );
           break;
         case 'Message':
@@ -219,9 +214,9 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
             },
             animationDuration: Duration(seconds: 2),
             hideCloseButton: true,
-            title: notification['title'],
-            subTitle: notification['body'],
-            duration: Duration(seconds: 5),
+            title: notification!.title as String,
+            subTitle: notification.body as String,
+            duration: Duration(seconds: 10),
           );
           break;
         case 'VCall':
@@ -232,20 +227,56 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
                   MaterialPageRoute(
                       builder: (context) => IndexPage(
                             channelName: notificationData['channel'],
+                            callType: notificationData['call_type'],
+                            userId: widget.user,
                           )));
             },
             animationDuration: Duration(seconds: 2),
             hideCloseButton: true,
-            title: notification['title'],
-            subTitle: notification['body'],
+            title: notification!.title as String,
+            subTitle: notification.body as String,
             duration: Duration(seconds: 10),
           );
       }
       FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        final notificationData = message.data['data'];
-        handleRouting(notificationData);
+        final type = message.data['type'];
+        switch (type) {
+          case 'Booking':
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => BookingsPage()));
+            break;
+          case 'VCall':
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => IndexPage(
+                      channelName: notificationData['channel'],
+                      callType: notificationData['call_type'],
+                      userId: widget.user,
+                    )));
+            break;
+        }
       });
-      //FirebaseMessaging.onBackgroundMessage((message) =>handleRouting(message.data['data']));
+      FirebaseMessaging.onBackgroundMessage((message) async{
+        final type = message.data['type'];
+        switch (type) {
+          case 'Booking':
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => BookingsPage()));
+            break;
+          case 'VCall':
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => IndexPage(
+                      channelName: notificationData['channel'],
+                      callType: notificationData['call_type'],
+                      userId: widget.user,
+                    )));
+            break;
+        }
+        return null;
+      });
     });
   }
 

@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
+import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -17,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:brahminapp/app/languages.dart';
+import 'package:search_choices/search_choices.dart';
 
 String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
@@ -286,8 +289,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         if (this.mounted) {
           setState(() {
             loading = true;
-            //TODO: botToast
-            /* BotToast.showText(
+            BotToast.showText(
               text: Language(code: widget.language, text: [
                 "Information saved ",
                 "पूरा हुआ ",
@@ -295,14 +297,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 "நிறைவு ",
                 "పూర్తయింది "
               ]).getText,
-            );*/
+            );
           });
         }
       });
     } else {
       if (userProfilePicFile == null && userProfilePicFile == null) {
-        //TODO: botToast
-        /* BotToast.showText(
+        BotToast.showText(
           text: Language(code: widget.language, text: [
             "Please add profile and cover picture ",
             "कृपया प्रोफ़ाइल और कवर चित्र जोड़ें ",
@@ -310,11 +311,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
             "சுயவிவரம் மற்றும் அட்டைப் படத்தைச் சேர்க்கவும் ",
             "దయచేసి ప్రొఫైల్ మరియు కవర్ చిత్రాన్ని జోడించండి "
           ]).getText,
-        );*/
+        );
       } else {
         if (userProfilePicFile == null) {
-          //TODO: botToast
-          /*   BotToast.showText(
+          BotToast.showText(
             text: Language(code: widget.language, text: [
               "Please add profile picture ",
               "कृपया प्रोफ़ाइल चित्र जोड़ें ",
@@ -322,10 +322,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
               "சுயவிவரப் படத்தைச் சேர்க்கவும் ",
               "దయచేసి ప్రొఫైల్ చిత్రాన్ని జోడించండి "
             ]).getText,
-          );*/
+          );
         }
         if (userCoverPicFile == null) {
-          /* BotToast.showText(
+          BotToast.showText(
             text: Language(code: widget.language, text: [
               "Please add cover picture ",
               "কভার ছবি যোগ করুন ",
@@ -333,7 +333,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               "அட்டைப் படத்தைச் சேர்க்கவும் ",
               "కవర్ చిత్రాన్ని జోడించండి "
             ]).getText,
-          );*/
+          );
         }
       }
     }
@@ -359,11 +359,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          toolbarHeight: 30,
+          toolbarHeight: 50,
           actions: [
             loading
                 ? SizedBox()
-                : ElevatedButton(
+                : TextButton(
                     onPressed: () {
                       _submit();
                     },
@@ -426,10 +426,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             blurRadius: 5)
                                       ],
                                       image: DecorationImage(
-                                          image: (userCoverPicFile == null
-                                              ? AssetImage(
-                                                  "images/cover_image.jpg")
-                                              : FileImage(userCoverPicFile!)) as ImageProvider<Object>,
+                                          image:
+                                              (userCoverPicFile == null
+                                                      ? AssetImage(
+                                                          "images/newback.jpg")
+                                                      : FileImage(
+                                                          userCoverPicFile!))
+                                                  as ImageProvider<Object>,
                                           fit: BoxFit.fitWidth),
                                       color: Colors.white,
                                       borderRadius: BorderRadius.only(
@@ -440,17 +443,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: GestureDetector(
-                                  child: userProfilePicFile == null
-                                      ? CircularAvatar(
-                                          child: Image.asset(
-                                              "images/placeholder.jpg"))
-                                      : CircularAvatar(
-                                          child:
-                                              Image.file(userProfilePicFile!)),
-                                  onTap: () {
-                                    getProfilePic(source: ImageSource.gallery);
-                                  },
-                                ),
+                                    onTap: () {
+                                      getProfilePic(
+                                          source: ImageSource.gallery);
+                                    },
+                                    child: CircularProfilePic(
+                                      fileSrc: userProfilePicFile,
+                                    )),
                               )
                             ],
                           ),
@@ -463,6 +462,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           child: TextFormField(
                               maxLength: 30,
                               decoration: InputDecoration(
+                                hoverColor: Colors.deepOrangeAccent,
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   border: InputBorder.none,
@@ -575,7 +575,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
-                       /* CustomContainer(
+                         CustomContainer(
                             radius: 10,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -603,13 +603,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         child: Text(name),
                                       ));
                                     }
-                                    return CustomSearchableDropdown.single(
+                                    return SearchChoices.single(
                                       key: UniqueKey(),
-                                      validator: (String value) {
-                                        value = value == null
-                                            ? UserDetails(snapshot: null).state!
-                                            : value;
-                                        if (value == null) {
+
+                                      validator: ( value) {
+                                        if (value==null) {
                                           return Language(
                                               code: widget.language,
                                               text: [
@@ -622,6 +620,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         }
                                         return null;
                                       },
+
                                       underline: SizedBox(),
                                       icon: Icon(
                                         Icons.arrow_drop_down_circle_outlined,
@@ -638,7 +637,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             "உங்கள் மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
                                             "మీ రాష్ట్రాన్ని ఎంచుకోండి"
                                           ]).getText,
-                                      lableColor: Colors.black54,
+                                     // lableColor: Colors.black54,
                                       isExpanded: true,
                                       //icon: Icon(Icons.description),
                                       displayClearIcon: false,
@@ -661,7 +660,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       },
                                     );
                                   }),
-                            )),*/
+                            )),
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
@@ -861,7 +860,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             Flexible(
                               flex: 1,
                               fit: FlexFit.loose,
-                              child: ElevatedButton(
+                              child: TextButton(
                                   onPressed: () async {
                                     DocumentSnapshot snap =
                                         await FirebaseFirestore.instance

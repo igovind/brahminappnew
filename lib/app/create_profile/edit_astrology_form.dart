@@ -174,6 +174,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         'chatOk': false,
         'callOk': false,
         'videoOk': false,
+        'coins':0
       }).whenComplete(() {
         FirebaseFirestore.instance
             .collection('Avaliable_pundit/${widget.uid}/astro')

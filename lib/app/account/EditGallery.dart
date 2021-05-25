@@ -141,11 +141,11 @@ class _EditGalleryState extends State<EditGallery> {
       },
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 30,
+          toolbarHeight: 50,
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [
-            ElevatedButton(
+            TextButton(
               onPressed: () => _submit(),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -203,7 +203,7 @@ class _EditGalleryState extends State<EditGallery> {
                                 image: imageFile == null
                                     ? (imageUrlP == null
                                         ? AssetImage(
-                                            "images/chat-background-1.jpg")
+                                            "images/newback.jpg")
                                         : NetworkImage(imageUrlP!)) as ImageProvider<Object>
                                     : FileImage(imageFile!))),
                       ),

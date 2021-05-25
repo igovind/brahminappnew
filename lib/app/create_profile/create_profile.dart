@@ -34,10 +34,34 @@ class CreateProfile extends StatelessWidget {
 
     Future<void> _confirmSignOut(context) async {
       final didRequestSignOut = await PlatformAlertDialog(
-        title: Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
-        content: Language(code: language,text: ["Are you sure that you want to logout?","क्या आप वाकई लॉगआउट करना चाहते हैं?","আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?","நீங்கள் வெளியேற விரும்புகிறீர்களா?","మీరు లాగ్ అవుట్ చేయాలనుకుంటున్నారా?"]).getText,
-        cancelActionText: Language(code: language,text: ["Cancel","रद्द करें","বাতিল","ரத்துசெய்","రద్దు చేయండి"]).getText,
-        defaultActionText: Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
+        title: Language(code: language, text: [
+          "Logout",
+          "लॉग आउट",
+          "প্রস্থান",
+          "வெளியேறு",
+          "లాగ్ అవుట్"
+        ]).getText,
+        content: Language(code: language, text: [
+          "Are you sure that you want to logout?",
+          "क्या आप वाकई लॉगआउट करना चाहते हैं?",
+          "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+          "நீங்கள் வெளியேற விரும்புகிறீர்களா?",
+          "మీరు లాగ్ అవుట్ చేయాలనుకుంటున్నారా?"
+        ]).getText,
+        cancelActionText: Language(code: language, text: [
+          "Cancel",
+          "रद्द करें",
+          "বাতিল",
+          "ரத்துசெய்",
+          "రద్దు చేయండి"
+        ]).getText,
+        defaultActionText: Language(code: language, text: [
+          "Logout",
+          "लॉग आउट",
+          "প্রস্থান",
+          "வெளியேறு",
+          "లాగ్ అవుట్"
+        ]).getText,
       ).show(context);
       if (didRequestSignOut == true) {
         _signOut(context);
@@ -62,28 +86,40 @@ class CreateProfile extends StatelessWidget {
           }
           return Scaffold(
             appBar: AppBar(
-             // iconTheme: IconThemeData(color: Colors.black54),
+              // iconTheme: IconThemeData(color: Colors.black54),
               //actions: [FlatButton(onPressed: () {}, child: Text("check"))],
               leading: SizedBox(),
-              toolbarHeight: 30,
+              toolbarHeight: 40,
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                Language(code: language,text: ["Registration","पंजीकरण","নিবন্ধন","பதிவு","నమోదు"]).getText,
+                Language(code: language, text: [
+                  "Registration",
+                  "पंजीकरण",
+                  "নিবন্ধন",
+                  "பதிவு",
+                  "నమోదు"
+                ]).getText,
                 style: TextStyle(color: Colors.black),
               ),
               actions: [
-                ElevatedButton(
+                TextButton(
                     onPressed: () => _confirmSignOut(context),
                     child: Text(
-                      Language(code: language,text: ["Logout","लॉग आउट","প্রস্থান","வெளியேறு","లాగ్ అవుట్"]).getText,
+                      Language(code: language, text: [
+                        "Logout",
+                        "लॉग आउट",
+                        "প্রস্থান",
+                        "வெளியேறு",
+                        "లాగ్ అవుట్"
+                      ]).getText,
                       style: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.bold),
                     ))
               ],
             ),
-            body: body(_currentIndex, uid,language),
+            body: body(_currentIndex, uid, language),
             bottomNavigationBar: DotsIndicator(
                 onTap: (value) {},
                 position: _currentIndex!.toDouble(),
@@ -100,7 +136,7 @@ class CreateProfile extends StatelessWidget {
   }
 }
 
-Widget body(int? value, uid,language) {
+Widget body(int? value, uid, language) {
   switch (value) {
     case 0:
       return StreamBuilder<DocumentSnapshot>(
@@ -117,17 +153,17 @@ Widget body(int? value, uid,language) {
               uid: uid,
             );
           });
-      break;
     case 1:
-      return AstrologyPage(uid: uid,language: language,);
-      break;
+      return AstrologyPage(
+        uid: uid,
+        language: language,
+      );
     case 2:
       return GalleryPage(
         language: language,
         uid: uid,
         done: "dj",
       );
-      break;
     case 3:
       return EditAdhaarDetails(
         language: language,
@@ -140,7 +176,6 @@ Widget body(int? value, uid,language) {
         check: "h",
         uid: uid,
       );
-      break;
   }
   return Text("Error");
 }

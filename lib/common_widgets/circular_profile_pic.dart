@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:brahminapp/services/media_querry.dart';
 import 'package:flutter/material.dart';
 
 class CircularProfilePic extends StatelessWidget {
@@ -20,7 +21,7 @@ class CircularProfilePic extends StatelessWidget {
   Widget build(BuildContext context) {
     if (fileSrc != null) {
       return Container(
-        height: 2.0 * (radius ?? 60),
+        height: 2.0 * (radius ?? MagicScreen(context: context,height: 60).getHeight),
         decoration: BoxDecoration(
           color: Colors.white,
             image: DecorationImage(image: FileImage(fileSrc!)),

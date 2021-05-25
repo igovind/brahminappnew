@@ -1,3 +1,4 @@
+import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:brahminapp/app/account/EditGallery.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
@@ -35,29 +36,45 @@ class GalleryPage extends StatelessWidget {
         actions: [
           done == null
               ? SizedBox()
-              : ElevatedButton(
+              : TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: uid).updateData(data: {'index': 3});
                   },
-                  child: Text(
-                  Language(code:language, text: [
-                  "Next",
-                  "आगे बढ़ें",
-                  "এগিয়ে যান",
-                  "மேலே செல்லுங்கள்",
-                  "ముందుకి వెళ్ళు"
-                  ]).getText,
-                    style: TextStyle(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(color: Colors.black54, blurRadius: 3)
+                        ],
                         color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.bold),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text(
+                      Language(code: language, text: [
+                        "Next",
+                        "आगे बढ़ें",
+                        "এগিয়ে যান",
+                        "மேலே செல்லுங்கள்",
+                        "ముందుకి వెళ్ళు"
+                      ]).getText,
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ))
         ],
         elevation: 0,
         backgroundColor: Colors.white,
-        toolbarHeight: height(40),
+        toolbarHeight: height(50),
         centerTitle: true,
         title: Text(
-          Language(code: language, text: ["Gallery ", "गेलरी ", "গ্যালারী ", "கேலரி ", "గ్యాలరీ "]).getText,
+          Language(code: language, text: [
+            "Gallery ",
+            "गेलरी ",
+            "গ্যালারী ",
+            "கேலரி ",
+            "గ్యాలరీ "
+          ]).getText,
           style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
         ),
       ),
@@ -144,22 +161,16 @@ class ImageBox extends StatelessWidget {
   final int? num;
   final language;
 
-  const ImageBox({Key? key, this.image, this.uid, this.check, this.num, this.language})
+  const ImageBox(
+      {Key? key, this.image, this.uid, this.check, this.num, this.language})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditGallery(
-          language: language,
-          set: check,
-          imageUrl: image,
-          uid: uid,
-          num: num,
-        ),));
-       /* showMaterialModalBottomSheet(
-          backgroundColor: Colors.transparent,
+        /*   showDialog(
+         // backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Container(
@@ -180,6 +191,40 @@ class ImageBox extends StatelessWidget {
             );
           },
         );*/
+        Widget _buildBottomSheet(
+          BuildContext context,
+          ScrollController scrollController,
+          double bottomSheetOffset,
+        ) {
+          return Material(
+            child: Container(
+                child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30))),
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: EditGallery(
+                language: language,
+                set: check,
+                imageUrl: image,
+                uid: uid,
+                num: num,
+              ),
+            )),
+          );
+        }
+
+        showFlexibleBottomSheet(
+          minHeight: 0,
+          initHeight: 0.5,
+          maxHeight: 1,
+          context: context,
+          builder: _buildBottomSheet,
+          anchors: [500, 50, 1],
+        );
       },
       child: Container(
         height: MagicScreen(height: 200, context: context).getHeight,
@@ -190,7 +235,7 @@ class ImageBox extends StatelessWidget {
             image: DecorationImage(
                 fit: BoxFit.fill,
                 image: (image == null
-                    ? AssetImage("images/cover_image.jpg")
+                    ? AssetImage("images/newback.jpg")
                     : NetworkImage(image)) as ImageProvider<Object>)),
       ),
     );

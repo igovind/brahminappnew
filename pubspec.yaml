@@ -32,6 +32,7 @@ dependencies:
   bot_toast: ^4.0.1
   bottom_navy_bar: ^6.0.0
   bubble_tab_indicator: ^0.1.6
+  bottom_sheet: ^1.0.0
   circle_bottom_navigation_bar: ^1.0.0
   carousel_slider: ^4.0.0-nullsafety.0
   cloud_firestore: ^2.2.0
@@ -65,8 +66,11 @@ dependencies:
   share: ^2.0.1
   shared_preferences: ^2.0.5
   scratcher: ^2.1.0
+  search_choices: ^2.0.3
   url_launcher: ^6.0.4
+  workmanager: ^0.4.0
   youtube_player_flutter: ^8.0.0
+
 
 
 dev_dependencies:

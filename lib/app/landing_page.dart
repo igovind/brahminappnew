@@ -44,10 +44,7 @@ class _LandingPageState extends State<LandingPage> {
                 child: TogglePage(
                   user: user,
                 ),
-                /* child: RHomePage(
-                  user: user,
-                ),*/
-                //child: NewHomePage(user: user,),
+
               ),
             );
           }

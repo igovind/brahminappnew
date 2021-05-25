@@ -218,14 +218,13 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        toolbarHeight: height(30),
+        toolbarHeight: height(50),
         actions: [
           widget.check != null
-              ? ElevatedButton(
+              ? TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
-                        .updateData(data: {"ready": true});
-                    Navigator.of(context).pop();
+                        .updateData(data: {"ready": true,"index":5});
                   },
                   child: Text(
                     Language(code: widget.language, text: [
@@ -239,7 +238,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                         color: Colors.deepOrange, fontWeight: FontWeight.bold),
                   ))
               : SizedBox(),
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               _submit();
             },

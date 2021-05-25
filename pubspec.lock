@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.0"
+  bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: bottom_sheet
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   bubble_tab_indicator:
     dependency: "direct main"
     description:
@@ -721,6 +728,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  search_choices:
+    dependency: "direct main"
+    description:
+      name: search_choices
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   share:
     dependency: "direct main"
     description:
@@ -887,6 +901,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  workmanager:
+    dependency: "direct main"
+    description:
+      name: workmanager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   xdg_directories:
     dependency: transitive
     description:

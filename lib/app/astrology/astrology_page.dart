@@ -2,6 +2,7 @@ import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:search_choices/search_choices.dart';
 import '../../common_widgets/custom_multi_select_file.dart';
 import '../languages.dart';
 
@@ -45,70 +46,58 @@ class _AstrologyPageState extends State<AstrologyPage> {
     ),
   ];
 
-/*  List<MultipleSelectItem> elements = [
-    MultipleSelectItem.build(
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
       value: 1,
-      display: 'Hindi',
-      content: 'Hindi',
+      child: Text('Hindi'),
     ),
-    MultipleSelectItem.build(
-      value: 2,
-      display: 'English',
-      content: 'English',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('English'),
     ),
-    MultipleSelectItem.build(
-      value: 3,
-      display: 'Kannada',
-      content: 'Kannada',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Kannada'),
     ),
-    MultipleSelectItem.build(
-      value: 4,
-      display: 'Malayalam',
-      content: 'Malayalam',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Malayalam'),
     ),
-    MultipleSelectItem.build(
-      value: 5,
-      display: 'Odia',
-      content: 'Odia',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Odia'),
     ),
-    MultipleSelectItem.build(
-      value: 6,
-      display: 'Punjabi',
-      content: 'Punjabi',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Punjabi'),
     ),
-    MultipleSelectItem.build(
-      value: 7,
-      display: 'Gujarati',
-      content: 'Gujarati',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Gujarati'),
     ),
-    MultipleSelectItem.build(
-      value: 8,
-      display: 'Urdu',
-      content: 'Urdu',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Urdu'),
     ),
-    MultipleSelectItem.build(
-      value: 9,
-      display: 'Tamil',
-      content: 'Tamil',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Tamil'),
     ),
-    MultipleSelectItem.build(
-      value: 10,
-      display: 'Telugu',
-      content: 'Telugu',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Telugu'),
     ),
-    MultipleSelectItem.build(
-      value: 11,
-      display: 'Marathi',
-      content: 'Marathi',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Marathi'),
     ),
-    MultipleSelectItem.build(
-      value: 12,
-      display: 'Bengali',
-      content: 'Bengali',
+    DropdownMenuItem(
+      value: 1,
+      child: Text('Bengali'),
     ),
-  ];*/
+  ];
 
-  List _selectedValues = [];
+  List<int> _selectedValues = [];
 
   @override
   void initState() {
@@ -146,7 +135,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
     if (_validateAndSaveForm() && _selectedValues.isNotEmpty) {
       String string = "";
       //TODO: multiple
-   /*   for (int i = 0; i < _selectedValues.length; i++) {
+      /*   for (int i = 0; i < _selectedValues.length; i++) {
         string = elements[i].content + "," + string;
       }*/
       FirebaseFirestore.instance
@@ -201,7 +190,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
     } else {
       if (_selectedValues.isEmpty) {
         //TODO: botToast
-       /* BotToast.showText(
+        /* BotToast.showText(
           text: Language(code: widget.language, text: [
             "Please select your languages ",
             "कृपया अपनी भाषाओं का चयन करें ",
@@ -217,23 +206,22 @@ class _AstrologyPageState extends State<AstrologyPage> {
   @override
   Widget build(BuildContext context) {
     List<DropdownMenuItem> dropdownMenuItemExperience =
-    List<DropdownMenuItem>.generate(
-        80,
+        List<DropdownMenuItem>.generate(
+            80,
             (index) => DropdownMenuItem(
-          child: Text(
-            "${index + 2} "+"${ Language(
-                code: widget.language,
-                text: [
-                  "Year ",
-                  "साल ",
-                  "বছর ",
-                  "ஆண்டு ",
-                  "సంవత్సరం "
-                ]).getText}",
-            style: TextStyle(fontWeight: FontWeight.w700),
-          ),
-          value: "${index + 2} Years",
-        ));
+                  child: Text(
+                    "${index + 2} " +
+                        "${Language(code: widget.language, text: [
+                              "Year ",
+                              "साल ",
+                              "বছর ",
+                              "ஆண்டு ",
+                              "సంవత్సరం "
+                            ]).getText}",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  value: "${index + 2} Years",
+                ));
     return astrologer
         ? Scaffold(
             appBar: AppBar(
@@ -247,11 +235,11 @@ class _AstrologyPageState extends State<AstrologyPage> {
                       })
                   : null,
               iconTheme: IconThemeData(color: Colors.black),
-              toolbarHeight: 30,
+              toolbarHeight: 50,
               backgroundColor: Colors.white,
               elevation: 0,
               actions: [
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     _submit();
                   },
@@ -512,24 +500,31 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                     color: Colors.black54,
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.bold)),
-                          /*  CustomMultipleDropDown(
+                            SearchChoices.multiple(
                               icon: Icon(
                                 Icons.arrow_drop_down_circle_outlined,
                                 color: Colors.deepOrangeAccent,
                               ),
-                              placeholder: Language(
-                                  code: widget.language,
-                                  text: [
-                                    "language ",
-                                    "भाषा ",
-                                    "ভাষা ",
-                                    "மொழி ",
-                                    "భాష "
-                                  ]).getText,
-                              disabled: false,
-                              values: _selectedValues,
-                              elements: [],//TODO: multiple
-                            ),*/
+                              items: items,
+                              underline: SizedBox(),
+                              selectedItems: _selectedValues,
+                              hint: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text("Select any"),
+                              ),
+                              searchHint: "Select any",
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedValues = value;
+                                });
+                              },
+                              closeButton: (selectedItems) {
+                                return (selectedItems.isNotEmpty
+                                    ? "Save ${selectedItems.length == 1 ? '"' + items[selectedItems.first].value.toString() + '"' : '(' + selectedItems.length.toString() + ')'}"
+                                    : "Save without selection");
+                              },
+                              isExpanded: true,
+                            ),
                           ],
                         ),
                       ),
@@ -741,7 +736,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () {
                         FireStoreDatabase(uid: widget.uid).updateData(data: {
                           'astrologer': true,
@@ -774,7 +769,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                         ),
                       ),
                     ),
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () {
                         if (widget.snapshot != null) {
                           Navigator.of(context).pop();
