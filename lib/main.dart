@@ -1,43 +1,53 @@
-
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/common_widgets/hexa_color.dart';
-import 'package:device_preview/device_preview.dart';
+import 'package:brahminapp/services/firebase_notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:brahminapp/services/auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
-
-import 'app/astrology/calls/index.dart';
-import 'app/bookings/bookings_page.dart';
 import 'app/landing_page.dart';
-import 'app/notification_back.dart';
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    Workmanager().registerOneOffTask("1", "simpleTask");
-    FirebaseMessaging.onMessage.listen((message) {
-      final notification = message.notification;
-      final notificationData = message.data;
-      print(
-          "${message.notification!.title}|||| ${message.data}??????????????????????????????????????????");
 
+final GlobalKey<NavigatorState> navigationKey =
+    GlobalKey(debugLabel: "Main Navigator");
 
-    });
-    return Future.value(true);
-  });
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("<<<<<<<<<<[ THIS IS BACKGROUND NOTIFICATION ]>>>>>>>>>>>>>");
+  await Firebase.initializeApp();
+  print("${message.notification} |||||||||||| ${message.data}");
+  switch (message.data['type']) {
+    case 'Booking':
+      print("<<<<<<<<<<[ THIS IS BOOKING  ]>>>>>>>>>>>>>");
+      FirebaseNotificationsA.showBookingNotification(
+          message.notification!.title, message.notification!.body);
+
+      break;
+    case 'Message':
+      print("<<<<<<<<<<[ THIS IS MESSAGE  ]>>>>>>>>>>>>>");
+      FirebaseNotificationsA.showMessageNotification(
+          message.notification!.title, message.notification!.body);
+      break;
+    case 'VCall':
+      print("<<<<<<<<<<[ THIS IS VCALL  ]>>>>>>>>>>>>>");
+      FirebaseNotificationsA.showCallNotification(
+          message.notification!.title,
+          message.notification!.body,
+          message.data['call_type'],
+          message.data['channel']);
+      break;
+    default:
+      print("<<<<<<<<<<[ THIS IS DEFAULT NOTIFICATION ]>>>>>>>>>>>>>");
+      FirebaseNotificationsA.showNotification(
+          message.notification!.title, message.notification!.body);
+  }
 }
-void main() async {
-  Workmanager().initialize(
-      callbackDispatcher,
-      isInDebugMode: true,);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent
-  ));
+
+Future<void> main() async {
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());
@@ -48,13 +58,24 @@ void main() async {
   ),);*/
 }
 
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  FirebaseNotificationsA firebaseNotificationsA = FirebaseNotificationsA();
 
-class MyApp extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      firebaseNotificationsA.setupFirebase(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         builder: BotToastInit(),
@@ -62,6 +83,7 @@ class MyApp extends StatelessWidget {
         //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
         // builder: DevicePreview.appBuilder,
         title: 'Purohit dashboard',
+        navigatorKey: navigationKey,
         theme: ThemeData(
           primaryColor: Colors.deepOrangeAccent, //Color(0xFFffbd59),
 

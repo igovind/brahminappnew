@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:search_choices/search_choices.dart';
+import 'CustomSearchableDropdown.dart';
+
 
 class ExampleNumber {
   int number;
@@ -297,7 +298,7 @@ class _TestingTestingState extends State<TestingTesting> {
                   ))));
         },
         doneButton: (selectedItemsDone, doneContext) {
-          return (ElevatedButton(
+          return (TextButton(
               onPressed: () {
                 Navigator.pop(doneContext);
                 setState(() {});
@@ -358,7 +359,7 @@ class _TestingTestingState extends State<TestingTesting> {
           });
         },
         doneButton: (selectedItemsDone, doneContext) {
-          return (ElevatedButton(
+          return (TextButton(
               onPressed: selectedItemsDone.length != 3
                   ? null
                   : () {
@@ -417,7 +418,7 @@ class _TestingTestingState extends State<TestingTesting> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     setState(() {
                       selectedItemsClose.clear();
@@ -427,7 +428,7 @@ class _TestingTestingState extends State<TestingTesting> {
                     updateParent(selectedItemsClose);
                   },
                   child: Text("Select all")),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     setState(() {
                       selectedItemsClose.clear();
@@ -457,7 +458,7 @@ class _TestingTestingState extends State<TestingTesting> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     setState(() {
                       selectedItemsClose.clear();
@@ -467,7 +468,7 @@ class _TestingTestingState extends State<TestingTesting> {
                     updateParent(selectedItemsClose);
                   },
                   child: Text("Select all")),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     setState(() {
                       selectedItemsClose.clear();
@@ -947,12 +948,12 @@ class _TestingTestingState extends State<TestingTesting> {
       "Single dialog open and set search terms": SearchChoices.single(
         label: Column(
           children: items.map((item) {
-            return (ElevatedButton(
+            return TextButton(
               child: item.child,
               onPressed: () {
                 openDialog!(item.value.toString());
               },
-            ));
+            );
           }).toList(),
         ),
         items: items,

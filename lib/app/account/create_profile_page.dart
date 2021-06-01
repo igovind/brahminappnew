@@ -137,7 +137,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget _finalSubmit() {
-    return ElevatedButton(
+    return TextButton(
       child: Text(
         'Submit',
         style: TextStyle(color: Colors.white, fontSize: 18),
@@ -242,7 +242,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           });
         } else {
           if (astro == true && chat == null && call == null && video == null) {
-            showDialog(
+            showModalBottomSheet(
+              backgroundColor: Colors.transparent,
                 context: context,
                 builder:(context)=> AlertDialog(
                   title: Text('Astrology'),
@@ -250,7 +251,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ));
           }
           if (profilePicFile == null) {
-            showDialog(
+            showModalBottomSheet(
+                backgroundColor: Colors.transparent,
                 context: context,
                 builder:(context)=> AlertDialog(
                   title: Text('Incomplete details'),
@@ -258,7 +260,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ));
           }
           if (coverPicFile == null) {
-            showDialog(
+            showModalBottomSheet(
+                backgroundColor: Colors.transparent,
                 context: context,
                 builder:(context)=> AlertDialog(
                   title: Text('Incomplete details'),
@@ -267,7 +270,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           }
 
           if (punditType == 'Pundit type') {
-            showDialog(
+            showModalBottomSheet(
+                backgroundColor: Colors.transparent,
                 context: context,
                 builder:(context)=> AlertDialog(
                   title: Text('Incomplete details'),

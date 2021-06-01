@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/services_given/new_add_edit_puja.dart';
 import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/services/database.dart';
@@ -25,10 +26,11 @@ class PujaOffering extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showDialog(
-             // backgroundColor: Colors.transparent,
+            showModalBottomSheet(
+             backgroundColor: Colors.transparent,
               context: context,
               builder: (context) {
+              // height(800);
                 return Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -103,7 +105,7 @@ class PujaOffering extends StatelessWidget {
                                 "మీరు ఖచ్చితంగా ఈ సేవను తొలగించాలనుకుంటున్నారా? "
                               ]).getText,),
                             actions: <Widget>[
-                              ElevatedButton(
+                              TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
                                   child: Text(Language(code:language, text: [
@@ -113,7 +115,7 @@ class PujaOffering extends StatelessWidget {
                                     "அழி ",
                                     "తొలగించు "
                                   ]).getText,)),
-                              ElevatedButton(
+                              TextButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
                                 child: Text(Language(code:language, text: [
@@ -164,32 +166,30 @@ class PujaOffering extends StatelessWidget {
                       direction.index.toString();
                       FireStoreDatabase(uid: uid).deletepuja(
                           id, snapshot!.data!.docs[index].get('keyword'));
-                      //TODO: botToast
-                    /*  BotToast.showText(text: Language(code:language, text: [
+                      BotToast.showText(text: Language(code:language, text: [
                         "Deleted successfully ",
                         "सफलतापूर्वक मिटाया गया ",
                         "সফলভাবে মোছা হয়েছে ",
                         "வெற்றிகரமாக நீக்கப்பட்டது ",
                         "విజయవంతంగా తొలగించబడింది "
-                      ]).getText,);*/
+                      ]).getText,);
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
                       child: GestureDetector(
                         onTap: () {
-                          showDialog(
-                            //backgroundColor: Colors.transparent,
+                          showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
                             context: context,
                             builder: (context) {
                               return Container(
+                                  height: height(600),
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       color: Theme.of(context).canvasColor,
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(30),
                                           topRight: Radius.circular(30))),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.9,
                                   child: NewAddAndEditPuja(
                                     docSnap: snapshot!.data!.docs[index],
                                     uid: uid,
@@ -275,7 +275,7 @@ class PujaOffering extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              ElevatedButton(
+                              TextButton(
                                   onPressed: () {},
                                   child: AccountTile(
                                     onPress: () {

@@ -78,8 +78,8 @@ class ChatListViewItem extends StatelessWidget {
                       'newMesssageCount': 0,
                       'timestrap': FieldValue.serverTimestamp(),
                     });
-                    showDialog(
-                      //backgroundColor: Colors.transparent,
+                    showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
                       context: context,
                       builder: (context) {
                         return Container(

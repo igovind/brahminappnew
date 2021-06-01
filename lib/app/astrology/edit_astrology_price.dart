@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
@@ -47,6 +48,9 @@ class EditAstrologyPrices extends StatelessWidget {
             /*  SizedBox(
               height: height(30),
             ),*/
+            SizedBox(
+              height: MagicScreen(context: context,height: 20).getHeight,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -61,11 +65,12 @@ class EditAstrologyPrices extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.w700),
                 ),
-                ElevatedButton(
+                TextButton(
                     onPressed: () {
-                      showDialog(
-                      //  backgroundColor: Colors.transparent,
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
                         context: context,
+
                         builder: (context) {
                           return Container(
                               padding: EdgeInsets.all(10),
@@ -74,7 +79,7 @@ class EditAstrologyPrices extends StatelessWidget {
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(30),
                                       topRight: Radius.circular(30))),
-                              height: MediaQuery.of(context).size.height * 0.9,
+                              height: MediaQuery.of(context).size.height * 0.7,
                               child: EditAstrologyForm(
                                 language: language,
                                 uid: userId!.uid,
@@ -135,7 +140,6 @@ class EditAstrologyPrices extends StatelessWidget {
                         onChanged: (value) {
                           FireStoreDatabase(uid: userId!.uid)
                               .setOnlineStatus(value: value!);
-
                         },
                       ),
                     ],
@@ -150,7 +154,7 @@ class EditAstrologyPrices extends StatelessWidget {
                           children: [
                             Text(
                               Language(code: language, text: [
-                                "Recieve Message ",
+                                "Receive Message ",
                                 "संदेश प्राप्त करें ",
                                 "বার্তা গ্রহণ করুন ",
                                 "செய்திகளைப் பெறுக ",
@@ -213,7 +217,7 @@ class EditAstrologyPrices extends StatelessWidget {
                           children: [
                             Text(
                                 Language(code: language, text: [
-                                  "Recieve Video Calls ",
+                                  "Receive Video Calls ",
                                   "वीडियो कॉल प्राप्त करें ",
                                   "ভিডিও কল গ্রহণ করুন ",
                                   "வீடியோ அழைப்புகளைப் பெறுக ",
@@ -268,24 +272,34 @@ class EditAstrologyPrices extends StatelessWidget {
                   Text("Rs/- ${snapshot!.data!.get("coins")}",
                       style: TextStyle(
                           color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ElevatedButton(
+                  TextButton(
                     child: Text(
                         Language(code: language, text: [
-                          "Coins ",
-                          "सिक्के ",
-                          "কয়েন ",
-                          "நாணயங்கள் ",
-                          "నాణేలు "
+                          "Withdraw",
+                          "निकासी करे",
+                          "প্রত্যাহার",
+                          "திரும்பப் பெறுங்கள்",
+                          "ఉపసంహరించుకోండి"
                         ]).getText,
                         style: TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold)),
                     onPressed: () {
-                      FirebaseFirestore.instance
-                          .doc(
-                              "coindWid/${UserDetails(snapshot: snapshot).uid}")
-                          .set({"price": snapshot!.data!.get("coins")});
-                      //TODO: botToast
-                     /* BotToast.showText(text: "Claimed");*/
+                      if(snapshot!.data!.get("coins")>10){
+                        FirebaseFirestore.instance
+                            .doc(
+                            "coindWid/${UserDetails(snapshot: snapshot).uid}")
+                            .set({"price": snapshot!.data!.get("coins")});
+                        BotToast.showText(text: "Claimed");
+                      }
+                      else{
+                        BotToast.showText(text: Language(code: language, text: [
+                          "You must have at least 10 rupees for withdrawal. ",
+                          "आपके पास कम से कम १० रूपए होने चाहिए निकासी के लिए  ",
+                          "প্রত্যাহারের জন্য আপনার কমপক্ষে 10 টাকা থাকতে হবে। ",
+                          "திரும்பப் பெற உங்களிடம் குறைந்தது 10 ரூபாய் இருக்க வேண்டும். ",
+                          "ఉపసంహరణకు మీ వద్ద కనీసం 10 రూపాయలు ఉండాలి. "
+                        ]).getText);
+                      }
                     },
                   )
                 ],
@@ -316,10 +330,15 @@ class EditAstrologyPrices extends StatelessWidget {
                   return Container(
                     height: online
                         ? MediaQuery.of(context).size.height * 0.45
-                        : MediaQuery.of(context).size.height * 0.62,
+                        : MediaQuery.of(context).size.height * 0.5,
                     child: ListView.separated(
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          if (index == snapshot.data!.size) {
+                            return SizedBox(
+                              height: 50,
+                            );
+                          }
                           return CallTile(
                             language: language,
                             name: snapshot.data!.docs[index].get("title"),
@@ -328,8 +347,8 @@ class EditAstrologyPrices extends StatelessWidget {
                                 snapshot.data!.docs[index].get("subtitle"),
                             time: snapshot.data!.docs[index].get("time"),
                             type: snapshot.data!.docs[index].get("type"),
-                            transactionId: snapshot.data!.docs[index]
-                                .get("TransactionId"),
+                            transactionId:
+                                snapshot.data!.docs[index].get("TransactionId"),
                             coins: snapshot.data!.docs[index].get("coins"),
                           );
                         },

@@ -52,7 +52,8 @@ class AstrologyForm extends StatelessWidget {
                     String id = snapshot.data!.docs[index].id;
                     return GestureDetector(
                       onTap: () {
-                        showDialog(
+                        showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
                             context: context,
                           builder:(context)=> Dialog(
                               child: Container(

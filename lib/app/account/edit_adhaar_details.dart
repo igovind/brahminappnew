@@ -289,6 +289,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: Colors.black54),
                       border: InputBorder.none,
                       labelText: Language(code: widget.language, text: [
                         "Your name as per Adhaar ",
@@ -318,6 +319,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   radius: 10,
                   child: TextFormField(
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: Colors.black54),
                       border: InputBorder.none,
                       labelText: Language(code: widget.language, text: [
                         "Permanent address ",
@@ -349,6 +351,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
                   child: TextFormField(
                     maxLength: 16,
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: Colors.black54),
                       border: InputBorder.none,
                       labelText: Language(code: widget.language, text: [
                         "Adhaar number ",

@@ -1,6 +1,7 @@
 import 'package:brahminapp/app/create_profile/create_profile.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/auth.dart';
+import 'package:brahminapp/services/media_querry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +20,12 @@ class SelectLanguage extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => Provider<AuthBase>(
-                      create: (context)=>Auth(),
-                      child: CreateProfile(
+                          create: (context) => Auth(),
+                          child: CreateProfile(
                             uid: userId!.uid,
                             language: Language(language: language).getCode,
                           ),
-                    )));
+                        )));
               },
               child: Container(
                 padding: EdgeInsets.only(top: 8, bottom: 8),
@@ -60,23 +61,23 @@ class SelectLanguage extends StatelessWidget {
                   TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
             )),
             SizedBox(
-              height: 50,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             languageTile("English"),
             SizedBox(
-              height: 20,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             languageTile("हिन्दी"),
             SizedBox(
-              height: 20,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             languageTile("বাঙ্গালী"),
             SizedBox(
-              height: 20,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             languageTile("தமிழ்"),
             SizedBox(
-              height: 20,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             languageTile("తెలుగు"),
           ],

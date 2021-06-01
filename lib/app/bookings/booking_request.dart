@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/bookings/booking_tile.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -12,7 +13,6 @@ class BookingRequest extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot>? snapshot;
   final language;
   final UserId? userId;
-
   const BookingRequest({Key? key, this.snapshot, this.userId, this.language})
       : super(key: key);
 
@@ -127,13 +127,13 @@ class BookingRequest extends StatelessWidget {
                                 tid: tid,
                                 bookingAccepted: true);
                             //TODO: botToast
-                           /* BotToast.showText(text: Language(code:language, text: [
+                            BotToast.showText(text: Language(code:language, text: [
                               "Accepted ",
                               "स्वीकार किया ",
                               "স্বীকৃত ",
                               "ஏற்றுக்கொள்ளப்பட்டது ",
                               "ఆమోదించబడిన "
-                            ]).getText,);*/
+                            ]).getText,);
                           },
                         ),
                         CustomRaisedButton(
@@ -159,14 +159,13 @@ class BookingRequest extends StatelessWidget {
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: false);
-                            //TODO: botToast
-                           /* BotToast.showText(text:  Language(code:language, text: [
+                            BotToast.showText(text:  Language(code:language, text: [
                               "Rejected ",
                               "अस्वीकृत ",
                               "প্রত্যাখ্যাত ",
                               "நிராகரிக்கப்பட்டது ",
                               "తిరస్కరించబడింది "
-                            ]).getText,);*/
+                            ]).getText,);
                           },
                         )
                       ],

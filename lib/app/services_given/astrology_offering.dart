@@ -18,8 +18,8 @@ class AstroOffering extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            //backgroundColor: Colors.transparent,
+          showModalBottomSheet(
+            backgroundColor: Colors.transparent,
             context: context,
             builder: (context) {
               return Container(

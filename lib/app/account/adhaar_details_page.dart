@@ -45,7 +45,7 @@ class AdhaarDetailsPage extends StatelessWidget {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 actions: [
-                  ElevatedButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditAdhaarDetails(
                         language: language,

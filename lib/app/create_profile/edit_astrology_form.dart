@@ -1,3 +1,4 @@
+import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/common_widgets/custom_multi_select_file.dart';
 import 'package:brahminapp/services/database.dart';
@@ -55,75 +56,61 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
       value: "7",
     ),
   ];
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
+      value: 'Hindi',
+      child: Text('Hindi'),
+    ),
+    DropdownMenuItem(
+      value: 'English',
+      child: Text('English'),
+    ),
+    DropdownMenuItem(
+      value: 'Kannada',
+      child: Text('Kannada'),
+    ),
+    DropdownMenuItem(
+      value: 'Malayalam',
+      child: Text('Malayalam'),
+    ),
+    DropdownMenuItem(
+      value: 'Odia',
+      child: Text('Odia'),
+    ),
+    DropdownMenuItem(
+      value: 'Punjabi',
+      child: Text('Punjabi'),
+    ),
+    DropdownMenuItem(
+      value: 'Gujarati',
+      child: Text('Gujarati'),
+    ),
+    DropdownMenuItem(
+      value: 'Urdu',
+      child: Text('Urdu'),
+    ),
+    DropdownMenuItem(
+      value: 'Tamil',
+      child: Text('Tamil'),
+    ),
+    DropdownMenuItem(
+      value: 'Telugu',
+      child: Text('Telugu'),
+    ),
+    DropdownMenuItem(
+      value: 'Marathi',
+      child: Text('Marathi'),
+    ),
+    DropdownMenuItem(
+      value: 'Bengali',
+      child: Text('Bengali'),
+    ),
+  ];
 
- /* List<MultipleSelectItem> elements = [
-    MultipleSelectItem.build(
-      value: 1,
-      display: 'Hindi',
-      content: 'Hindi',
-    ),
-    MultipleSelectItem.build(
-      value: 2,
-      display: 'English',
-      content: 'English',
-    ),
-    MultipleSelectItem.build(
-      value: 3,
-      display: 'Kannada',
-      content: 'Kannada',
-    ),
-    MultipleSelectItem.build(
-      value: 4,
-      display: 'Malayalam',
-      content: 'Malayalam',
-    ),
-    MultipleSelectItem.build(
-      value: 5,
-      display: 'Odia',
-      content: 'Odia',
-    ),
-    MultipleSelectItem.build(
-      value: 6,
-      display: 'Punjabi',
-      content: 'Punjabi',
-    ),
-    MultipleSelectItem.build(
-      value: 7,
-      display: 'Gujarati',
-      content: 'Gujarati',
-    ),
-    MultipleSelectItem.build(
-      value: 8,
-      display: 'Urdu',
-      content: 'Urdu',
-    ),
-    MultipleSelectItem.build(
-      value: 9,
-      display: 'Tamil',
-      content: 'Tamil',
-    ),
-    MultipleSelectItem.build(
-      value: 10,
-      display: 'Telugu',
-      content: 'Telugu',
-    ),
-    MultipleSelectItem.build(
-      value: 11,
-      display: 'Marathi',
-      content: 'Marathi',
-    ),
-    MultipleSelectItem.build(
-      value: 12,
-      display: 'Bengali',
-      content: 'Bengali',
-    ),
-  ];*/
-
-  List _selectedValues = [];
+  List<int> _selectedValues = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     messagePrice =
         widget.snapshot == null ? null : widget.snapshot!.data!.get("chat");
     audioPrice =
@@ -141,6 +128,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         : widget.snapshot!.data!.get("experience").toString();
     languages =
         widget.snapshot == null ? "" : widget.snapshot!.data!.get("language");
+
     super.initState();
   }
 
@@ -156,10 +144,9 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
   _submit() {
     if (_validateAndSaveForm()) {
       String string = "";
-      //TODO: multiple dropdown
-     /* for (int i = 0; i < _selectedValues.length; i++) {
-        string = elements[i].content + "," + string;
-      }*/
+      for (int i = 0; i < _selectedValues.length; i++) {
+        string = items[_selectedValues[i]].value + ", " + string;
+      }
       FireStoreDatabase(uid: widget.uid).updateData(data: {
         "chat": messagePrice,
         "call": audioPrice,
@@ -170,11 +157,16 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         "astrologer": true,
         "language": string,
         "index": 2,
-        'online': false,
-        'chatOk': false,
-        'callOk': false,
-        'videoOk': false,
-        'coins':0
+        'online': true,
+        'chatOk': true,
+        'callOk': true,
+        'videoOk': true,
+      }).whenComplete((){
+        if(widget.snapshot==null){
+          FireStoreDatabase(uid: widget.uid).updateData(data: {
+            'coins': 0
+          });
+        }
       }).whenComplete(() {
         FirebaseFirestore.instance
             .collection('Avaliable_pundit/${widget.uid}/astro')
@@ -194,6 +186,9 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
 
   @override
   Widget build(BuildContext context) {
+    print("TTTTTTTTTTTTT");
+    List<int> gh=langFung(languages!);
+    print(gh);
     List<DropdownMenuItem> dropdownMenuItemExperience =
         List<DropdownMenuItem>.generate(
             80,
@@ -201,12 +196,12 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                   child: Text(
                     "${index + 2}" +
                         "${Language(code: widget.language, text: [
-                          "Year ",
-                          "साल ",
-                          "বছর ",
-                          "ஆண்டு ",
-                          "సంవత్సరం "
-                        ]).getText}",
+                              "Year ",
+                              "साल ",
+                              "বছর ",
+                              "ஆண்டு ",
+                              "సంవత్సరం "
+                            ]).getText}",
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                   value: "${index + 2} Years",
@@ -226,7 +221,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               _submit();
             },
@@ -254,7 +249,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20),
+        padding: /*widget.snapshot!=null?EdgeInsets.only(top: 20):*/ EdgeInsets.only(top: 20,left: 10,right: 10,bottom: 20),
         child: Form(
           key: _formKeyNK,
           child: SingleChildScrollView(
@@ -441,7 +436,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                               }
                               return null;
                             },
-                            //value: experience??"",
+                            value: experience,
                             decoration: InputDecoration(
                                 enabledBorder: InputBorder.none),
                             icon: Icon(
@@ -460,7 +455,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                   ),
                 ),
                 SizedBox(
-                  height: height(100),
+                  height: height(10),
                 ),
                 CustomContainer(
                   radius: 10,
@@ -484,23 +479,31 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                               color: Colors.black54,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.bold)),
-                     /* CustomMultipleDropDown(
+                      SearchChoices.multiple(
                         icon: Icon(
                           Icons.arrow_drop_down_circle_outlined,
                           color: Colors.deepOrangeAccent,
                         ),
-                        placeholder: Language(code: widget.language, text: [
-                          "language ",
-                          "भाषा ",
-                          "ভাষা ",
-                          "மொழி ",
-                          "భాష "
-                        ]).getText,
-                        disabled: false,
-                        values: _selectedValues,
-
-                        elements: [],
-                      ),*/
+                        items: items,
+                        underline: SizedBox(),
+                        selectedItems: _selectedValues,
+                        hint: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text("Select any"),
+                        ),
+                        searchHint: "Select any",
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedValues = value;
+                          });
+                        },
+                        closeButton: (selectedItems) {
+                          return (selectedItems.isNotEmpty
+                              ? "Save ${selectedItems.length == 1 ? '"' + items[selectedItems.first].value.toString() + '"' : '(' + selectedItems.length.toString() + ')'}"
+                              : "Save without selection");
+                        },
+                        isExpanded: true,
+                      ),
                     ],
                   ),
                 ),
@@ -513,6 +516,7 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(color: Colors.black38),
                         border: InputBorder.none,
                         labelText: Language(code: widget.language, text: [
                           "Expertise ",
@@ -547,19 +551,42 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
                 ),
                 CustomContainer(
                     radius: 10,
-                    child: CustomTextField(
-                      onSaved: (newValue) {},
-                      lableText: Language(code: widget.language, text: [
-                        "Additional description ",
-                        "अतिरिक्त विवरण ",
-                        "অতিরিক্ত বিবরণ ",
-                        "கூடுதல் விளக்கம் ",
-                        "అదనపు వివరణ "
-                      ]).getText,
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        labelStyle: TextStyle(color: Colors.black38),
+                        border: InputBorder.none,
+                        labelText: Language(code: widget.language, text: [
+                          "Additional description ",
+                          "अतिरिक्त विवरण ",
+                          "অতিরিক্ত বিবরণ ",
+                          "கூடுதல் விளக்கம் ",
+                          "అదనపు వివరణ "
+                        ]).getText,
+                      ),
                       initialValue: description,
+
+                      onSaved: (value) {
+                        setState(() {
+                          description = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText;
+                        }
+                        return null;
+                      }, //_benefits = value,
                     )),
                 SizedBox(
-                  height: height(10),
+                  height: height(20),
                 ),
                 /*Row(
                   children: [
@@ -683,4 +710,27 @@ class _EditAstrologyFormState extends State<EditAstrologyForm> {
       ),
     );
   }
+}
+
+List<int> langFung(String lang) {
+  print(lang);
+  List<String> str = lang.split(",");
+  print(str);
+  print(str.length);
+  List<int> list = [];
+  for (int i = 0; i < str.length; i++) {
+    if (str[i] == 'Hindi') list.add(0);
+    if (str[i] == 'English') list.add(1);
+    if (str[i] == 'Kannada') list.add(2);
+    if (str[i] == 'Malayalam') list.add(3);
+    if (str[i] == 'Odia') list.add(4);
+    if (str[i] == 'Punjabi') list.add(5);
+    if (str[i] == 'Gujarati') list.add(6);
+    if (str[i] == 'Urdu') list.add(7);
+    if (str[i] == 'Tamil') list.add(8);
+    if (str[i] == 'Telugu') list.add(9);
+    if (str[i] == 'Marathi') list.add(10);
+    if (str[i] == 'Bengali') list.add(11);
+  }
+  return list;
 }

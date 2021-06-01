@@ -20,10 +20,6 @@ class BankDetailsPage extends StatelessWidget {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    /* double width(double width) {
-      return MagicScreen(context: context, width: width).getWidth;
-    }*/
-
     String? name;
     String? bankName;
     // ignore: non_constant_identifier_names
@@ -52,7 +48,6 @@ class BankDetailsPage extends StatelessWidget {
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              toolbarHeight: height(30),
               /*  title: Text(
                 'Bank details',
                 style: TextStyle(
@@ -61,7 +56,7 @@ class BankDetailsPage extends StatelessWidget {
                     fontSize: 18),
               ),*/
               actions: [
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditBankDetails(
                       uid: uid,
@@ -71,7 +66,7 @@ class BankDetailsPage extends StatelessWidget {
                       accountNumber: accountNumber,
                       language: language,
                     ),));
-                   /* showMaterialModalBottomSheet(
+                    showModalBottomSheet(
                       backgroundColor: Colors.transparent,
                       context: context,
                       builder: (context) {
@@ -93,7 +88,7 @@ class BankDetailsPage extends StatelessWidget {
                           ),
                         );
                       },
-                    );*/
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

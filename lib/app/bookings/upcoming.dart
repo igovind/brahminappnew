@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/services_given/claim_reward.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/common_widgets/hexa_color.dart';
@@ -59,8 +60,7 @@ class Upcoming extends StatelessWidget {
                   var url = '$link';
                   if (await canLaunch(url)) {
                     await launch(url);
-                    //TODO: botToast
-                  /*  BotToast.showText(
+                      BotToast.showText(
                       text: Language(code: language, text: [
                         "Google Maps is opening ",
                         "Google मानचित्र खुल रहा है ",
@@ -68,7 +68,7 @@ class Upcoming extends StatelessWidget {
                         "கூகிள் மேப்ஸ் திறக்கிறது ",
                         "గూగుల్ మ్యాప్స్ తెరవబడుతున్నాయి "
                       ]).getText,
-                    );*/
+                    );
                   } else {
                     throw 'Could not launch $url';
                   }
@@ -134,17 +134,17 @@ class Upcoming extends StatelessWidget {
                             color: HexColor("#540D6E"),
                             //borderRadius: 12,
                             height: height(40),
-                            onPressed: () => showDialog(
+                            onPressed: () => showModalBottomSheet(
                                 context: context,
-        builder:(context)=> ClaimReward(
-                                  realOTP: otp,
-                                  uid: userId!.uid,
-                                  tuid: tuid,
-                                  samagri: samagri,
-                                  net: net,
-                                  samagriPrice: samagriPrice,
-                                  serviceId: serviceId,
-                                ))),
+                                builder: (context) => ClaimReward(
+                                      realOTP: otp,
+                                      uid: userId!.uid,
+                                      tuid: tuid,
+                                      samagri: samagri,
+                                      net: net,
+                                      samagriPrice: samagriPrice,
+                                      serviceId: serviceId,
+                                    ))),
                         SizedBox(
                           width: height(10),
                         ),
@@ -163,8 +163,7 @@ class Upcoming extends StatelessWidget {
                                 var url = 'tel://$contact';
                                 if (await canLaunch(url)) {
                                   await launch(url);
-                                  //TODO: botToast
-                                  /*BotToast.showText(text: "calling $contact");*/
+                                  BotToast.showText(text: "calling $contact");
                                 } else {
                                   throw 'Could not launch $url';
                                 }

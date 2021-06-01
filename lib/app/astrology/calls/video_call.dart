@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:brahminapp/app/astrology/calls/settings.dart';
 import 'package:brahminapp/services/database.dart';
+import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +16,25 @@ class CallPage extends StatefulWidget {
   //final ClientRole role;
   final String? userId;
   final String? bid;
+  final name;
+  final leftHand;
+  final rightHand;
+  final kundali;
+  final time;
+  final place;
 
   /// Creates a call page with given channel name.
-  const CallPage({Key? key, this.channelName, this.userId, this.bid})
+  const CallPage(
+      {Key? key,
+      this.channelName,
+      this.userId,
+      this.bid,
+      this.name,
+      this.leftHand,
+      this.rightHand,
+      this.kundali,
+      this.time,
+      this.place})
       : super(key: key);
 
   @override
@@ -67,8 +84,7 @@ class _CallPageState extends State<CallPage> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = VideoDimensions(1920, 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
-    await _engine.joinChannel(null, "ifQJEBLW87THMcuSaypDAuCjJlw2", null, 0);
-
+    await _engine.joinChannel(null, widget.channelName!, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -154,6 +170,29 @@ class _CallPageState extends State<CallPage> {
     );
   }
 
+  Widget _expandedSmallVideoRow(List<Widget> views) {
+    final wrappedViews = views.map<Widget>(_videoView).toList();
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        child: Container(
+          margin: EdgeInsets.only(
+              top: MagicScreen(context: context, height: 30).getHeight,
+              right: MagicScreen(context: context, width: 10).getWidth),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 5)]),
+          // padding: EdgeInsets.all(30),
+          height: MagicScreen(context: context,height: 110).getHeight,
+          width: MagicScreen(context: context,width: 100).getWidth,
+          child: Row(
+            children: wrappedViews,
+          ),
+        ),
+      ),
+    );
+  }
+
   /// Video layout wrapper
   Widget _viewRows() {
     final views = _getRenderViews();
@@ -165,10 +204,220 @@ class _CallPageState extends State<CallPage> {
         ));
       case 2:
         return Container(
-            child: Column(
+            child: Stack(
           children: <Widget>[
-            _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
+            _expandedVideoRow([views[1]]),
+            Align(
+                alignment: Alignment.topRight,
+                child: _expandedSmallVideoRow([views[0]])),
+            Positioned(
+                top: MagicScreen(context: context,height: 30).getHeight,
+                left: MagicScreen(context: context,width: 10).width,
+                child: Column(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black54, blurRadius: 5)
+                            ],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${widget.name}",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black54, blurRadius: 5)
+                            ],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${widget.time}",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    SizedBox(
+                      height: MagicScreen(context: context,height: 5).getHeight,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black54, blurRadius: 5)
+                            ],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${widget.place}",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    SizedBox(
+                      height: MagicScreen(context: context,height: 5).getHeight,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) => Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  height: MagicScreen(context: context,height: 300).getHeight,
+                                  child: Column(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        iconSize: MagicScreen(context: context,height: 30).getHeight,
+                                        icon: Icon(
+                                            Icons.keyboard_arrow_down_sharp),
+                                        color: Colors.black54,
+                                      ),
+                                      widget.kundali == null
+                                          ? Center(
+                                              child: Text("Kundali not given"))
+                                          : Container(
+                                              height: MagicScreen(context: context,height: 250).getHeight,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          widget.kundali))),
+                                            )
+                                    ],
+                                  ),
+                                ));
+                      },
+                      child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black54, blurRadius: 5)
+                              ]),
+                          child: Text(
+                            "Kundali",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
+                    SizedBox(
+                      height: MagicScreen(context: context,height: 5).getHeight,
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) => Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      height: MagicScreen(context: context,height: 700).getHeight,
+                                      child: Column(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            iconSize: MagicScreen(context: context,height: 30).getHeight,
+                                            icon: Icon(Icons
+                                                .keyboard_arrow_down_sharp),
+                                            color: Colors.black54,
+                                          ),
+                                          widget.leftHand == null
+                                              ? Center(
+                                                  child: Text("Not available"),
+                                                )
+                                              : Container(
+                                                  height: MagicScreen(context: context,height: 500).getHeight,
+                                                  decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              widget
+                                                                  .leftHand))),
+                                                )
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color: Colors.blueAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black54, blurRadius: 5)
+                                  ]),
+                              child: Text(
+                                "Left Hand",
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ),
+                        SizedBox(
+                          width: MagicScreen(context: context,height: 10).getHeight,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) => Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      height: MagicScreen(context: context,height: 700).getHeight,
+                                      child: Column(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            iconSize: MagicScreen(context: context,height: 30).getHeight,
+                                            icon: Icon(Icons
+                                                .keyboard_arrow_down_sharp),
+                                            color: Colors.black54,
+                                          ),
+                                          widget.rightHand == null
+                                              ? Center(
+                                                  child: Text("Not available"),
+                                                )
+                                              : Container(
+                                                  height: MagicScreen(context: context,height: 500).getHeight,
+                                                  decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              widget
+                                                                  .rightHand))),
+                                                )
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color: Colors.blueAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black54, blurRadius: 5)
+                                  ]),
+                              child: Text(
+                                "Right Hand",
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ),
+                      ],
+                    )
+                  ],
+                )),
           ],
         ));
       case 3:
@@ -293,8 +542,11 @@ class _CallPageState extends State<CallPage> {
   }
 
   void _onCallEnd(BuildContext context) async {
-    FirebaseFirestore.instance.collection('calls/${widget.userId}/${widget.bid}').get().then((value) {
-      for (DocumentSnapshot ds in value.docs){
+    FirebaseFirestore.instance
+        .collection('calls/${widget.userId}/${widget.bid}')
+        .get()
+        .then((value) {
+      for (DocumentSnapshot ds in value.docs) {
         ds.reference.delete();
       }
     });
@@ -319,10 +571,10 @@ class _CallPageState extends State<CallPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       // ignore: missing_return
-      onWillPop: ()async{
+      onWillPop: () async {
         _onCallEnd(context);
         return true;
-        },
+      },
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Center(

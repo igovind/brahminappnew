@@ -1,4 +1,3 @@
-import 'package:brahminapp/app/astrology/calls/index.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/hexa_color.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -58,16 +57,9 @@ class _HomePageFolderState extends State<HomePageFolder> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepOrangeAccent,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => IndexPage(
-                    callType: 'Video',
-                    userId: widget.userId,
-                    channelName: "ifQJEBLW87THMcuSaypDAuCjJlw2",
-                  )));
-      /*    showDialog(
-           // backgroundColor: Colors.transparent,
+
+          showModalBottomSheet(
+            backgroundColor: Colors.transparent,
             context: context,
             builder: (context) {
               return Container(
@@ -87,7 +79,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                     )),
               );
             },
-          );*/
+          );
         },
         child: Icon(Icons.message),
       ),
@@ -270,7 +262,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                     style: TextStyle(
                                         color: Colors.green, fontSize: 12),
                                   ),
-                                  ElevatedButton(
+                                  TextButton(
                                       onPressed: () {
                                         setState(() {
                                           claimed = true;
@@ -491,8 +483,8 @@ class CustomGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(
-         // backgroundColor: Colors.transparent,
+        showModalBottomSheet(
+          backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Container(
@@ -532,7 +524,7 @@ class CustomGridTile extends StatelessWidget {
                   "$name",
                   overflow: TextOverflow.clip,
                   style: TextStyle(
-                      fontSize: 12,
+                      fontSize: MagicScreen(context: context,height: 10).getHeight,
                       fontWeight: FontWeight.bold,
                       color: HexColor("#70201C")),
                 ),

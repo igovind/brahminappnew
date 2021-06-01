@@ -173,11 +173,10 @@ class _EditProfileState extends State<EditProfile> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          toolbarHeight: 30,
           actions: [
             loading
                 ? SizedBox()
-                : ElevatedButton(
+                : TextButton(
                     onPressed: () {
                       _submit();
                     },

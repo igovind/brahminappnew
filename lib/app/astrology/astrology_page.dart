@@ -1,8 +1,10 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:search_choices/search_choices.dart';
+
 import '../../common_widgets/custom_multi_select_file.dart';
 import '../languages.dart';
 
@@ -48,79 +50,56 @@ class _AstrologyPageState extends State<AstrologyPage> {
 
   List<DropdownMenuItem> items = [
     DropdownMenuItem(
-      value: 1,
+      value: 'Hindi',
       child: Text('Hindi'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'English',
       child: Text('English'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Kannada',
       child: Text('Kannada'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Malayalam',
       child: Text('Malayalam'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Odia',
       child: Text('Odia'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Punjabi',
       child: Text('Punjabi'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Gujarati',
       child: Text('Gujarati'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Urdu',
       child: Text('Urdu'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Tamil',
       child: Text('Tamil'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Telugu',
       child: Text('Telugu'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Marathi',
       child: Text('Marathi'),
     ),
     DropdownMenuItem(
-      value: 1,
+      value: 'Bengali',
       child: Text('Bengali'),
     ),
   ];
 
   List<int> _selectedValues = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    messagePrice =
-        widget.snapshot == null ? null : widget.snapshot!.data!.get("chat");
-    audioPrice =
-        widget.snapshot == null ? null : widget.snapshot!.data!.get("call");
-    videoPrice =
-        widget.snapshot == null ? null : widget.snapshot!.data!.get("video");
-    description = widget.snapshot == null
-        ? null
-        : widget.snapshot!.data!.get("description");
-    expertise = widget.snapshot == null
-        ? null
-        : widget.snapshot!.data!.get("expertise");
-    experience = widget.snapshot == null
-        ? null
-        : widget.snapshot!.data!.get("experience").toString();
-    languages =
-        widget.snapshot == null ? "" : widget.snapshot!.data!.get("language");
-    super.initState();
-  }
 
   bool _validateAndSaveForm() {
     final form = _formKeyNK.currentState!;
@@ -134,10 +113,9 @@ class _AstrologyPageState extends State<AstrologyPage> {
   _submit() {
     if (_validateAndSaveForm() && _selectedValues.isNotEmpty) {
       String string = "";
-      //TODO: multiple
-      /*   for (int i = 0; i < _selectedValues.length; i++) {
-        string = elements[i].content + "," + string;
-      }*/
+         for (int i = 0; i < _selectedValues.length; i++) {
+           string= string+items[_selectedValues[i]].value;
+      }
       FirebaseFirestore.instance
           .doc("punditUsers/${widget.uid}/user_profile/user_data")
           .update({
@@ -150,6 +128,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
         "astrologer": true,
         "language": string,
         "index": 2,
+        'coins':0,
         'online': true,
         'chatOk': true,
         'callOk': true,
@@ -189,8 +168,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
       });
     } else {
       if (_selectedValues.isEmpty) {
-        //TODO: botToast
-        /* BotToast.showText(
+         BotToast.showText(
           text: Language(code: widget.language, text: [
             "Please select your languages ",
             "कृपया अपनी भाषाओं का चयन करें ",
@@ -198,7 +176,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
             "உங்கள் மொழிகளைத் தேர்ந்தெடுக்கவும் ",
             "దయచేసి మీ భాషలను ఎంచుకోండి "
           ]).getText,
-        );*/
+        );
       }
     }
   }
@@ -309,7 +287,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                         }
                                         return null;
                                       },
-                                      value: messagePrice,
+                                    //  value: messagePrice,
                                       decoration: InputDecoration(
                                           enabledBorder: InputBorder.none),
                                       icon: Icon(
@@ -356,7 +334,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                         }
                                         return null;
                                       },
-                                      value: audioPrice,
+                                     // value: audioPrice,
                                       decoration: InputDecoration(
                                           enabledBorder: InputBorder.none),
                                       icon: Icon(
@@ -403,7 +381,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                         }
                                         return null;
                                       },
-                                      value: videoPrice,
+                                     // value: videoPrice,
                                       decoration: InputDecoration(
                                           enabledBorder: InputBorder.none),
                                       icon: Icon(
@@ -456,7 +434,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                     }
                                     return null;
                                   },
-                                  value: experience,
+                                //  value: experience,
                                   decoration: InputDecoration(
                                       enabledBorder: InputBorder.none),
                                   icon: Icon(
@@ -508,6 +486,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                               items: items,
                               underline: SizedBox(),
                               selectedItems: _selectedValues,
+
                               hint: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: Text("Select any"),
@@ -518,11 +497,12 @@ class _AstrologyPageState extends State<AstrologyPage> {
                                   _selectedValues = value;
                                 });
                               },
-                              closeButton: (selectedItems) {
+
+                        /*      closeButton: (selectedItems) {
                                 return (selectedItems.isNotEmpty
                                     ? "Save ${selectedItems.length == 1 ? '"' + items[selectedItems.first].value.toString() + '"' : '(' + selectedItems.length.toString() + ')'}"
                                     : "Save without selection");
-                              },
+                              },*/
                               isExpanded: true,
                             ),
                           ],
@@ -536,8 +516,10 @@ class _AstrologyPageState extends State<AstrologyPage> {
                           child: TextFormField(
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
+
                             decoration: InputDecoration(
                               border: InputBorder.none,
+                              labelStyle: TextStyle(color: Colors.black54),
                               labelText: Language(code: widget.language, text: [
                                 "Expertise ",
                                 "विशेषज्ञता ",
@@ -575,6 +557,7 @@ class _AstrologyPageState extends State<AstrologyPage> {
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             decoration: InputDecoration(
+                              labelStyle: TextStyle(color: Colors.black54),
                               border: InputBorder.none,
                               labelText: Language(code: widget.language, text: [
                                 "Additional description ",

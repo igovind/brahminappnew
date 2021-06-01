@@ -92,14 +92,13 @@ class _EditBankDetailsState extends State<EditBankDetails> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+       // iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        toolbarHeight: height(30),
         actions: [
           widget.check == null
               ? SizedBox()
-              : ElevatedButton(
+              : TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {"ready": true});
@@ -110,7 +109,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                         color: Colors.deepOrangeAccent,
                         fontWeight: FontWeight.bold),
                   )),
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               _submit();
             },

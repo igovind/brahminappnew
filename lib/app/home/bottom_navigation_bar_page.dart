@@ -1,18 +1,13 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/account_page.dart';
-import 'package:brahminapp/app/astrology/calls/index.dart';
 import 'package:brahminapp/app/astrology/edit_astrology_price.dart';
 import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/services_given/services_page.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import 'package:circle_bottom_navigation_bar/circle_bottom_navigation_bar.dart';
 import 'package:circle_bottom_navigation_bar/widgets/tab_data.dart';
-
 import '../languages.dart';
 import 'home_page2.dart';
 
@@ -44,7 +39,6 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
           snapshot: tabImageSnapshot,
           userDataSnapshot: userDataSnapshot,
         );
-        break;
 /*      case 1:
         return NewsFeedSextion(
           uid: null,
@@ -55,20 +49,18 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
           language: widget.language,
           userId: widget.user,
         );
-        break;
+
       case 2:
         return ServicesPage(
           language: widget.language,
           userId: widget.user,
         );
-        break;
       case 3:
         return EditAstrologyPrices(
           language: widget.language,
           snapshot: userDataSnapshot,
           userId: widget.user,
         );
-        break;
       case 4:
         return StreamBuilder<DocumentSnapshot>(
             stream: FireStoreDatabase(uid: widget.user!.uid).getAdhaarDetails,
@@ -95,7 +87,6 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
                     );
                   });
             });
-        break;
     }
     return Text("error");
   }
@@ -154,132 +145,6 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
       ),
     ];
   }
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-/*    void handleRouting(RemoteNotification notification) {
-      //final database = Provider.of<DatabaseL>(context, listen: false);
-      switch (notification.) {
-        case 'Booking':
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => BookingsPage()));
-          break;
-        case 'VCall':
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => IndexPage(
-                        channelName: notification,
-                      )));
-          break;
-      }
-    }*/
-
-    FirebaseMessaging.onMessage.listen((message) {
-      final notification = message.notification;
-      final notificationData = message.data;
-      print(
-          "${message.notification!.title}|||| ${message.data}??????????????????????????????????????????");
-      switch (message.data['type']) {
-        case 'Booking':
-          BotToast.showSimpleNotification(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BookingsPage()));
-            },
-            animationDuration: Duration(seconds: 2),
-            hideCloseButton: true,
-            title: notification!.title as String,
-            subTitle: notification.body as String,
-            duration: Duration(seconds: 10),
-          );
-          break;
-        case 'Message':
-          BotToast.showSimpleNotification(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BookingsPage()));
-            },
-            animationDuration: Duration(seconds: 2),
-            hideCloseButton: true,
-            title: notification!.title as String,
-            subTitle: notification.body as String,
-            duration: Duration(seconds: 10),
-          );
-          break;
-        case 'VCall':
-          BotToast.showSimpleNotification(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => IndexPage(
-                            channelName: notificationData['channel'],
-                            callType: notificationData['call_type'],
-                            userId: widget.user,
-                          )));
-            },
-            animationDuration: Duration(seconds: 2),
-            hideCloseButton: true,
-            title: notification!.title as String,
-            subTitle: notification.body as String,
-            duration: Duration(seconds: 10),
-          );
-      }
-      FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        final type = message.data['type'];
-        switch (type) {
-          case 'Booking':
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => BookingsPage()));
-            break;
-          case 'VCall':
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => IndexPage(
-                      channelName: notificationData['channel'],
-                      callType: notificationData['call_type'],
-                      userId: widget.user,
-                    )));
-            break;
-        }
-      });
-      FirebaseMessaging.onBackgroundMessage((message) async{
-        final type = message.data['type'];
-        switch (type) {
-          case 'Booking':
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => BookingsPage()));
-            break;
-          case 'VCall':
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => IndexPage(
-                      channelName: notificationData['channel'],
-                      callType: notificationData['call_type'],
-                      userId: widget.user,
-                    )));
-            break;
-        }
-        return null;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -329,3 +194,4 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
     );
   }
 }
+

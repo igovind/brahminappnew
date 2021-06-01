@@ -70,7 +70,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ElevatedButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   astrology = true;
@@ -99,7 +99,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ),
                               ),
                             ),
-                            ElevatedButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   _currentIndex=_currentIndex! +1;
@@ -139,7 +139,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           return Column(
             children: [
               Container(height: 620, child: EditAdhaarDetails(uid: widget.uid)),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 3});
@@ -161,7 +161,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 4});
@@ -184,7 +184,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'initialIndex': 5});
@@ -207,7 +207,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   uid: widget.uid,
                 ),
               ),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
                         .updateData(data: {'ready': true});

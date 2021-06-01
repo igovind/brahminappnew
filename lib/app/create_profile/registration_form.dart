@@ -19,7 +19,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:brahminapp/app/languages.dart';
-import 'package:search_choices/search_choices.dart';
 
 String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
@@ -111,8 +110,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           setState(() {
             locationLoading = false;
           });
-          //TODO: botToast
-          /*BotToast.showText(text: "Location is updated");*/
+          BotToast.showText(text: "Location is updated");
         });
       });
     }
@@ -462,7 +460,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           child: TextFormField(
                               maxLength: 30,
                               decoration: InputDecoration(
-                                hoverColor: Colors.deepOrangeAccent,
+                                  hoverColor: Colors.deepOrangeAccent,
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   border: InputBorder.none,
@@ -575,7 +573,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
-                         CustomContainer(
+                        CustomContainer(
                             radius: 10,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -604,23 +602,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       ));
                                     }
                                     return SearchChoices.single(
-                                      key: UniqueKey(),
-
-                                      validator: ( value) {
-                                        if (value==null) {
-                                          return Language(
-                                              code: widget.language,
-                                              text: [
-                                                "This field is required",
-                                                "यह फ़ील्ड आवश्यक है",
-                                                "ঘরটি অবশ্যই পূরণ করতে হবে",
-                                                "இந்த புலம் தேவை",
-                                                "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
-                                              ]).getText;
-                                        }
-                                        return null;
-                                      },
-
                                       underline: SizedBox(),
                                       icon: Icon(
                                         Icons.arrow_drop_down_circle_outlined,
@@ -637,7 +618,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             "உங்கள் மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
                                             "మీ రాష్ట్రాన్ని ఎంచుకోండి"
                                           ]).getText,
-                                     // lableColor: Colors.black54,
+                                      // lableColor: Colors.black54,
                                       isExpanded: true,
                                       //icon: Icon(Icons.description),
                                       displayClearIcon: false,
@@ -703,7 +684,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)
                                 .getHeight),
-                        /*CustomContainer(
+                        CustomContainer(
                           radius: 10,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -729,12 +710,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       child: Text(name),
                                     ));
                                   }
-                                  return CustomSearchableDropdown.single(
+                                  return SearchChoices.single(
                                     disabledHint: true,
-                                    validator: (String value) {
-                                      value = value == null
-                                          ? UserDetails(snapshot: null).type!
-                                          : value;
+                                    validator: (value) {
                                       if (value == null) {
                                         return Language(
                                             code: widget.language,
@@ -756,14 +734,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                       "பண்டிட் வகையைத் தேர்ந்தெடுக்கவும் ",
                                       "పండిట్ రకాన్ని ఎంచుకోండి "
                                     ]).getText,
-                                    lableColor: Colors.black54,
+                                    // lableColor: Colors.black54,
                                     icon: Icon(
                                       Icons.arrow_drop_down_circle_outlined,
                                       color: Colors.deepOrangeAccent,
                                     ),
                                     underline: SizedBox(),
                                     items: typeList,
-
+                                    value: punditType,
                                     isExpanded: true,
                                     //icon: Icon(Icons.description),
                                     displayClearIcon: false,
@@ -785,7 +763,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   );
                                 }),
                           ),
-                        ),*/
+                        ),
                         SizedBox(
                             height: MagicScreen(context: context, height: 30)
                                 .getHeight),

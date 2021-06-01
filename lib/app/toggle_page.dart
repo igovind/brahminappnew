@@ -6,11 +6,9 @@ import 'package:brahminapp/app/select_language_page.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class TogglePage extends StatefulWidget {
   final UserId? user;
@@ -23,17 +21,6 @@ class TogglePage extends StatefulWidget {
 
 class _TogglePageState extends State<TogglePage> {
   @override
-  void initState() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
         stream: FireStoreDatabase(uid: widget.user!.uid).getUserData,
@@ -43,9 +30,6 @@ class _TogglePageState extends State<TogglePage> {
           }
 
           if (snapshot.data!.data() == null) {
-            /* return CreateProfile(
-              uid: widget.user.uid,
-            );*/
             return SelectLanguage(
               userId: widget.user,
             );
@@ -57,7 +41,6 @@ class _TogglePageState extends State<TogglePage> {
               uid: widget.user!.uid,
               language: lang,
             );
-
           }
           if (UserDetails(snapshot: snapshot).astrologer!) {
             return ExtBotNavBar(
@@ -75,9 +58,7 @@ class _TogglePageState extends State<TogglePage> {
                   language: lang,
                   userDataSnapshot: snapshot,
                   user: widget.user,
-                )
-                /*  child: NewAddEditPuja(),*/
-                ),
+                )),
           );
         });
   }

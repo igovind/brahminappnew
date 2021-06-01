@@ -105,7 +105,8 @@ Widget _galleryBox(
     int? num}) {
   return GestureDetector(
     onTap: () {
-      showDialog(
+      showModalBottomSheet(
+          backgroundColor: Colors.transparent,
           context: context!,
         builder:(context)=> EditGallery(
             imageUrl: imageUrl,

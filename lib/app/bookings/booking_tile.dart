@@ -10,7 +10,13 @@ class BookingTiles extends StatelessWidget {
   final Widget? child;
   final VoidCallback? onPressLocation;
   final language;
-  const BookingTiles({Key? key, this.snapshot, this.child, this.onPressLocation, this.language})
+
+  const BookingTiles(
+      {Key? key,
+      this.snapshot,
+      this.child,
+      this.onPressLocation,
+      this.language})
       : super(key: key);
 
   @override
@@ -50,9 +56,26 @@ class BookingTiles extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CircularAvatarNetwork(
-                  url: pic,
+                Container(
+                  height: 90,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(pic!)),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 5)
+                      ]),
                 ),
+               /* Container(
+                  height: 60,
+                  //MagicScreen(height: radius, context: context).getHeight,
+                  //width: MagicScreen(width: radius, context: context).getWidth,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(image: NetworkImage(pic!))),
+                ),*/
                 Column(
                   children: <Widget>[
                     Text(client,
@@ -122,13 +145,15 @@ class BookingTiles extends StatelessWidget {
             SizedBox(
               height: height(10),
             ),
-            Text(Language(code:language, text: [
-              "Booking ID: $tid ",
-              "बुकिंग: $tid ",
-              "সংরক্ষণ: $tid ",
-              "பதிவு: $tid  ",
-              "బుకింగ్: $tid  "
-            ]).getText,),
+            Text(
+              Language(code: language, text: [
+                "Booking ID: $tid ",
+                "बुकिंग: $tid ",
+                "সংরক্ষণ: $tid ",
+                "பதிவு: $tid  ",
+                "బుకింగ్: $tid  "
+              ]).getText,
+            ),
             SizedBox(
               height: height(5),
             ),

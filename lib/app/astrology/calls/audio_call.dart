@@ -5,6 +5,7 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/astrology/calls/settings.dart';
 import 'package:brahminapp/services/database.dart';
+import 'package:brahminapp/services/media_querry.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,25 @@ class VoiceCallPage extends StatefulWidget {
   //final ClientRole role;
   final String? userId;
   final String? bid;
+  final time;
+  final place;
+  final kundali;
+  final leftHand;
+  final name;
+  final rightHand;
 
   /// Creates a call page with given channel name.
-  const VoiceCallPage({Key? key, this.channelName, this.userId, this.bid})
+  const VoiceCallPage(
+      {Key? key,
+      this.channelName,
+      this.userId,
+      this.bid,
+      this.time,
+      this.place,
+      this.kundali,
+      this.leftHand,
+      this.rightHand,
+      this.name})
       : super(key: key);
 
   @override
@@ -91,7 +108,6 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
       });
     }, leaveChannel: (stats) {
       setState(() {
-
         _infoStrings.add('onLeaveChannel');
 
         _users.clear();
@@ -117,7 +133,6 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
       FireStoreDatabase(uid: widget.userId).updateData(data: {
         'busy': false,
       });
-
     }, firstRemoteVideoFrame: (uid, width, height, elapsed) {
       setState(() {
         final info = 'firstRemoteVideo: $uid ${width}x $height';
@@ -125,8 +140,6 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
       });
     }));
   }
-
-
 
   /// Toolbar layout
   Widget _toolbar() {
@@ -229,8 +242,11 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   }
 
   void _onCallEnd(BuildContext context) async {
-FirebaseFirestore.instance.collection('calls/${widget.userId}/${widget.bid}').get().then((value) {
-      for (DocumentSnapshot ds in value.docs){
+    FirebaseFirestore.instance
+        .collection('calls/${widget.userId}/${widget.bid}')
+        .get()
+        .then((value) {
+      for (DocumentSnapshot ds in value.docs) {
         ds.reference.delete();
       }
     });
@@ -257,10 +273,10 @@ FirebaseFirestore.instance.collection('calls/${widget.userId}/${widget.bid}').ge
   Widget build(BuildContext context) {
     return WillPopScope(
       // ignore: missing_return
-      onWillPop: ()async{
+      onWillPop: () async {
         _onCallEnd(context);
         return true;
-        } ,
+      },
       child: Scaffold(
         backgroundColor: Colors.white,
         body: StreamBuilder<QuerySnapshot>(
@@ -277,10 +293,174 @@ FirebaseFirestore.instance.collection('calls/${widget.userId}/${widget.bid}').ge
                   children: <Widget>[
                     _panel(),
                     _toolbar(),
-                    Center(
-                      child: CircularAvatarNetwork(
-                        url: image,
-                      ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: MagicScreen(context: context, height: 50)
+                              .getHeight,
+                        ),
+                        Container(
+                          height: MagicScreen(context: context, height: 150)
+                              .getHeight,
+                          decoration: BoxDecoration(
+                              color: Colors.black38,
+                              image:
+                                  DecorationImage(image: NetworkImage(image!)),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(color: Colors.black54, blurRadius: 4)
+                              ]),
+                          // url: image,
+                        ),
+                        SizedBox(
+                          height: MagicScreen(context: context, height: 20)
+                              .getHeight,
+                        ),
+                        Text(
+                          "${widget.name}",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "DOB: ${widget.time}",
+                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                        ),
+                        Text(
+                          "Place of Birth: ${widget.place}",
+                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                        ),
+                        widget.kundali == null
+                            ? Container(
+                                height:
+                                    MagicScreen(context: context, height: 250)
+                                        .getHeight,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black38),
+                                child: Center(
+                                  child: Text("Kundali is not given"),
+                                ),
+                              )
+                            : Container(
+                                height:
+                                    MagicScreen(context: context, height: 250)
+                                        .getHeight,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(widget.kundali))),
+                              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            height: MagicScreen(
+                                                    context: context,
+                                                    height: 400)
+                                                .getHeight,
+                                            child: Column(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  iconSize: MagicScreen(
+                                                          context: context,
+                                                          height: 30)
+                                                      .getHeight,
+                                                  icon: Icon(Icons
+                                                      .keyboard_arrow_down_sharp),
+                                                  color: Colors.black54,
+                                                ),
+                                                widget.leftHand == null
+                                                    ? Center(
+                                                        child: Text(
+                                                            "Not available"),
+                                                      )
+                                                    : Container(
+                                                        height: MagicScreen(
+                                                                context:
+                                                                    context,
+                                                                height: 250)
+                                                            .getHeight,
+                                                        decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    widget
+                                                                        .leftHand))),
+                                                      )
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Text(
+                                  "Left Hand",
+                                  style: TextStyle(
+                                      color: Colors.deepOrangeAccent,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                            TextButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            height: MagicScreen(
+                                                    context: context,
+                                                    height: 400)
+                                                .getHeight,
+                                            child: Column(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  iconSize: MagicScreen(
+                                                          context: context,
+                                                          height: 30)
+                                                      .getHeight,
+                                                  icon: Icon(Icons
+                                                      .keyboard_arrow_down_sharp),
+                                                  color: Colors.black54,
+                                                ),
+                                                widget.rightHand == null
+                                                    ? Center(
+                                                        child: Text(
+                                                            "Not available"),
+                                                      )
+                                                    : Container(
+                                                        height: MagicScreen(
+                                                                context:
+                                                                    context,
+                                                                height: 250)
+                                                            .getHeight,
+                                                        decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    widget
+                                                                        .rightHand))),
+                                                      )
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Text("Right Hand",
+                                    style: TextStyle(
+                                        color: Colors.deepOrangeAccent,
+                                        fontWeight: FontWeight.bold))),
+                          ],
+                        )
+                      ],
                     )
                   ],
                 ),

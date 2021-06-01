@@ -43,11 +43,11 @@ class AstrologySection extends StatelessWidget {
                             content: const Text(
                                 "Are you sure you wish to delete this service?"),
                             actions: <Widget>[
-                              ElevatedButton(
+                              TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
                                   child: const Text("DELETE")),
-                              ElevatedButton(
+                              TextButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
                                 child: const Text("CANCEL"),

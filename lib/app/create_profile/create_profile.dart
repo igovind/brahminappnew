@@ -4,7 +4,9 @@ import 'package:brahminapp/app/account/gallery_page.dart';
 import 'package:brahminapp/app/astrology/astrology_page.dart';
 import 'package:brahminapp/app/create_profile/registration_form.dart';
 import 'package:brahminapp/app/languages.dart';
+import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/common_widgets/platform_alert_dialog.dart';
+import 'package:brahminapp/main.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -86,8 +88,6 @@ class CreateProfile extends StatelessWidget {
           }
           return Scaffold(
             appBar: AppBar(
-              // iconTheme: IconThemeData(color: Colors.black54),
-              //actions: [FlatButton(onPressed: () {}, child: Text("check"))],
               leading: SizedBox(),
               toolbarHeight: 40,
               backgroundColor: Colors.white,
@@ -177,5 +177,38 @@ Widget body(int? value, uid, language) {
         uid: uid,
       );
   }
-  return Text("Error");
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Text(
+          "${Language(code: language, text: [
+            "Congratulations!!\n You have Successfully Created your profile",
+            "बधाई हो!!\n आपने सफलतापूर्वक अपना प्रोफ़ाइल बना लिया है",
+            "অভিনন্দন !!\n আপনি সফলভাবে আপনার প্রোফাইল তৈরি করেছেন",
+            "வாழ்த்துக்கள் !!\n உங்கள் சுயவிவரத்தை வெற்றிகரமாக உருவாக்கியுள்ளீர்கள்",
+            "అభినందనలు !!\n మీరు మీ ప్రొఫైల్‌ను విజయవంతంగా సృష్టించారు "
+          ]).getText}",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 18),
+        ),
+        SizedBox(height: 50,),
+        CustomContainer(
+          radius: 10,
+          child: TextButton(
+              onPressed: () =>
+                  Navigator.of(navigationKey.currentState!.context).pop(),
+              child: Text(Language(code: language, text: [
+                "Open App",
+                "ऐप खोलें",
+                "এপ খোল",
+                "பயன்பாட்டைத் திறக்கவும்",
+                "అనువర్తనాన్ని తెరవండి "
+              ]).getText,style: TextStyle(color: Colors.deepOrange),)),
+        )
+      ],),
+    ),
+  );
 }

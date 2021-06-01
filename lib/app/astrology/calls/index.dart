@@ -44,26 +44,65 @@ class IndexState extends State<IndexPage> {
       return MagicScreen(context: context, height: height).getHeight;
     }
 
-    String? profilePic =
-        "https://a10.gaanacdn.com/images/albums/4/1879604/crop_175x175_1879604.jpg";
-    String? kundaliPic = "https://i.stack.imgur.com/vKpJn.jpg";
-    String? rightHand =
-        "https://m0.her.ie/wp-content/uploads/2016/08/09170056/HandLines1.jpg";
-    String? leftHand =
-        "https://m0.her.ie/wp-content/uploads/2016/08/09170056/HandLines1.jpg";
-    String? name = "govind mishra";
+    String? profilePic;
+    String? kundaliPic;
+    String? rightHand;
+    String? leftHand;
+    String? name;
+    String? place = "Not given";
     Timestamp? time;
+    String? timeDate = "Not Given";
+    Future<void> onJoin() async {
+      // update input validation
+      print(
+          'THis is channel text ......................................................${_channelController.text}');
+      await _handleCameraAndMic(Permission.camera);
+      await _handleCameraAndMic(Permission.microphone);
+      // push video page with given channel name
+      print("LL?????????????????????????????????????${widget.callType}");
+      if (widget.callType == 'Video') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CallPage(
+                      bid: widget.bid,
+                      userId: widget.userId!.uid,
+                      channelName: widget.channelName,
+                      name: name,
+                      place: place,
+                      kundali: kundaliPic,
+                      leftHand: leftHand,
+                      rightHand: rightHand,
+                      time: timeDate, //role: ClientRole.Broadcaster,
+                    )));
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VoiceCallPage(
+                      name: name,
+                      place: place,
+                      time: timeDate,
+                      kundali: kundaliPic,
+                      leftHand: leftHand,
+                      rightHand: rightHand,
+                      userId: widget.userId!.uid,
+                      channelName: widget.channelName,
+                      //role: ClientRole.Broadcaster,
+                    )));
+      }
+    }
+
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
           stream: FireStoreDatabase(uid: widget.userId!.uid).getTempCall,
           builder: (context, snapshot) {
+            if (snapshot == null) {}
             if (snapshot.data == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-            print(
-                "yes this is present?????????????????????????????????????????????/${snapshot.data}");
             if (snapshot.data!.docs.isNotEmpty) {
               DocumentSnapshot documentSnapshot = snapshot.data!.docs[0];
               profilePic = documentSnapshot.get("image");
@@ -72,8 +111,15 @@ class IndexState extends State<IndexPage> {
               leftHand = documentSnapshot.get("lefthand");
               name = documentSnapshot.get("sender");
               time = documentSnapshot.get("time");
-              print(
-                  "yes this is present?????????????????????????????????????????????/");
+              place = documentSnapshot.get(("place")) ?? "Not given";
+              DateTime? timestamp = time!.toDate();
+              timeDate =
+                  "${timestamp.day}/${timestamp.month}/${timestamp.year} - ${timestamp.hour}:${timestamp.minute}";
+            }
+            if (name == null) {
+              return Center(
+                child: Text("NO CALL IS HERE"),
+              );
             }
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -81,19 +127,58 @@ class IndexState extends State<IndexPage> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: height(50),
+                      height: height(30),
                     ),
-                    CircularAvatarNetwork(url: profilePic),
-                    Text("$name"),
+                    Container(
+                      height: height(120),
+                      decoration: BoxDecoration(
+                          color: Colors.black38,
+                          image:
+                              DecorationImage(image: NetworkImage(profilePic!)),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black54, blurRadius: 4)
+                          ]),
+                      // url: image,
+                    ),
                     SizedBox(
-                      height: height(5),
+                      height: height(10),
                     ),
-                    // Text("$time"),
+                    Text(
+                      "$name",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    Text(
+                      "DOB $timeDate",
+                      style: TextStyle(color: Colors.black54, fontSize: 16),
+                    ),
+                    Text(
+                      "Place of Birth: $place",
+                      style: TextStyle(color: Colors.black54, fontSize: 16),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [],
+                    ),
                     SizedBox(
                       height: height(10),
                     ),
                     kundaliPic == null
-                        ? SizedBox()
+                        ? Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black38,
+                                borderRadius: BorderRadius.circular(10)),
+                            height: height(200),
+                            width: height(400),
+                            child: Center(
+                                child: Text(
+                              "Kundali is not available",
+                              style: TextStyle(color: Colors.white),
+                            )),
+                          )
                         : ImageViev(
                             image: kundaliPic,
                             height: height(250),
@@ -103,9 +188,24 @@ class IndexState extends State<IndexPage> {
                       height: height(10),
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         leftHand == null
-                            ? SizedBox()
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black38,
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: height(200),
+                                width: height(100),
+                                child: Center(
+                                    child: Text(
+                                  "Left hand image is not available",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                )),
+                              )
                             : Expanded(
                                 child: ImageViev(
                                   image: leftHand,
@@ -117,7 +217,19 @@ class IndexState extends State<IndexPage> {
                           width: height(20),
                         ),
                         rightHand == null
-                            ? SizedBox()
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black38,
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: height(200),
+                                width: height(100),
+                                child: Center(
+                                    child: Text(
+                                  "Right hand image is not available",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                              )
                             : Expanded(
                                 child: ImageViev(
                                   image: rightHand,
@@ -142,14 +254,14 @@ class IndexState extends State<IndexPage> {
                           ),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: height(20),
                         ),
                         Expanded(
                           child: CustomRaisedButton(
                             onPressed: () {
                               FirebaseFirestore.instance
                                   .doc(
-                                      "punditUsers/${widget.userId!.uid}/tempcall")
+                                      "punditUsers/${widget.userId!.uid}/tempcall/${widget.channelName}")
                                   .update({"reject": true});
                               Navigator.of(context).pop();
                             },
@@ -165,36 +277,6 @@ class IndexState extends State<IndexPage> {
             );
           }),
     );
-  }
-
-  Future<void> onJoin() async {
-    // update input validation
-    print(
-        'THis is channel text ......................................................${_channelController.text}');
-    await _handleCameraAndMic(Permission.camera);
-    await _handleCameraAndMic(Permission.microphone);
-    // push video page with given channel name
-    print("LL?????????????????????????????????????${widget.callType}");
-    if (widget.callType == 'Video') {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CallPage(
-                    bid: widget.bid,
-                    userId: widget.userId!.uid,
-                    channelName: widget.channelName,
-                    //role: ClientRole.Broadcaster,
-                  )));
-    } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => VoiceCallPage(
-                    userId: widget.userId!.uid,
-                    channelName: widget.channelName,
-                    //role: ClientRole.Broadcaster,
-                  )));
-    }
   }
 
   Future<void> _handleCameraAndMic(Permission permission) async {
@@ -215,7 +297,7 @@ class ImageViev extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(
+        showModalBottomSheet(
           context: context,
           builder: (context) {
             return Container(

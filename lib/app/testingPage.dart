@@ -1,5 +1,9 @@
+/*
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../main.dart';
 
 class TestingPage extends StatelessWidget {
   final uid;
@@ -9,6 +13,7 @@ class TestingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black54,
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("Avaliable_pundit")
@@ -28,7 +33,8 @@ class TestingPage extends StatelessWidget {
                   return Center(
                       child: ElevatedButton(
                     onPressed: () async {
-                      print("hii ${snapshot.data!.size}");
+*/
+/*                      print("hii ${snapshot.data!.size}");
                       for (int i = 0; i < snapshot.data!.size; i++) {
                         String uid = snapshot.data!.docs[i].id;
                         String refralCode = "G" + (100 + i).toString();
@@ -58,10 +64,27 @@ class TestingPage extends StatelessWidget {
                           "punditID": punditId,
                         });
                       }
-                      /* String code =
+                      *//*
+*/
+/* String code =
                           snapshotA.data.data()["available_code"].toString();
                       FireStoreDatabase(uid: null).setAvailableCode();
-                      print("MMMMMM $code");*/
+                      print("MMMMMM $code");*//*
+
+                      flutterLocalNotificationsPlugin.show(
+                          0,
+                          "notification.title",
+                          "notification.body",
+                          NotificationDetails(
+                            android: AndroidNotificationDetails(
+                              "bhbjjbjh",
+                              "nkjnkjn",
+                              "bjbjkkjb",
+                              icon: "@mipmap/ic_launcher",
+                              fullScreenIntent: true
+                              // other properties...
+                            ),
+                          ));
                     },
                     child: Text("press"),
                   ));
@@ -70,3 +93,4 @@ class TestingPage extends StatelessWidget {
     );
   }
 }
+*/

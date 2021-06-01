@@ -19,9 +19,10 @@ class CircularProfilePic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height=MagicScreen(context: context,height: 60).getHeight;
     if (fileSrc != null) {
       return Container(
-        height: 2.0 * (radius ?? MagicScreen(context: context,height: 60).getHeight),
+        height: 2.0 * (radius ?? MagicScreen(context: context,height: height).getHeight),
         decoration: BoxDecoration(
           color: Colors.white,
             image: DecorationImage(image: FileImage(fileSrc!)),
@@ -33,7 +34,7 @@ class CircularProfilePic extends StatelessWidget {
     }
     if (imageUrl == null) {
       return Container(
-        height: 2.0 * (radius ?? 60),
+        height: 2.0 * (radius ?? height),
         decoration: BoxDecoration(
           color: Colors.white,
             image:
@@ -45,7 +46,7 @@ class CircularProfilePic extends StatelessWidget {
       );
     }
     return Container(
-      height: 2.0 * (radius ?? 60),
+      height: 2.0 * (radius ?? height),
       decoration: BoxDecoration(
         color: Colors.white,
           image: DecorationImage(image: NetworkImage(imageUrl!)),

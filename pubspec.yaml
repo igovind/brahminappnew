@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   #agora_rtc_engine: ^4.0.1
   agora_rtc_engine: ^4.0.1
+  awesome_notifications: ^0.0.6+7
   bot_toast: ^4.0.1
   bottom_navy_bar: ^6.0.0
   bubble_tab_indicator: ^0.1.6
@@ -36,6 +37,7 @@ dependencies:
   circle_bottom_navigation_bar: ^1.0.0
   carousel_slider: ^4.0.0-nullsafety.0
   cloud_firestore: ^2.2.0
+  device_info: ^2.0.2
   confetti: ^0.6.0-nullsafety
   cupertino_icons: ^1.0.3
   custom_image_crop: ^0.0.2
@@ -43,6 +45,7 @@ dependencies:
   device_preview: ^0.7.1
   dotted_border: ^2.0.0
   dots_indicator: ^2.0.0
+  modal_bottom_sheet: ^2.0.0
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
   firebase_core_web: ^1.1.0
@@ -51,6 +54,8 @@ dependencies:
   flare_flutter: ^3.0.0
   flutter_awesome_alert_box: ^2.0.0-prerelease-nullsafety
   flutter_slidable: ^0.6.0
+  flutter_native_timezone: ^1.1.0
+  flutter_local_notifications: ^6.0.0
   geoflutterfire: ^3.0.0-nullsafety.3
   geolocator: ^7.0.3
   google_fonts: ^2.1.0
@@ -66,9 +71,7 @@ dependencies:
   share: ^2.0.1
   shared_preferences: ^2.0.5
   scratcher: ^2.1.0
-  search_choices: ^2.0.3
   url_launcher: ^6.0.4
-  workmanager: ^0.4.0
   youtube_player_flutter: ^8.0.0
 
 
