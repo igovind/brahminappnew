@@ -80,6 +80,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'image': imgMap[nameOfPuja],
         'type': typeMap[nameOfPuja]
       }, pid: serviceId).whenComplete(() {
+        //new
         FirebaseFirestore.instance
             .doc(
                 "Avaliable_pundit/${widget.uid}/Category/${typeMap[nameOfPuja]}")
