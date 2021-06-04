@@ -1,7 +1,9 @@
 import 'package:brahminapp/app/testingPage.dart';
 import 'package:brahminapp/app/toggle_page.dart';
+import 'package:brahminapp/services/OnePage.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/sign_in/sign_in_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,6 @@ class _LandingPageState extends State<LandingPage> {
             if (user == null) {
               return SignInPage.create(context);
             }
-
             return Provider<UserId>.value(
               value: user,
               child: Provider<DatabaseL>(
@@ -45,7 +46,6 @@ class _LandingPageState extends State<LandingPage> {
                 child: TogglePage(
                   user: user,
                 ),
-
               ),
             );
           }

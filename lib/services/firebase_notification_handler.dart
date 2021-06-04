@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'OnePage.dart';
 import 'auth.dart';
 import 'notification_handler.dart';
 
@@ -30,16 +32,13 @@ class FirebaseNotificationsA {
       provisional: false,
       sound: true,
     );
-    User? user = FirebaseAuth.instance.currentUser;
-    UserId userId = UserId(
-        userEmail: user!.email,
-        uid: user.uid,
-        photoUrl: user.photoURL,
-        displayName: user.displayName);
+
+
     //get token
     //will use to revcive noti
     //_messaging.getToken().then((value) => print("MyToken: $value"));
     // _messaging.subscribeToTopic("edmtdev_demo").whenComplete(() => print("SUBSCRIBED OK"));
+
     FirebaseMessaging.onMessage.listen((event) {
       print("<<<<<<<<<<[ THIS IS FOREGROUND NOTIFICATION ]>>>>>>>>>>>>>");
       switch (event.data['type']) {
@@ -56,14 +55,22 @@ class FirebaseNotificationsA {
         case 'VCall':
           print("<<<<<<<<<<[ THIS IS VCALL  ]>>>>>>>>>>>>>");
           showCallNotification(
-              event.notification!.title, event.notification!.body, event.data['call_type'], event.data['channel']);
+              event.notification!.title,
+              event.notification!.body,
+              event.data['call_type'],
+              event.data['channel']);
           break;
         default:
           print("<<<<<<<<<<[ THIS IS DEFAULT  ]>>>>>>>>>>>>>");
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      print("<<<<<<<<<<[ TI DON'T THING THIS CODE WILL WORK ]>>>>>>>>>>>>>");
+      print("<<<<<<<<<<[ I DON'T THINk THIS CODE WILL WORK ]>>>>>>>>>>>>>");
+      if (event.data['type'] == 'Message') {
+        print("[WHAT THE FUCK B]");
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => OnePage()));
+      }
       if (Platform.isIOS)
         showDialog(
             context: NotificationHandler.myContext,
@@ -136,11 +143,12 @@ class FirebaseNotificationsA {
     var platform = NotificationDetails(android: androidChannel, iOS: ios);
     await NotificationHandler.flutterLocalNotificationPlugin.show(
         Random().nextInt(1000), title, body, platform,
-        payload: channel+"*"+callType);
+        payload: channel + "*" + callType);
   }
 
   static void showBookingNotification(title, body) async {
-    print("<<<<<<<<<<[ THIS IS BOOKING NOTIFICATION ]>>>>>>>>>>>>>$title $body");
+    print(
+        "<<<<<<<<<<[ THIS IS BOOKING NOTIFICATION ]>>>>>>>>>>>>>$title $body");
     const int insistentFlag = 4;
     var androidChannel = AndroidNotificationDetails(
         "com.pujapurohit.brjnjnkahminapp",
@@ -159,7 +167,7 @@ class FirebaseNotificationsA {
     var platform = NotificationDetails(android: androidChannel, iOS: ios);
     await NotificationHandler.flutterLocalNotificationPlugin.show(
         Random().nextInt(1000), title, body, platform,
-        payload: "Booking"+"*"+title);
+        payload: "Booking" + "*" + title);
   }
 }
 

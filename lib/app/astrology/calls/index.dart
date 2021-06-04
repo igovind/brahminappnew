@@ -61,35 +61,31 @@ class IndexState extends State<IndexPage> {
       // push video page with given channel name
       print("LL?????????????????????????????????????${widget.callType}");
       if (widget.callType == 'Video') {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CallPage(
-                      bid: widget.bid,
-                      userId: widget.userId!.uid,
-                      channelName: widget.channelName,
-                      name: name,
-                      place: place,
-                      kundali: kundaliPic,
-                      leftHand: leftHand,
-                      rightHand: rightHand,
-                      time: timeDate, //role: ClientRole.Broadcaster,
-                    )));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CallPage(
+                  bid: widget.bid,
+                  userId: widget.userId!.uid,
+                  channelName: widget.channelName,
+                  name: name,
+                  place: place,
+                  kundali: kundaliPic,
+                  leftHand: leftHand,
+                  rightHand: rightHand,
+                  time: timeDate, //role: ClientRole.Broadcaster,
+                )));
       } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => VoiceCallPage(
-                      name: name,
-                      place: place,
-                      time: timeDate,
-                      kundali: kundaliPic,
-                      leftHand: leftHand,
-                      rightHand: rightHand,
-                      userId: widget.userId!.uid,
-                      channelName: widget.channelName,
-                      //role: ClientRole.Broadcaster,
-                    )));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => VoiceCallPage(
+                  name: name,
+                  place: place,
+                  time: timeDate,
+                  kundali: kundaliPic,
+                  leftHand: leftHand,
+                  rightHand: rightHand,
+                  userId: widget.userId!.uid,
+                  channelName: widget.channelName,
+                  //role: ClientRole.Broadcaster,
+                )));
       }
     }
 
@@ -259,11 +255,15 @@ class IndexState extends State<IndexPage> {
                         Expanded(
                           child: CustomRaisedButton(
                             onPressed: () {
-                              FirebaseFirestore.instance
+                              /*FirebaseFirestore.instance
                                   .doc(
                                       "punditUsers/${widget.userId!.uid}/tempcall/${widget.channelName}")
-                                  .update({"reject": true});
-                              Navigator.of(context).pop();
+                                  .update({"reject": true});*/
+                              FirebaseFirestore.instance
+                                  .doc(
+                                  "punditUsers/${widget.userId!.uid}/tempcall/${widget.channelName}")
+                                  .delete();
+                             // Navigator.of(context).pop();
                             },
                             child: Text('Reject'),
                             color: Colors.red,

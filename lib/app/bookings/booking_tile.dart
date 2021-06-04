@@ -57,18 +57,17 @@ class BookingTiles extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  height: 90,
+                  height: 100,
+                  width: 100,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(pic!)),
+                      image: DecorationImage(image: NetworkImage(pic!)),
                       shape: BoxShape.circle,
+                      color: Colors.black38,
                       boxShadow: [
-                        BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 5)
+                        BoxShadow(color: Colors.black38, blurRadius: 5)
                       ]),
                 ),
-               /* Container(
+                /* Container(
                   height: 60,
                   //MagicScreen(height: radius, context: context).getHeight,
                   //width: MagicScreen(width: radius, context: context).getWidth,

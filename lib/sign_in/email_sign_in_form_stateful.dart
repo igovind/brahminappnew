@@ -99,7 +99,7 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
         onPressed: submitEnabled ? _submit : null,
       ),
       SizedBox(height: 8.0),
-      FlatButton(
+      TextButton(
         child: Text(secondaryText),
         onPressed: !_isLoading ? _toggleFormType : null,
       ),

@@ -49,7 +49,7 @@ class EditAstrologyPrices extends StatelessWidget {
               height: height(30),
             ),*/
             SizedBox(
-              height: MagicScreen(context: context,height: 20).getHeight,
+              height: MagicScreen(context: context, height: 20).getHeight,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,9 +68,8 @@ class EditAstrologyPrices extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       showModalBottomSheet(
-                          backgroundColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
                         context: context,
-
                         builder: (context) {
                           return Container(
                               padding: EdgeInsets.all(10),
@@ -284,15 +283,15 @@ class EditAstrologyPrices extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold)),
                     onPressed: () {
-                      if(snapshot!.data!.get("coins")>10){
+                      if (snapshot!.data!.get("coins") > 10) {
                         FirebaseFirestore.instance
                             .doc(
-                            "coindWid/${UserDetails(snapshot: snapshot).uid}")
+                                "coindWid/${UserDetails(snapshot: snapshot).uid}")
                             .set({"price": snapshot!.data!.get("coins")});
                         BotToast.showText(text: "Claimed");
-                      }
-                      else{
-                        BotToast.showText(text: Language(code: language, text: [
+                      } else {
+                        BotToast.showText(
+                            text: Language(code: language, text: [
                           "You must have at least 10 rupees for withdrawal. ",
                           "आपके पास कम से कम १० रूपए होने चाहिए निकासी के लिए  ",
                           "প্রত্যাহারের জন্য আপনার কমপক্ষে 10 টাকা থাকতে হবে। ",
@@ -393,14 +392,20 @@ class CallTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       padding: EdgeInsets.all(8),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircularAvatarNetwork(
-                url: image,
+              Container(
+                height: MagicScreen(context: context, height: 70).getHeight,
+                width: MagicScreen(context: context, width: 70).getWidth,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(image: NetworkImage(image!))),
               ),
               Column(
                 children: [

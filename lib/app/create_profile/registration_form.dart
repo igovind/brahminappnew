@@ -36,6 +36,7 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _sTFormKey = GlobalKey<FormState>();
+  final _kTFormKey = GlobalKey<FormState>();
   File? userProfilePicFile;
   File? userCoverPicFile;
   bool inProcess = false;
@@ -230,6 +231,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'verified': false,
         'ready': false,
         'reName': refName,
+        'rates': 0,
+        'raters': 0,
+        'reviews': 0,
         'refUID': refUID,
         'refImg': refPicUrl,
         'PujaKeywords': '#',
@@ -283,6 +287,68 @@ class _RegistrationFormState extends State<RegistrationForm> {
             });
           }
         }
+      }).whenComplete(() {
+        FirebaseFirestore.instance
+            .doc("Avaliable_pundit/${widget.uid}/reviews/behaviou")
+            .set({
+          'name': 'Behaviour',
+          'rate': 0,
+          'raters': 0,
+          'type': 'specific'
+        }).whenComplete(() {
+          FirebaseFirestore.instance
+              .doc("Avaliable_pundit/${widget.uid}/reviews/knowledge")
+              .set({
+            'name': 'knowledge',
+            'rate': 0,
+            'raters': 0,
+            'type': 'specific'
+          });
+        }).whenComplete(() {
+          FirebaseFirestore.instance
+              .doc("Avaliable_pundit/${widget.uid}/reviews/value")
+              .set({
+            'name': 'Value for money',
+            'rate': 0,
+            'raters': 0,
+            'type': 'specific'
+          });
+        });
+      }).whenComplete((){
+        FirebaseFirestore.instance
+            .doc("punditUsers/${widget.uid}/reviews/behaviou")
+            .set({
+          'name': 'Behaviour',
+          'rate': 0,
+          'raters': 0,
+          'type': 'specific'
+        }).whenComplete(() {
+          FirebaseFirestore.instance
+              .doc("punditUsers/${widget.uid}/reviews/knowledge")
+              .set({
+            'name': 'knowledge',
+            'rate': 0,
+            'raters': 0,
+            'type': 'specific'
+          });
+        }).whenComplete(() {
+          FirebaseFirestore.instance
+              .doc("punditUsers/${widget.uid}/reviews/value")
+              .set({
+            'name': 'Value for money',
+            'rate': 0,
+            'raters': 0,
+            'type': 'specific'
+          });
+        }).whenComplete(() {
+          FirebaseFirestore.instance
+              .doc("Avaliable_pundit/${widget.uid}/Category/All")
+              .set({
+            'items': 0,
+            'name': "All",
+            'type': "#all"
+          });
+        });
       }).whenComplete(() async {
         if (this.mounted) {
           setState(() {
@@ -771,16 +837,25 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             ? SizedBox()
                             : found!
                                 ? Center(
-                                    child: ListTile(
-                                      title: Text(
-                                        "$refName",
-                                        style: TextStyle(
-                                            color: Colors.deepOrangeAccent,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      leading: CircularAvatarNetwork(
-                                        url: refPicUrl,
-                                      ),
+                                    child: CustomContainer(
+                                      radius: 10,
+                                      child: ListTile(
+                                          title: Text(
+                                            "$refName",
+                                            style: TextStyle(
+                                                color: Colors.deepOrangeAccent,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          leading: Container(
+                                            // child: Image.network(refPicUrl!),
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: NetworkImage(refPicUrl!),
+                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            height: 50, width: 50,
+                                          )),
                                     ),
                                   )
                                 : Text(
@@ -805,73 +880,79 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               flex: 2,
                               child: CustomContainer(
                                 radius: 30,
-                                child: TextFormField(
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 20),
-                                      border: InputBorder.none,
-                                      labelText: Language(
-                                          code: widget.language,
-                                          text: [
-                                            "referral code ",
-                                            "रेफरल कोड ",
-                                            "রেফারেল কোড ",
-                                            "பரிந்துரை குறியீடு ",
-                                            "రిఫెరల్ కోడ్ "
-                                          ]).getText,
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        refBy = value;
-                                      });
-                                    },
-                                    onSaved: (value) {
-                                      setState(() {
-                                        if (value != null) {
+                                child: Form(
+                                  key: _kTFormKey,
+                                  child: TextFormField(
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 20),
+                                        border: InputBorder.none,
+                                        labelText: Language(
+                                            code: widget.language,
+                                            text: [
+                                              "referral code ",
+                                              "रेफरल कोड ",
+                                              "রেফারেল কোড ",
+                                              "பரிந்துரை குறியீடு ",
+                                              "రిఫెరల్ కోడ్ "
+                                            ]).getText,
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
                                           refBy = value;
-                                        }
-                                      });
-                                    } //_benefits = value,
-                                    ),
+                                        });
+                                      },
+                                      onSaved: (value) {
+                                        setState(() {
+                                          if (value != null) {
+                                            refBy = value;
+                                          }
+                                        });
+                                      } //_benefits = value,
+                                      ),
+                                ),
                               ),
                             ),
-                            Flexible(
-                              flex: 1,
-                              fit: FlexFit.loose,
-                              child: TextButton(
-                                  onPressed: () async {
-                                    DocumentSnapshot snap =
-                                        await FirebaseFirestore.instance
-                                            .doc("referal/$refBy")
-                                            .get();
-                                    if (snap.data() != null) {
-                                      String? refUid = snap.get("uid");
-                                      print("$refUid $refName");
-                                      setState(() {
-                                        found = true;
-                                        refName = snap.get("name");
-                                        refPicUrl = snap.get("image");
-                                        refUID = snap.get("uid");
-                                        refAbt = snap.get("aboutYou");
-                                      });
-                                    } else {
-                                      setState(() {
-                                        found = false;
-                                      });
-                                    }
-                                  },
-                                  child: Text(
-                                    Language(code: widget.language, text: [
-                                      "Check ",
-                                      "जाँच करे ",
-                                      "করে চেক ",
-                                      "கரே சரிபார்க்கவும் ",
-                                      "కరే తనిఖీ చేయండి "
-                                    ]).getText,
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold),
-                                  )),
+                            Form(
+                              child: Flexible(
+                                flex: 1,
+                                fit: FlexFit.loose,
+                                child: TextButton(
+                                    onPressed: () async {
+                                      _kTFormKey.currentState!.save();
+                                      DocumentSnapshot snap =
+                                          await FirebaseFirestore.instance
+                                              .doc("referal/$refBy")
+                                              .get();
+                                      if (snap.data() != null) {
+                                        String? refUid = snap.get("uid");
+                                        print("$refUid $refName");
+                                        setState(() {
+                                          found = true;
+                                          refName = snap.get("name");
+                                          refPicUrl = snap.get("image");
+                                          refUID = snap.get("uid");
+                                          refAbt = snap.get("aboutYou");
+                                        });
+                                      } else {
+                                        setState(() {
+                                          found = false;
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                      Language(code: widget.language, text: [
+                                        "Check ",
+                                        "जाँच करे ",
+                                        "করে চেক ",
+                                        "கரே சரிபார்க்கவும் ",
+                                        "కరే తనిఖీ చేయండి "
+                                      ]).getText,
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
                             )
                           ],
                         )

@@ -126,7 +126,6 @@ class BookingRequest extends StatelessWidget {
                                 tuid: tuid,
                                 tid: tid,
                                 bookingAccepted: true);
-                            //TODO: botToast
                             BotToast.showText(text: Language(code:language, text: [
                               "Accepted ",
                               "स्वीकार किया ",

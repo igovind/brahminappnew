@@ -2,9 +2,11 @@ import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/app/astrology/edit_astrology_price.dart';
 import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/services_given/services_page.dart';
+import 'package:brahminapp/services/OnePage.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:circle_bottom_navigation_bar/circle_bottom_navigation_bar.dart';
@@ -12,7 +14,6 @@ import 'package:circle_bottom_navigation_bar/widgets/tab_data.dart';
 
 import '../languages.dart';
 import 'home_page2.dart';
-
 
 class BotNavBar extends StatefulWidget {
   final AsyncSnapshot<DocumentSnapshot>? userDataSnapshot;
@@ -31,10 +32,10 @@ class _BotNavBarState extends State<BotNavBar> {
 
   Widget bodyContainer(
       {AsyncSnapshot<DocumentSnapshot>? tabImageSnapshot,
-        AsyncSnapshot<DocumentSnapshot>? userDataSnapshot}) {
+      AsyncSnapshot<DocumentSnapshot>? userDataSnapshot}) {
     switch (currentPage) {
       case 0:
-      //slogan = "Familly, Happiness, Food";
+        //slogan = "Familly, Happiness, Food";
         return HomePageFolder(
           language: widget.language,
           userId: widget.user,
@@ -69,7 +70,7 @@ class _BotNavBarState extends State<BotNavBar> {
               }
               return StreamBuilder<DocumentSnapshot>(
                   stream:
-                  FireStoreDatabase(uid: widget.user!.uid).getBankDetails,
+                      FireStoreDatabase(uid: widget.user!.uid).getBankDetails,
                   builder: (context, bankSnapshot) {
                     if (bankSnapshot.data == null) {
                       return Center(
@@ -88,6 +89,7 @@ class _BotNavBarState extends State<BotNavBar> {
     }
     return Text("error");
   }
+
   List<TabData> getTabsData() {
     return [
       TabData(
@@ -103,8 +105,8 @@ class _BotNavBarState extends State<BotNavBar> {
         icon: Icons.person_add_alt_1,
         iconSize: 25,
         title: Language(
-            code: widget.language,
-            text: ["Booking ", "बुकिंग ", "সংরক্ষণ ", "பதிவு ", "బుకింగ్ "])
+                code: widget.language,
+                text: ["Booking ", "बुकिंग ", "সংরক্ষণ ", "பதிவு ", "బుకింగ్ "])
             .getText,
         fontSize: 12,
         fontWeight: FontWeight.bold,
@@ -130,6 +132,37 @@ class _BotNavBarState extends State<BotNavBar> {
     ];
   }
 
+  Future<void> _handling(context) async {
+    print("[WHAT THE FUCK]");
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage?.data['type'] == 'Message') {
+      print("[WHAT THE FUCK H]");
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => OnePage()));
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("[WHAT THE FUCK B]");
+      if (message.data['type'] == 'Message') {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => OnePage()));
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    _handling(context);
+    //_handling(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -150,21 +183,21 @@ class _BotNavBarState extends State<BotNavBar> {
     }
 
     return Scaffold(
-
       body: StreamBuilder<DocumentSnapshot>(
           stream: FireStoreDatabase(uid: widget.user!.uid).getTabImages,
           builder: (context, snapshot) {
             if (snapshot.data == null) {
               return Center(child: CircularProgressIndicator());
             }
-            return bodyContainer(userDataSnapshot: widget.userDataSnapshot,tabImageSnapshot: snapshot);
-          }
-      ),
-
+            return bodyContainer(
+                userDataSnapshot: widget.userDataSnapshot,
+                tabImageSnapshot: snapshot);
+          }),
       bottomNavigationBar: CircleBottomNavigationBar(
         initialSelection: currentPage,
         barHeight: viewPadding.bottom > 0 ? barHeightWithNotch : barHeight,
-        arcHeight: 10,//viewPadding.bottom > 0 ? arcHeightWithNotch : barHeight,
+        arcHeight: 10,
+        //viewPadding.bottom > 0 ? arcHeightWithNotch : barHeight,
         itemTextOff: viewPadding.bottom > 0 ? 0 : 1,
         itemTextOn: viewPadding.bottom > 0 ? 0 : 1,
         circleOutline: 15.0,
@@ -181,4 +214,3 @@ class _BotNavBarState extends State<BotNavBar> {
     );
   }
 }
-

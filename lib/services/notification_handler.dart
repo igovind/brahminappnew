@@ -16,8 +16,10 @@ import 'auth.dart';
 
 //final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 class NotificationHandler {
+
   static final flutterLocalNotificationPlugin =
       FlutterLocalNotificationsPlugin();
+static final notificationAppLaunchDetails=NotificationAppLaunchDetails(true, "payload");
   static late BuildContext myContext;
 
   static void initNotification(BuildContext context) {

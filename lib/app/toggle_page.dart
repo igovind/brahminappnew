@@ -1,4 +1,5 @@
 import 'package:brahminapp/app/account/user_details.dart';
+import 'package:brahminapp/app/astrology/calls/index.dart';
 import 'package:brahminapp/app/create_profile/create_profile.dart';
 import 'package:brahminapp/app/home/bottom_navigation_bar_page.dart';
 import 'package:brahminapp/app/home/one_more_bottom_navy.dart';
@@ -20,6 +21,32 @@ class TogglePage extends StatefulWidget {
 }
 
 class _TogglePageState extends State<TogglePage> {
+  @override
+  void initState()  {
+    // TODO: implement initState
+    /*QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("punditUsers/${widget.user!.uid}/tempcall")
+        .get();
+    if(snapshot.size>0){
+      String channel = snapshot.docs[0].get("channel");
+      String callType = snapshot.docs[0].get("channel");
+      showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (context) => Container(
+            height: 500,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: IndexPage(
+              callType: callType,
+              channelName: channel,
+              userId: widget.user,
+            ),
+          ));
+    }*/
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(

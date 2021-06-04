@@ -2,9 +2,11 @@ import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/app/astrology/edit_astrology_price.dart';
 import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/services_given/services_page.dart';
+import 'package:brahminapp/services/OnePage.dart';
 import 'package:brahminapp/services/auth.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:circle_bottom_navigation_bar/circle_bottom_navigation_bar.dart';
 import 'package:circle_bottom_navigation_bar/widgets/tab_data.dart';
@@ -145,6 +147,46 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
       ),
     ];
   }
+
+  Future<void> _handling(context) async {
+    print("[WHAT THE FUCK]");
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage?.data['type'] == 'Message') {
+      print("[WHAT THE FUCK H]");
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => OnePage()));
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.data['type'] == 'Message') {
+        print("[WHAT THE FUCK B]");
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => OnePage()));
+      }
+    });
+    if (initialMessage?.data['type'] == 'VCall') {
+      print("[WHAT THE FUCK HPP]");
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => OnePage()));
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.data['type'] == 'VCall') {
+        print("[WHAT THE FUCK BPP]");
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => OnePage()));
+      }
+    });
+  }
+
+  @override
+  void initState() {
+  //  _handling(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -194,4 +236,3 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
     );
   }
 }
-

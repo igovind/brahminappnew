@@ -14,6 +14,7 @@ import '../languages.dart';
 List<Category> trendingPujaList = [];
 List<String> trendingPujaNameList = [];
 final _formKey = GlobalKey<FormState>();
+
 class NewAddAndEditPuja extends StatefulWidget {
   final uid;
   final DocumentSnapshot? docSnap;
@@ -28,9 +29,8 @@ class NewAddAndEditPuja extends StatefulWidget {
 }
 
 class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
-
   String puja = "Select puja";
-  String nameOfPuja="";
+  String nameOfPuja = "";
   bool other = false;
   String? _name;
   double? _rate;
@@ -41,6 +41,8 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
   String? hr;
   Map keymap = {};
   Map samMap = {};
+  Map imgMap = {};
+  Map typeMap = {};
   dynamic keyword;
 
   int index = 0;
@@ -58,34 +60,109 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
   Future<void> _submit() async {
     try {
       final String serviceId = DateTime.now().toIso8601String();
-      FireStoreDatabase(uid: widget.uid)
-          .setPujaOffering(data: {
-            'puja': _name,
-            'price': _rate,
-            'Benefit': _benefits,
-            'swastik': 0,
-            'PanditD': _additionalDisctription,
-            'Pujan Samagri': samagri,
-            'time': _time,
-            'keyword': keyword == null ? '#' + _name! + '/' : keyword,
-            'subscriber': 0,
-            'profit': 0.1,
-            'serviceId': serviceId,
-          }, pid: serviceId)
-          .whenComplete(() => FireStoreDatabase(uid: widget.uid).updateKeyword(
-                keyword == null ? '#' + _name! + '/' : keyword,
-              ))
-          .whenComplete(() {
-            BotToast.showText(
-              text: Language(code: widget.language, text: [
-                "$_name Added in your puja service ",
-                "$_name आपकी पूजा सेवा में जोड़ा गया ",
-                "$_name আপনার পূজা পরিষেবায় যুক্ত হয়েছে ",
-                "$_name உங்கள் பூஜை சேவையில் சேர்க்கப்பட்டது ",
-                "$_name మీ పూజా సేవలో చేర్చబడింది "
-              ]).getText,
-            );
-          });
+      FireStoreDatabase(uid: widget.uid).setPujaOffering(data: {
+        'puja': _name,
+        'price': _rate,
+        'Benefit': _benefits,
+        'swastik': 0,
+        'PanditD': _additionalDisctription,
+        'Pujan Samagri': samagri,
+        'time': _time,
+        'keyword': keyword == null ? '#' + _name! + '/' : keyword,
+        'subscriber': 0,
+        'profit': 0.1,
+        'serviceId': serviceId,
+        'rates': 0,
+        'np': _rate!+300,
+        'reviews': 0,
+        'image': imgMap[nameOfPuja],
+        'type': typeMap[nameOfPuja]
+      }, pid: serviceId).whenComplete(() {
+        FirebaseFirestore.instance
+            .doc(
+                "Avaliable_pundit/${widget.uid}/Category/${typeMap[nameOfPuja]}")
+            .set({
+              'items': 0,
+              'name': typeMap[nameOfPuja],
+              'type': typeMap[nameOfPuja]
+            })
+            .whenComplete(
+                () => FireStoreDatabase(uid: widget.uid).updateKeyword(
+                      keyword == null ? '#' + _name! + '/' : keyword,
+                    ))
+            .whenComplete(() {
+              FirebaseFirestore.instance
+                  .doc(
+                      "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/Samagri")
+                  .set({
+                'name': 'Samagri',
+                'rate': 0,
+                'raters': 0,
+                'type': 'specific'
+              }).whenComplete(() {
+                FirebaseFirestore.instance
+                    .doc(
+                        "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/cost")
+                    .set({
+                  'name': 'Cost efficient',
+                  'rate': 0,
+                  'raters': 0,
+                  'type': 'specific'
+                }).whenComplete(() {
+                  FirebaseFirestore.instance
+                      .doc(
+                          "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/satisfaction")
+                      .set({
+                    'name': 'Satisfaction',
+                    'rate': 0,
+                    'raters': 0,
+                    'type': 'specific'
+                  });
+                });
+              });
+            })
+            .whenComplete(() {
+              FirebaseFirestore.instance
+                  .doc(
+                      "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/Samagri")
+                  .set({
+                'name': 'Samagri',
+                'rate': 0,
+                'raters': 0,
+                'type': 'specific',
+              }).whenComplete(() {
+                FirebaseFirestore.instance
+                    .doc(
+                        "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/cost")
+                    .set({
+                  'name': 'Cost efficient',
+                  'rate': 0,
+                  'raters': 0,
+                  'type': 'specific',
+                }).whenComplete(() {
+                  FirebaseFirestore.instance
+                      .doc(
+                          "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/satisfaction")
+                      .set({
+                    'name': 'Satisfaction',
+                    'rate': 0,
+                    'raters': 0,
+                    'type': 'specific',
+                  });
+                });
+              });
+            });
+      }).whenComplete(() {
+        BotToast.showText(
+          text: Language(code: widget.language, text: [
+            "$_name Added in your puja service ",
+            "$_name आपकी पूजा सेवा में जोड़ा गया ",
+            "$_name আপনার পূজা পরিষেবায় যুক্ত হয়েছে ",
+            "$_name உங்கள் பூஜை சேவையில் சேர்க்கப்பட்டது ",
+            "$_name మీ పూజా సేవలో చేర్చబడింది "
+          ]).getText,
+        );
+      });
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'Operation failed',
@@ -102,6 +179,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'Benefit': _benefits,
         'PanditD': _additionalDisctription,
         'time': _time,
+        'np': _rate!+300,
       }, pid: widget.docSnap!.id);
       BotToast.showText(
           text: Language(code: widget.language, text: [
@@ -198,6 +276,8 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
             snapshot.data!.docs.forEach((element) {
               keymap.addAll({element.get('name'): element.id});
               samMap.addAll({element.get('name'): element.get('Samagri')});
+              imgMap.addAll({element.get('name'): element.get('image')});
+              typeMap.addAll({element.get('name'): element.get('type')});
             });
             print(keymap);
             keymap.forEach((key, value) {
@@ -243,7 +323,6 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                     CustomContainer(
                       radius: 10,
                       child: TextFormField(
-
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: Language(code: widget.language, text: [
@@ -428,7 +507,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                                         setState(() {
                                           samagri = samMap[value];
                                           keyword = keymap[value];
-                                          nameOfPuja=value;
+                                          nameOfPuja = value;
                                           other = false;
                                         });
                                       }

@@ -35,7 +35,7 @@ class _AstrologerFormState extends State<AstrologerForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         FireStoreDatabase(uid: widget.uid).updateData(data: {
                           'astrologer': true,
@@ -62,7 +62,7 @@ class _AstrologerFormState extends State<AstrologerForm> {
                         ),
                       ),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         FireStoreDatabase(uid: widget.uid).updateData(data: {
                           'astrologer': false,
