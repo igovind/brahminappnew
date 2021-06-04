@@ -40,6 +40,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
   String? _additionalDisctription;
   String? _time;
   String? hr;
+  bool? online = false;
   Map keymap = {};
   Map samMap = {};
   Map imgMap = {};
@@ -66,7 +67,6 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'price': _rate,
         'Benefit': _benefits,
         'swastik': 0,
-        'onlinePrice':_onlineRate,
         'PanditD': _additionalDisctription,
         'Pujan Samagri': samagri,
         'time': _time,
@@ -75,9 +75,127 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'profit': 0.1,
         'serviceId': serviceId,
         'rates': 0,
-        'np': _rate!+300,
+        'np': _rate! + 300,
         'reviews': 0,
         'image': imgMap[nameOfPuja],
+        'type': typeMap[nameOfPuja],
+        'offer': 'Physical'
+      }, pid: serviceId).whenComplete(() {
+        //new
+        FirebaseFirestore.instance
+            .doc(
+                "Avaliable_pundit/${widget.uid}/Category/${typeMap[nameOfPuja]}")
+            .set({
+              'items': 0,
+              'name': typeMap[nameOfPuja],
+              'type': typeMap[nameOfPuja]
+            })
+            .whenComplete(
+                () => FireStoreDatabase(uid: widget.uid).updateKeyword(
+                      keyword == null ? '#' + _name! + '/' : keyword,
+                    ))
+            .whenComplete(() {
+              FirebaseFirestore.instance
+                  .doc(
+                      "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/Samagri")
+                  .set({
+                'name': 'Samagri',
+                'rate': 0,
+                'raters': 0,
+                'type': 'specific'
+              }).whenComplete(() {
+                FirebaseFirestore.instance
+                    .doc(
+                        "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/cost")
+                    .set({
+                  'name': 'Cost efficient',
+                  'rate': 0,
+                  'raters': 0,
+                  'type': 'specific'
+                }).whenComplete(() {
+                  FirebaseFirestore.instance
+                      .doc(
+                          "Avaliable_pundit/${widget.uid}/puja_offering/$serviceId/reviews/satisfaction")
+                      .set({
+                    'name': 'Satisfaction',
+                    'rate': 0,
+                    'raters': 0,
+                    'type': 'specific'
+                  });
+                });
+              });
+            })
+            .whenComplete(() {
+              FirebaseFirestore.instance
+                  .doc(
+                      "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/Samagri")
+                  .set({
+                'name': 'Samagri',
+                'rate': 0,
+                'raters': 0,
+                'type': 'specific',
+              }).whenComplete(() {
+                FirebaseFirestore.instance
+                    .doc(
+                        "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/cost")
+                    .set({
+                  'name': 'Cost efficient',
+                  'rate': 0,
+                  'raters': 0,
+                  'type': 'specific',
+                }).whenComplete(() {
+                  FirebaseFirestore.instance
+                      .doc(
+                          "punditUsers/${widget.uid}/puja_offering/$serviceId/reviews/satisfaction")
+                      .set({
+                    'name': 'Satisfaction',
+                    'rate': 0,
+                    'raters': 0,
+                    'type': 'specific',
+                  });
+                });
+              });
+            });
+      }).whenComplete(() {
+        BotToast.showText(
+          text: Language(code: widget.language, text: [
+            "$_name Added in your puja service ",
+            "$_name आपकी पूजा सेवा में जोड़ा गया ",
+            "$_name আপনার পূজা পরিষেবায় যুক্ত হয়েছে ",
+            "$_name உங்கள் பூஜை சேவையில் சேர்க்கப்பட்டது ",
+            "$_name మీ పూజా సేవలో చేర్చబడింది "
+          ]).getText,
+        );
+      });
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: 'Operation failed',
+        exception: e,
+      ).show(context);
+    }
+  }
+
+  Future<void> _submit2() async {
+    try {
+      final String serviceId = DateTime.now().toIso8601String() + "%";
+      FireStoreDatabase(uid: widget.uid).setPujaOffering(data: {
+        'puja': _name,
+        'price': _onlineRate,
+        'Benefit': _benefits,
+        'swastik': 0,
+        'onlinePrice': _onlineRate,
+        'PanditD': _additionalDisctription,
+        'Pujan Samagri': samagri,
+        'time': _time,
+        'keyword': keyword == null ? '#' + _name! + '/' : keyword,
+        'subscriber': 0,
+        'profit': 0.1,
+        'serviceId': serviceId,
+        'rates': 0,
+        'np': _rate! + 300,
+        'reviews': 0,
+        'image': imgMap[nameOfPuja],
+        'offer': 'Online',
         'type': typeMap[nameOfPuja]
       }, pid: serviceId).whenComplete(() {
         //new
@@ -182,8 +300,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'Benefit': _benefits,
         'PanditD': _additionalDisctription,
         'time': _time,
-        'onlinePrice':_onlineRate,
-        'np': _rate!+300,
+        'np': _rate! + 300,
       }, pid: widget.docSnap!.id);
       BotToast.showText(
           text: Language(code: widget.language, text: [
@@ -216,6 +333,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
       samagri = widget.docSnap!.get('Pujan Samagri');
       _additionalDisctription = widget.docSnap!.get('PanditD');
       _time = widget.docSnap!.get('time');
+      _onlineRate = widget.docSnap!.get('onlinePrice');
     }
     return Scaffold(
       appBar: AppBar(
@@ -227,6 +345,9 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                 if (widget.docSnap == null) {
                   if (_validateAndSaveForm() && keyword != null) {
                     _submit();
+                    if (online!) {
+                      _submit2();
+                    }
                     Navigator.of(context).pop();
                   }
                   if (keyword == null) {
@@ -358,50 +479,6 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                     SizedBox(
                       height:
                           MagicScreen(height: 10, context: context).getHeight,
-                    ),
-                    CustomContainer(
-                      radius: 10,
-                      child: Column(children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelText: Language(code: widget.language, text: [
-                                "Rate ",
-                                "ऑनलाइन रेट मूल्यांकन करें ",
-                                "অনলাইন রেট",
-                                "ஆன்லைன் வீதம்",
-                                "ఆన్‌లైన్ రేటు "
-                              ]).getText,
-                              prefixText: '₹'),
-                          initialValue: _onlineRate != null ? '$_onlineRate' : '',
-                          keyboardType: TextInputType.numberWithOptions(
-                            signed: false,
-                            decimal: false,
-                          ),
-                          validator: (value) => value!.isNotEmpty
-                              ? null
-                              : Language(code: widget.language, text: [
-                            "This field is required",
-                            "यह फ़ील्ड आवश्यक है",
-                            "ঘরটি অবশ্যই পূরণ করতে হবে",
-                            "இந்த புலம் தேவை",
-                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
-                          ]).getText,
-                          onSaved: (value) =>
-                          _onlineRate = double.tryParse(value!) ?? 0,
-                        ),
-                        Text( Language(code: widget.language, text: [
-                          "If this worship can be done online then write its price.",
-                          "यदि ये पूजा ऑनलाइन हो सकती हो तोह उसका दाम लिखें ",
-                          "যদি এই পূজাটি অনলাইনে করা যায় তবে তার দাম লিখুন।",
-                          "இந்த வழிபாட்டை ஆன்லைனில் செய்ய முடிந்தால் அதன் விலையை எழுதுங்கள்.",
-                          "ఈ ఆరాధన ఆన్‌లైన్‌లో చేయగలిగితే దాని ధర రాయండి. "
-                        ]).getText,)
-                      ],)
-                    ),
-                    SizedBox(
-                      height:
-                      MagicScreen(height: 10, context: context).getHeight,
                     ),
                     CustomContainer(
                       radius: 10,
@@ -627,6 +704,107 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       height:
                           MagicScreen(height: 50, context: context).getHeight,
                     ),
+                    CustomContainer(
+                      radius: 10,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            Language(code: widget.language, text: [
+                              "Can this puja be done online? ",
+                              "क्या ये पूजा ऑनलाइन की जा सकती हैं ? ",
+                              "এই পুজো কি অনলাইনে করা যায়?",
+                              "இந்த பூஜையை ஆன்லைனில் செய்ய முடியுமா?",
+                              "ఈ పూజను ఆన్‌లైన్‌లో చేయవచ్చా?"
+                            ]).getText,
+                          ),
+                          Row(
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      online = true;
+                                    });
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      online = false;
+                                    });
+                                  },
+                                  child: Text(
+                                    "No",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MagicScreen(height: 10, context: context)
+                                .getHeight,
+                          ),
+                          !online!
+                              ? SizedBox()
+                              : CustomContainer(
+                                  radius: 10,
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            labelText: Language(
+                                                code: widget.language,
+                                                text: [
+                                                  "Rate ",
+                                                  "ऑनलाइन रेट मूल्यांकन करें ",
+                                                  "অনলাইন রেট",
+                                                  "ஆன்லைன் வீதம்",
+                                                  "ఆన్‌లైన్ రేటు "
+                                                ]).getText,
+                                            prefixText: '₹'),
+                                        initialValue: _onlineRate != null
+                                            ? '$_onlineRate'
+                                            : '',
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                          signed: false,
+                                          decimal: false,
+                                        ),
+                                        validator: (value) => value!.isNotEmpty
+                                            ? null
+                                            : Language(
+                                                code: widget.language,
+                                                text: [
+                                                    "This field is required",
+                                                    "यह फ़ील्ड आवश्यक है",
+                                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                                    "இந்த புலம் தேவை",
+                                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                                  ]).getText,
+                                        onSaved: (value) => _onlineRate =
+                                            double.tryParse(value!) ?? 0,
+                                      ),
+                                      Text(
+                                        Language(code: widget.language, text: [
+                                          "If this worship can be done online then write its price.",
+                                          "यदि ये पूजा ऑनलाइन हो सकती हो तोह उसका दाम लिखें ",
+                                          "যদি এই পূজাটি অনলাইনে করা যায় তবে তার দাম লিখুন।",
+                                          "இந்த வழிபாட்டை ஆன்லைனில் செய்ய முடிந்தால் அதன் விலையை எழுதுங்கள்.",
+                                          "ఈ ఆరాధన ఆన్‌లైన్‌లో చేయగలిగితే దాని ధర రాయండి. "
+                                        ]).getText,
+                                      )
+                                    ],
+                                  )),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

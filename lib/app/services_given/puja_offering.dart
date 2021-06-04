@@ -221,12 +221,26 @@ class PujaOffering extends StatelessWidget {
                               SizedBox(
                                 height: height(5),
                               ),
-                              Text(
-                                "$name",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.deepOrangeAccent),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(),
+                                  Text(
+                                    "$name",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.deepOrangeAccent),
+                                  ),
+                                  id[id.length-1] != "%"
+                                      ? SizedBox()
+                                      : Icon(
+                                          Icons.circle,
+                                          size: 20,
+                                          color: Colors.green,
+                                        )
+                                ],
                               ),
                               SizedBox(
                                 height: height(20),

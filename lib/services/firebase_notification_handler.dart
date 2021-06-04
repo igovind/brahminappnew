@@ -135,10 +135,10 @@ class FirebaseNotificationsA {
         priority: Priority.high,
         ticker: 'ticker',
         color: Colors.red,
-        ongoing: true,
+       // ongoing: true,
         sound: RawResourceAndroidNotificationSound('notification_sound'),
         additionalFlags:
-            Int32List.fromList(<int>[insistentFlag, 512, 4096, 32, 2, 1]));
+            Int32List.fromList(<int>[4,0]));//512, 4096,0, 2,
     var ios = IOSNotificationDetails();
     var platform = NotificationDetails(android: androidChannel, iOS: ios);
     await NotificationHandler.flutterLocalNotificationPlugin.show(
@@ -159,10 +159,10 @@ class FirebaseNotificationsA {
         priority: Priority.high,
         ticker: 'ticker',
         color: Colors.red,
-        ongoing: true,
+       // ongoing: true,
         sound: RawResourceAndroidNotificationSound('notification_sound'),
         additionalFlags:
-            Int32List.fromList(<int>[insistentFlag, 512, 4096, 32, 2, 1]));
+            Int32List.fromList(<int>[4]));
     var ios = IOSNotificationDetails();
     var platform = NotificationDetails(android: androidChannel, iOS: ios);
     await NotificationHandler.flutterLocalNotificationPlugin.show(
