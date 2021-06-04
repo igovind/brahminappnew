@@ -34,6 +34,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
   bool other = false;
   String? _name;
   double? _rate;
+  double? _onlineRate;
   String? _benefits;
   String? samagri;
   String? _additionalDisctription;
@@ -65,6 +66,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'price': _rate,
         'Benefit': _benefits,
         'swastik': 0,
+        'onlinePrice':_onlineRate,
         'PanditD': _additionalDisctription,
         'Pujan Samagri': samagri,
         'time': _time,
@@ -179,6 +181,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
         'Benefit': _benefits,
         'PanditD': _additionalDisctription,
         'time': _time,
+        'onlinePrice':_onlineRate,
         'np': _rate!+300,
       }, pid: widget.docSnap!.id);
       BotToast.showText(
@@ -354,6 +357,50 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                     SizedBox(
                       height:
                           MagicScreen(height: 10, context: context).getHeight,
+                    ),
+                    CustomContainer(
+                      radius: 10,
+                      child: Column(children: [
+                        TextFormField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: Language(code: widget.language, text: [
+                                "Rate ",
+                                "ऑनलाइन रेट मूल्यांकन करें ",
+                                "অনলাইন রেট",
+                                "ஆன்லைன் வீதம்",
+                                "ఆన్‌లైన్ రేటు "
+                              ]).getText,
+                              prefixText: '₹'),
+                          initialValue: _onlineRate != null ? '$_onlineRate' : '',
+                          keyboardType: TextInputType.numberWithOptions(
+                            signed: false,
+                            decimal: false,
+                          ),
+                          validator: (value) => value!.isNotEmpty
+                              ? null
+                              : Language(code: widget.language, text: [
+                            "This field is required",
+                            "यह फ़ील्ड आवश्यक है",
+                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                            "இந்த புலம் தேவை",
+                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                          ]).getText,
+                          onSaved: (value) =>
+                          _onlineRate = double.tryParse(value!) ?? 0,
+                        ),
+                        Text( Language(code: widget.language, text: [
+                          "If this worship can be done online then write its price.",
+                          "यदि ये पूजा ऑनलाइन हो सकती हो तोह उसका दाम लिखें ",
+                          "যদি এই পূজাটি অনলাইনে করা যায় তবে তার দাম লিখুন।",
+                          "இந்த வழிபாட்டை ஆன்லைனில் செய்ய முடிந்தால் அதன் விலையை எழுதுங்கள்.",
+                          "ఈ ఆరాధన ఆన్‌లైన్‌లో చేయగలిగితే దాని ధర రాయండి. "
+                        ]).getText,)
+                      ],)
+                    ),
+                    SizedBox(
+                      height:
+                      MagicScreen(height: 10, context: context).getHeight,
                     ),
                     CustomContainer(
                       radius: 10,

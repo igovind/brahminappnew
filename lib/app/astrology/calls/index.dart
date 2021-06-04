@@ -263,7 +263,7 @@ class IndexState extends State<IndexPage> {
                                   .doc(
                                   "punditUsers/${widget.userId!.uid}/tempcall/${widget.channelName}")
                                   .delete();
-                             // Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                             },
                             child: Text('Reject'),
                             color: Colors.red,
