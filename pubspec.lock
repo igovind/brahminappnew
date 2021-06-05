@@ -29,13 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
-  awesome_notifications:
-    dependency: "direct main"
-    description:
-      name: awesome_notifications
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6+7"
   boolean_selector:
     dependency: transitive
     description:
@@ -342,13 +335,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_awesome_alert_box:
-    dependency: "direct main"
-    description:
-      name: flutter_awesome_alert_box
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0-prerelease-nullsafety"
   flutter_inappwebview:
     dependency: transitive
     description:

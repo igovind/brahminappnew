@@ -1,17 +1,20 @@
+
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/services/OnePage.dart';
-import 'package:brahminapp/services/firebase_notification_handler.dart';
+import 'package:brahminapp/common_widgets/hexa_color.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:brahminapp/services/auth.dart';
+import 'package:brahminapp/services/firebase_notification_handler.dart';
+import 'app/astrology/calls/index.dart';
+import 'app/bookings/bookings_page.dart';
 import 'app/landing_page.dart';
-
+import 'app/notification_back.dart';
 final GlobalKey<NavigatorState> navigationKey =
-    GlobalKey(debugLabel: "Main Navigator");
-
+GlobalKey(debugLabel: "Main Navigator");
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("<<<<<<<<<<[ THIS IS BACKGROUND NOTIFICATION ]>>>>>>>>>>>>>");
   await Firebase.initializeApp();
@@ -30,7 +33,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       break;
     case 'VCall':
       print("<<<<<<<<<<[ THIS IS VCALL  ]>>>>>>>>>>>>>");
-     // Navigator.of(navigationKey.currentState!.context).push(MaterialPageRoute(builder: (context)=>OnePage()));
+      // Navigator.of(navigationKey.currentState!.context).push(MaterialPageRoute(builder: (context)=>OnePage()));
       FirebaseNotificationsA.showCallNotification(
           message.notification!.title,
           message.notification!.body,
@@ -43,10 +46,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           message.notification!.title, message.notification!.body);
   }
 }
+void main() async {
 
-Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent
+  ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -60,6 +64,8 @@ Future<void> main() async {
   ),);*/
 }
 
+
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -67,17 +73,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FirebaseNotificationsA firebaseNotificationsA = FirebaseNotificationsA();
-
   @override
   void initState() {
+    firebaseNotificationsA.setupFirebase(context);
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      firebaseNotificationsA.setupFirebase(context);
-    });
   }
-
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         builder: BotToastInit(),

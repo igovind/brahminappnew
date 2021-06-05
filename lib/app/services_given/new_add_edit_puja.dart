@@ -333,7 +333,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
       samagri = widget.docSnap!.get('Pujan Samagri');
       _additionalDisctription = widget.docSnap!.get('PanditD');
       _time = widget.docSnap!.get('time');
-      _onlineRate = widget.docSnap!.get('onlinePrice');
+      //_onlineRate = widget.docSnap!.get('onlinePrice');
     }
     return Scaffold(
       appBar: AppBar(
@@ -704,7 +704,7 @@ class _NewAddAndEditPujaState extends State<NewAddAndEditPuja> {
                       height:
                           MagicScreen(height: 50, context: context).getHeight,
                     ),
-                    CustomContainer(
+                   widget.docSnap!=null?SizedBox(): CustomContainer(
                       radius: 10,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
