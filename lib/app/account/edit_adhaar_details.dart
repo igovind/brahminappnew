@@ -182,9 +182,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
       if (widget.address != null) {
         Navigator.of(context).pop();
       }
-      if (widget.check == null) {
-        FireStoreDatabase(uid: widget.uid).updateData(data: {"ready": true});
-      }
+
     } else {
       showDialog(
           context: context,
@@ -224,7 +222,7 @@ class _EditAdhaarDetailsState extends State<EditAdhaarDetails> {
               ? TextButton(
                   onPressed: () {
                     FireStoreDatabase(uid: widget.uid)
-                        .updateData(data: {"ready": true,"index":5});
+                        .updateData(data: {"ready": true,"index":3});
                   },
                   child: Text(
                     Language(code: widget.language, text: [

@@ -1,5 +1,4 @@
 import 'package:brahminapp/app/home/chat/ChatListModal.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'api.dart';
 import 'firestore.dart';
@@ -206,7 +205,12 @@ class FireStoreDatabase implements DatabaseL {
   Stream<QuerySnapshot> get getAstroList {
     return fireStore.collection('punditUsers/$uid/astro_offering').snapshots();
   }
-
+  Stream<DocumentSnapshot>  get getPanchang {
+    return fireStore.doc('inventories/panchang').snapshots();
+  }
+  Stream<DocumentSnapshot> get getListOfPuja {
+    return fireStore.doc('inventories/listed_puja').snapshots();
+  }
   Stream<QuerySnapshot> get getTempCall {
     return fireStore.collection('punditUsers/$uid/tempcall').snapshots();
   }

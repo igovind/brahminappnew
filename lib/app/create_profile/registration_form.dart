@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
 import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
@@ -50,6 +49,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String? coverPicUrl;
   String? punditType;
   late String refBy;
+  String? expi;
 
   Position? userLocation;
   bool locationLoading = false;
@@ -61,7 +61,61 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String? refPicUrl;
   String? refAbt;
   String? refUID;
+  String? lang;
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
+      value: 'Hindi',
+      child: Text('Hindi'),
+    ),
+    DropdownMenuItem(
+      value: 'English',
+      child: Text('English'),
+    ),
+    DropdownMenuItem(
+      value: 'Kannada',
+      child: Text('Kannada'),
+    ),
+    DropdownMenuItem(
+      value: 'Malayalam',
+      child: Text('Malayalam'),
+    ),
+    DropdownMenuItem(
+      value: 'Odia',
+      child: Text('Odia'),
+    ),
+    DropdownMenuItem(
+      value: 'Punjabi',
+      child: Text('Punjabi'),
+    ),
+    DropdownMenuItem(
+      value: 'Gujarati',
+      child: Text('Gujarati'),
+    ),
+    DropdownMenuItem(
+      value: 'Urdu',
+      child: Text('Urdu'),
+    ),
+    DropdownMenuItem(
+      value: 'Tamil',
+      child: Text('Tamil'),
+    ),
+    DropdownMenuItem(
+      value: 'Telugu',
+      child: Text('Telugu'),
+    ),
+    DropdownMenuItem(
+      value: 'Marathi',
+      child: Text('Marathi'),
+    ),
+    DropdownMenuItem(
+      value: 'Bengali',
+      child: Text('Bengali'),
+    ),
+  ];
+  List<int> _selectedLanguageIndex = [];
+
 
   bool _validateAndSaveForm() {
     final form = _sTFormKey.currentState!;
@@ -208,10 +262,19 @@ class _RegistrationFormState extends State<RegistrationForm> {
       String profileUrl = await submitProfilePic();
       String coverUrl = await submitCoverPic();
       String code = _availableCode();
+      String lang = "";
+      _selectedLanguageIndex.forEach((element) {
+        lang = lang +" "+ items[element].value;
+      });
+
+      print(" $lang $expi $_selectedLanguageIndex/////");
       FireStoreDatabase(uid: widget.uid).setData(data: {
         'firstName': capitalize(fullName!),
         'aboutYou': aboutYou,
+        'astrologer':false,
         'number': contact,
+        'experience': expi,
+        'lang': lang,
         'state': state,
         'type': punditType,
         'refCode': "G" + code,
@@ -239,7 +302,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'PujaKeywords': '#',
         "index": 1,
         "langCode": widget.language,
-        "lang": Language(code: widget.language).getLang,
+        "langA": Language(code: widget.language).getLang,
         "dateOfProfileCreation": FieldValue.serverTimestamp(),
         "dateOfProfileUpdate": FieldValue.arrayUnion([DateTime.now()])
       }).whenComplete(() {
@@ -314,7 +377,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             'type': 'specific'
           });
         });
-      }).whenComplete((){
+      }).whenComplete(() {
         FirebaseFirestore.instance
             .doc("punditUsers/${widget.uid}/reviews/behaviou")
             .set({
@@ -343,11 +406,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         }).whenComplete(() {
           FirebaseFirestore.instance
               .doc("Avaliable_pundit/${widget.uid}/Category/All")
-              .set({
-            'items': 0,
-            'name': "All",
-            'type': "#all"
-          });
+              .set({'items': 0, 'name': "All", 'type': "#all"});
         });
       }).whenComplete(() async {
         if (this.mounted) {
@@ -418,6 +477,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem> dropdownMenuItemExperience =
+        List<DropdownMenuItem>.generate(
+            80,
+            (index) => DropdownMenuItem(
+                  child: Text(
+                    "${index + 2} " +
+                        "${Language(code: widget.language, text: [
+                              "Year ",
+                              "साल ",
+                              "বছর ",
+                              "ஆண்டு ",
+                              "సంవత్సరం "
+                            ]).getText}",
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  value: "${index + 2} Years",
+                ));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -746,6 +822,88 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                 });
                               } //_benefits = value,
                               ),
+                        ),
+                        SizedBox(
+                            height: MagicScreen(context: context, height: 10)
+                                .getHeight),
+                        CustomContainer(
+                          radius: 10,
+                          child: SearchChoices.multiple(
+                            validator: (value) {
+                              if (value == null) {
+                                return Language(code: widget.language, text: [
+                                  "This field is required",
+                                  "यह फ़ील्ड आवश्यक है",
+                                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                  "இந்த புலம் தேவை",
+                                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                ]).getText;
+                              }
+                              return null;
+                            },
+                            hint: Language(code: widget.language, text: [
+                              "Select Language",
+                              "भाषा का चयन करें",
+                              "ভাষা নির্বাচন কর",
+                              "மொழியை தேர்ந்தெடுங்கள்",
+                              "భాషను ఎంచుకోండి"
+                            ]).getText,
+                            items: items,
+                            selectedItems: _selectedLanguageIndex,
+                            icon: Icon(
+                              Icons.arrow_drop_down_circle_outlined,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                            isExpanded: true,
+                            underline: SizedBox(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedLanguageIndex = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                            height: MagicScreen(context: context, height: 10)
+                                .getHeight),
+                        CustomContainer(
+                          radius: 10,
+                          child: SearchChoices.single(
+                            validator: (value) {
+                              if (value == null) {
+                                return Language(code: widget.language, text: [
+                                  "This field is required",
+                                  "यह फ़ील्ड आवश्यक है",
+                                  "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                  "இந்த புலம் தேவை",
+                                  "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                ]).getText;
+                              }
+                              return null;
+                            },
+                            hint: Language(code: widget.language, text: [
+                              "Year of experience ",
+                              "अनुभव का वर्ष ",
+                              "অভিজ্ঞতার বছর ",
+                              "அனுபவ ஆண்டு ",
+                              "అనుభవం సంవత్సరం "
+                            ]).getText,
+                            items: dropdownMenuItemExperience,
+
+                            //selectedItems: _selectedLanguageIndex,
+                            icon: Icon(
+                              Icons.arrow_drop_down_circle_outlined,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                            isExpanded: true,
+                            value: expi,
+                            underline: SizedBox(),
+                            onChanged: (value) {
+                              setState(() {
+                                expi = value;
+                              });
+                            },
+                          ),
                         ),
                         SizedBox(
                             height: MagicScreen(context: context, height: 10)

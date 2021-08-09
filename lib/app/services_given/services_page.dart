@@ -10,7 +10,18 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 class ServicesPage extends StatefulWidget {
   final UserId? userId;
   final language;
-  const ServicesPage({Key? key, this.userId, this.language}) : super(key: key);
+  final bgImg;
+  final check;
+  final AsyncSnapshot<DocumentSnapshot> userData;
+
+  const ServicesPage(
+      {Key? key,
+      this.userId,
+      this.language,
+      required this.userData,
+      this.bgImg,
+      this.check})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +31,7 @@ class ServicesPage extends StatefulWidget {
 
 class HomeWidgetState extends State<ServicesPage>
     with SingleTickerProviderStateMixin {
-   late List<Tab> tabs;
+  late List<Tab> tabs;
 
   TabController? _tabController;
 
@@ -28,13 +39,15 @@ class HomeWidgetState extends State<ServicesPage>
   void initState() {
     super.initState();
     tabs = <Tab>[
-      Tab(text: Language(code: widget.language, text: [
-        "Puja service ",
-        "पूजा सेवा ",
-        "পূজা সেবা ",
-        "பூஜா சேவை ",
-        "పూజా సేవ "
-      ]).getText,),
+      Tab(
+        text: Language(code: widget.language, text: [
+          "Puja service ",
+          "पूजा सेवा ",
+          "পূজা সেবা ",
+          "பூஜா சேவை ",
+          "పూజా సేవ "
+        ]).getText,
+      ),
       // Tab(text: "Astrology offering"),
     ];
     _tabController = new TabController(vsync: this, length: tabs.length);
@@ -53,10 +66,24 @@ class HomeWidgetState extends State<ServicesPage>
     }
 
     return Scaffold(
-        appBar: new AppBar(
-     toolbarHeight: height(65),
-
+        appBar: widget.check!=null?AppBar(actions: [TextButton(
+            onPressed: () {
+              FireStoreDatabase(uid: widget.userId!.uid)
+                  .updateData(data: {"ready": true});
+            },
+            child: Text(
+              "Skip",
+              style: TextStyle(
+                  color: Colors.deepOrangeAccent,
+                  fontWeight: FontWeight.bold),
+            )),],backgroundColor: Colors.white,elevation: 0,): AppBar(
+          toolbarHeight: height(65),
           backgroundColor: Colors.white,
+          actions: [
+           /* widget.check == null
+                ? SizedBox()
+                : */
+          ],
           bottom: TabBar(
             isScrollable: true,
             unselectedLabelColor: Colors.grey,
@@ -96,8 +123,13 @@ class HomeWidgetState extends State<ServicesPage>
                       );
                     }
                     return TabBarView(controller: _tabController, children: [
-                      PujaOffering(snapshot: pujaOfferingSnapshot,uid: widget.userId!.uid,language: widget.language,),
-                     // AstroOffering(snapshot: pujaOfferingSnapshot,userId: widget.userId,),
+                      PujaOffering(
+                        snapshot: pujaOfferingSnapshot,
+                        uid: widget.userId!.uid,
+                        language: widget.language,
+                        userData: widget.userData,
+                      ),
+                      // AstroOffering(snapshot: pujaOfferingSnapshot,userId: widget.userId,),
                     ]);
                   });
             }));

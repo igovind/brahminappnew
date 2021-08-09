@@ -47,4 +47,8 @@ class UserDetails {
 
   double? get swastik =>
       snapshot == null ? null : snapshot!.data!.get("swastik");
+  String? get experience =>
+      snapshot == null ? null : snapshot!.data!.get("experience");
+  String? get languageSpoken =>
+      snapshot == null ? null : snapshot!.data!.get("lang");
 }

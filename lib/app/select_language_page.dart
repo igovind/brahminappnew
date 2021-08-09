@@ -22,6 +22,7 @@ class SelectLanguage extends StatelessWidget {
                     builder: (context) => Provider<AuthBase>(
                           create: (context) => Auth(),
                           child: CreateProfile(
+                            userId: userId!,
                             uid: userId!.uid,
                             language: Language(language: language).getCode,
                           ),

@@ -1,5 +1,4 @@
 import 'package:brahminapp/app/account/account_page.dart';
-import 'package:brahminapp/app/astrology/edit_astrology_price.dart';
 import 'package:brahminapp/app/bookings/bookings_page.dart';
 import 'package:brahminapp/app/services_given/services_page.dart';
 import 'package:brahminapp/services/OnePage.dart';
@@ -8,10 +7,8 @@ import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import 'package:circle_bottom_navigation_bar/circle_bottom_navigation_bar.dart';
 import 'package:circle_bottom_navigation_bar/widgets/tab_data.dart';
-
 import '../languages.dart';
 import 'home_page2.dart';
 
@@ -42,23 +39,19 @@ class _BotNavBarState extends State<BotNavBar> {
           snapshot: tabImageSnapshot,
           userDataSnapshot: userDataSnapshot,
         );
-        break;
-/*      case 1:
-        return NewsFeedSextion(
-          uid: null,
-        );
-        break;*/
+
       case 1:
         return BookingsPage(
           language: widget.language,
           userId: widget.user,
         );
-        break;
       case 2:
         return ServicesPage(
+          userData: userDataSnapshot!,
           language: widget.language,
           userId: widget.user,
         );
+
       case 3:
         return StreamBuilder<DocumentSnapshot>(
             stream: FireStoreDatabase(uid: widget.user!.uid).getAdhaarDetails,
@@ -85,7 +78,6 @@ class _BotNavBarState extends State<BotNavBar> {
                     );
                   });
             });
-        break;
     }
     return Text("error");
   }
@@ -133,7 +125,6 @@ class _BotNavBarState extends State<BotNavBar> {
   }
 
   Future<void> _handling(context) async {
-    print("[WHAT THE FUCK]");
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
@@ -169,7 +160,6 @@ class _BotNavBarState extends State<BotNavBar> {
     final viewPadding = MediaQuery.of(context).viewPadding;
     double barHeight;
     double barHeightWithNotch = 67;
-    double arcHeightWithNotch = 67;
 
     if (size.height > 700) {
       barHeight = 60;
@@ -179,7 +169,6 @@ class _BotNavBarState extends State<BotNavBar> {
 
     if (viewPadding.bottom > 0) {
       barHeightWithNotch = (size.height * 0.07) + viewPadding.bottom;
-      arcHeightWithNotch = (size.height * 0.075) + viewPadding.bottom;
     }
 
     return Scaffold(

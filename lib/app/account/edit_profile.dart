@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:brahminapp/app/account/user_details.dart';
-import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
-import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
@@ -12,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../languages.dart';
-import 'account_page.dart';
-import 'okay_button.dart';
 
 class EditProfile extends StatefulWidget {
   final AsyncSnapshot<DocumentSnapshot>? snapshot;
@@ -48,6 +44,58 @@ class _EditProfileState extends State<EditProfile> {
     }
     return false;
   }
+
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
+      value: 'Hindi',
+      child: Text('Hindi'),
+    ),
+    DropdownMenuItem(
+      value: 'English',
+      child: Text('English'),
+    ),
+    DropdownMenuItem(
+      value: 'Kannada',
+      child: Text('Kannada'),
+    ),
+    DropdownMenuItem(
+      value: 'Malayalam',
+      child: Text('Malayalam'),
+    ),
+    DropdownMenuItem(
+      value: 'Odia',
+      child: Text('Odia'),
+    ),
+    DropdownMenuItem(
+      value: 'Punjabi',
+      child: Text('Punjabi'),
+    ),
+    DropdownMenuItem(
+      value: 'Gujarati',
+      child: Text('Gujarati'),
+    ),
+    DropdownMenuItem(
+      value: 'Urdu',
+      child: Text('Urdu'),
+    ),
+    DropdownMenuItem(
+      value: 'Tamil',
+      child: Text('Tamil'),
+    ),
+    DropdownMenuItem(
+      value: 'Telugu',
+      child: Text('Telugu'),
+    ),
+    DropdownMenuItem(
+      value: 'Marathi',
+      child: Text('Marathi'),
+    ),
+    DropdownMenuItem(
+      value: 'Bengali',
+      child: Text('Bengali'),
+    ),
+  ];
+  List<int> _selectedLanguageIndex = [];
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
@@ -88,6 +136,10 @@ class _EditProfileState extends State<EditProfile> {
       } else {
         coverPicUrl = UserDetails(snapshot: widget.snapshot).coverPhoto;
       }
+      String lang = "";
+      _selectedLanguageIndex.forEach((element) {
+        lang = lang + " " + items[element].value;
+      });
       FireStoreDatabase(uid: widget.uid).updateData(data: {
         'profilePicUrl': profilePicUrl ??
             UserDetails(snapshot: widget.snapshot).profilePhoto,
@@ -98,7 +150,11 @@ class _EditProfileState extends State<EditProfile> {
         'number': contact ?? UserDetails(snapshot: widget.snapshot).aboutYou,
         'state': state ?? UserDetails(snapshot: widget.snapshot).state,
         'type': punditType ?? UserDetails(snapshot: widget.snapshot).type,
+        'experience': expi,
         "dateOfProfileUpdate": FieldValue.arrayUnion([DateTime.now()]),
+        'lang': _selectedLanguageIndex.isEmpty
+            ? UserDetails(snapshot: widget.snapshot).languageSpoken
+            : lang,
         'searchKey': fullName == null
             ? UserDetails(snapshot: widget.snapshot).name![0]
             : fullName![0].toUpperCase().toString(),
@@ -167,8 +223,35 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  String? expi;
+
+  @override
+  void initState() {
+    state = UserDetails(snapshot: widget.snapshot).state;
+    expi = UserDetails(snapshot: widget.snapshot).experience;
+    punditType = UserDetails(snapshot: widget.snapshot).type;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem> dropdownMenuItemExperience =
+        List<DropdownMenuItem>.generate(
+            80,
+            (index) => DropdownMenuItem(
+                  child: Text(
+                    "${index + 2} " +
+                        "${Language(code: UserDetails(snapshot: widget.snapshot).language, text: [
+                              "Year ",
+                              "साल ",
+                              "বছর ",
+                              "ஆண்டு ",
+                              "సంవత్సరం "
+                            ]).getText}",
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  value: "${index + 2} Years",
+                ));
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -262,40 +345,41 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             Align(
                                 alignment: Alignment.bottomCenter,
-                                child:GestureDetector(
-                                  onTap: () {getProfilePic(source: ImageSource.gallery);},
-                                  child: userProfilePicFile !=
-                                      null
+                                child: GestureDetector(
+                                  onTap: () {
+                                    getProfilePic(source: ImageSource.gallery);
+                                  },
+                                  child: userProfilePicFile != null
                                       ? Container(
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        image: DecorationImage(
-                                            image: FileImage(
-                                                userProfilePicFile!)),
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.black38,
-                                              blurRadius: 5)
-                                        ]),
-                                  )
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              image: DecorationImage(
+                                                  image: FileImage(
+                                                      userProfilePicFile!)),
+                                              shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black38,
+                                                    blurRadius: 5)
+                                              ]),
+                                        )
                                       : Container(
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                UserDetails(
-                                                    snapshot: widget
-                                                        .snapshot)
-                                                    .profilePhoto!)),
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.black38,
-                                              blurRadius: 5)
-                                        ]),
-                                  ),
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      UserDetails(
+                                                              snapshot: widget
+                                                                  .snapshot)
+                                                          .profilePhoto!)),
+                                              shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black38,
+                                                    blurRadius: 5)
+                                              ]),
+                                        ),
                                 ))
                           ],
                         ),
@@ -436,9 +520,7 @@ class _EditProfileState extends State<EditProfile> {
                             } //_benefits = value,
                             ),
                       ),
-                      SizedBox(
-                          height: MagicScreen(context: context, height: 10)
-                              .getHeight),
+
                       /*CustomContainer(
                           radius: 10,
                           child: Padding(
@@ -672,17 +754,277 @@ class _EditProfileState extends State<EditProfile> {
                               }),
                         ),
                       ),*/
+
+                      CustomContainer(
+                        radius: 10,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: StreamBuilder<DocumentSnapshot>(
+                              stream: FireStoreDatabase(uid: widget.uid)
+                                  .getPunditTypes,
+                              builder: (context, snapshot1) {
+                                if (snapshot1.data == null) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                List<dynamic> typeArray =
+                                    snapshot1.data!.get('punditTypes');
+
+                                List<DropdownMenuItem<String>> typeList = [];
+                                for (int i = 0; i < typeArray.length; i++) {
+                                  String name = typeArray[i];
+                                  typeList.add(DropdownMenuItem(
+                                    value: name,
+                                    child: Text(name),
+                                  ));
+                                }
+                                return SearchChoices.single(
+                                  disabledHint: true,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return Language(
+                                          code: UserDetails(
+                                                  snapshot: widget.snapshot)
+                                              .language,
+                                          text: [
+                                            "This field is required",
+                                            "यह फ़ील्ड आवश्यक है",
+                                            "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                            "இந்த புலம் தேவை",
+                                            "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                          ]).getText;
+                                    }
+                                    return null;
+                                  },
+
+                                  label: Language(
+                                      code:
+                                          UserDetails(snapshot: widget.snapshot)
+                                              .language,
+                                      text: [
+                                        "Select Pandit Type ",
+                                        "पंडित प्रकार का चयन करें ",
+                                        "পন্ডিত প্রকার নির্বাচন করুন ",
+                                        "பண்டிட் வகையைத் தேர்ந்தெடுக்கவும் ",
+                                        "పండిట్ రకాన్ని ఎంచుకోండి "
+                                      ]).getText,
+                                  // lableColor: Colors.black54,
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_circle_outlined,
+                                    color: Colors.deepOrangeAccent,
+                                  ),
+                                  underline: SizedBox(),
+                                  items: typeList,
+                                  value: punditType,
+                                  isExpanded: true,
+                                  //icon: Icon(Icons.description),
+                                  displayClearIcon: false,
+
+                                  //underline: false,
+                                  searchHint: Language(
+                                      code:
+                                          UserDetails(snapshot: widget.snapshot)
+                                              .language,
+                                      text: [
+                                        "Select one ",
+                                        "एक का चयन करें ",
+                                        "একটা নির্বাচন করুন ",
+                                        "ஒன்றை தேர்ந்தெடு ",
+                                        "ఒకటి ఎంచుకో "
+                                      ]).getText,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      punditType = value;
+                                    });
+                                  },
+                                );
+                              }),
+                        ),
+                      ),
+                      SizedBox(
+                          height: MagicScreen(context: context, height: 10)
+                              .getHeight),
+                      CustomContainer(
+                        radius: 10,
+                        child: SearchChoices.single(
+                          validator: (value) {
+                            if (value == null) {
+                              return Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "This field is required",
+                                    "यह फ़ील्ड आवश्यक है",
+                                    "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                    "இந்த புலம் தேவை",
+                                    "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                  ]).getText;
+                            }
+                            return null;
+                          },
+                          label: Language(
+                              code: UserDetails(snapshot: widget.snapshot)
+                                  .language,
+                              text: [
+                                "Year of experience ",
+                                "अनुभव का वर्ष ",
+                                "অভিজ্ঞতার বছর ",
+                                "அனுபவ ஆண்டு ",
+                                "అనుభవం సంవత్సరం "
+                              ]).getText,
+                          items: dropdownMenuItemExperience,
+                          //selectedItems: _selectedLanguageIndex,
+                          icon: Icon(
+                            Icons.arrow_drop_down_circle_outlined,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                          isExpanded: true,
+                          value: expi,
+                          underline: SizedBox(),
+                          onChanged: (value) {
+                            setState(() {
+                              expi = value;
+                            });
+                          },
+                        ),
+                      ),
                       SizedBox(
                         height: 10,
                       ),
-                      Divider(
+                      CustomContainer(
+                          radius: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: StreamBuilder<DocumentSnapshot>(
+                                stream: FireStoreDatabase(uid: widget.uid)
+                                    .getStates,
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  List<dynamic> statesArray =
+                                      snapshot.data!.get('states');
+                                  List<DropdownMenuItem<String>> statesList =
+                                      [];
+                                  for (int i = 0; i < statesArray.length; i++) {
+                                    String name = statesArray[i];
+                                    statesList.add(DropdownMenuItem(
+                                      value: name,
+                                      child: Text(name),
+                                    ));
+                                  }
+                                  return SearchChoices.single(
+                                    underline: SizedBox(),
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      color: Colors.deepOrangeAccent,
+                                    ),
+                                    items: statesList,
+                                    value: state,
+                                    label: Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Select your state",
+                                          "अपना राज्य चुनें",
+                                          "আপনার রাষ্ট্র নির্বাচন করুন",
+                                          "உங்கள் மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
+                                          "మీ రాష్ట్రాన్ని ఎంచుకోండి"
+                                        ]).getText,
+                                    // lableColor: Colors.black54,
+                                    isExpanded: true,
+                                    //icon: Icon(Icons.description),
+                                    displayClearIcon: false,
+                                    hint: state ??
+                                        "${UserDetails(snapshot: null).state}",
+                                    //underline: false,
+                                    searchHint: Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Select one ",
+                                          "एक का चयन करें ",
+                                          "একটা নির্বাচন করুন ",
+                                          "ஒன்றை தேர்ந்தெடு ",
+                                          "ఒకటి ఎంచుకో "
+                                        ]).getText,
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        state = value;
+                                      });
+                                    },
+                                  );
+                                }),
+                          )),
+                      SizedBox(
+                          height: MagicScreen(context: context, height: 10)
+                              .getHeight),
+                      CustomContainer(
+                          radius: 10,
+                          child: Column(
+                            children: [
+                              SearchChoices.multiple(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "This field is required",
+                                          "यह फ़ील्ड आवश्यक है",
+                                          "ঘরটি অবশ্যই পূরণ করতে হবে",
+                                          "இந்த புலம் தேவை",
+                                          "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను"
+                                        ]).getText;
+                                  }
+                                  return null;
+                                },
+                                hint: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "Select Language",
+                                      "भाषा का चयन करें",
+                                      "ভাষা নির্বাচন কর",
+                                      "மொழியை தேர்ந்தெடுங்கள்",
+                                      "భాషను ఎంచుకోండి"
+                                    ]).getText,
+                                items: items,
+                                selectedItems: _selectedLanguageIndex,
+                                icon: Icon(
+                                  Icons.arrow_drop_down_circle_outlined,
+                                  color: Colors.deepOrangeAccent,
+                                ),
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedLanguageIndex = value;
+                                  });
+                                },
+                              ),
+                              Text(UserDetails(snapshot: widget.snapshot)
+                                  .languageSpoken!),
+                            ],
+                          )),
+                      /*Divider(
                         thickness: 0.5,
                         color: Colors.deepOrangeAccent,
                       ),
                       SizedBox(
                         height: 10,
-                      ),
-                      UserDetails(snapshot: widget.snapshot).astrologer!
+                      ),*/
+                      /* UserDetails(snapshot: widget.snapshot).astrologer!
                           ? SizedBox()
                           : AccountTile(
                               title: Language(
@@ -703,7 +1045,7 @@ class _EditProfileState extends State<EditProfile> {
                                           uid: widget.uid,
                                         )));
                               },
-                            )
+                            )*/
                     ],
                   ),
                 ),

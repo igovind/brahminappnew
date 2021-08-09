@@ -3,6 +3,7 @@ import 'package:brahminapp/app/account/bank_details.dart';
 import 'package:brahminapp/app/account/choose_language.dart';
 import 'package:brahminapp/app/account/edit_profile.dart';
 import 'package:brahminapp/app/account/gallery_page.dart';
+import 'package:brahminapp/app/account/share_profile.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/common_widgets/circular_profile_pic.dart';
@@ -195,318 +196,368 @@ class _AccountPageState extends State<AccountPage> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: height(430),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 15),
-                        height: height(200),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black54, blurRadius: 5)
-                            ],
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    UserDetails(snapshot: widget.snapshot)
-                                        .coverPhoto!),
-                                fit: BoxFit.fitWidth),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(50),
-                                bottomRight: Radius.circular(50))),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: TextButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          color:
-                                              Theme.of(context).canvasColor,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30),
-                                              topRight:
-                                                  Radius.circular(30))),
-                                      height: MediaQuery.of(context)
-                                              .size
-                                              .height *
-                                          0.9,
-                                      child: EditProfile(
-                                        uid: widget.userId!.uid,
-                                        snapshot: widget.snapshot,
-                                      ));
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: height(430),
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(top: 15),
+                            height: height(200),
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black54, blurRadius: 5)
+                                ],
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        UserDetails(snapshot: widget.snapshot)
+                                            .coverPhoto!),
+                                    fit: BoxFit.fitWidth),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(50),
+                                    bottomRight: Radius.circular(50))),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    backgroundColor: Colors.transparent,
+                                    context: context,
+                                    builder: (context) {
+                                      return Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Theme.of(context).canvasColor,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(30),
+                                                  topRight:
+                                                      Radius.circular(30))),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.9,
+                                          child: EditProfile(
+                                            uid: widget.userId!.uid,
+                                            snapshot: widget.snapshot,
+                                          ));
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black54,
-                                        blurRadius: 3)
-                                  ],
-                                  color: Colors.deepOrangeAccent,
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Text(
-                                Language(
-                                    code: UserDetails(
-                                            snapshot: widget.snapshot)
-                                        .language,
-                                    text: [
-                                      "Edit profile ",
-                                      "प्रोफ़ाइल संपादित करें ",
-                                      "জীবন বৃত্তান্ত সম্পাদনা ",
-                                      "சுயவிவரத்தைத் திருத்து ",
-                                      "ప్రొఫైల్‌ను సవరించండి "
-                                    ]).getText,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black54,
+                                            blurRadius: 3)
+                                      ],
+                                      color: Colors.deepOrangeAccent,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Text(
+                                    Language(
+                                        code: UserDetails(
+                                                snapshot: widget.snapshot)
+                                            .language,
+                                        text: [
+                                          "Edit profile ",
+                                          "प्रोफ़ाइल संपादित करें ",
+                                          "জীবন বৃত্তান্ত সম্পাদনা ",
+                                          "சுயவிவரத்தைத் திருத்து ",
+                                          "ప్రొఫైల్‌ను సవరించండి "
+                                        ]).getText,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          height: height(300),
-                          width: width(300),
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black54, blurRadius: 5)
-                              ],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: height(20),
-                              ),
-                              CircularProfilePic(
-                                imageUrl:
-                                    UserDetails(snapshot: widget.snapshot)
-                                        .profilePhoto,
-                              ),
-                              SizedBox(
-                                height: height(10),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              height: height(300),
+                              width: width(300),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black54, blurRadius: 5)
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
                                 children: [
+
+                                  CircularProfilePic(
+                                    imageUrl:
+                                        UserDetails(snapshot: widget.snapshot)
+                                            .profilePhoto,
+                                  ),
+                                  SizedBox(
+                                    height: height(10),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${UserDetails(snapshot: widget.snapshot).name}",
+                                        style: TextStyle(
+                                            color: Colors.deepOrangeAccent,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      UserDetails(snapshot: widget.snapshot)
+                                              .verified!
+                                          ? Icon(
+                                              Icons.verified,
+                                              color: Colors.deepOrangeAccent,
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
                                   Text(
-                                    "${UserDetails(snapshot: widget.snapshot).name}",
+                                    "${UserDetails(snapshot: widget.snapshot).type}",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${UserDetails(snapshot: widget.snapshot).swastik}  ",
+                                        style: TextStyle(
+                                            color: Colors.deepOrangeAccent),
+                                      ),
+                                      Icon(
+                                        Icons.star_border,
+                                        color: Colors.deepOrangeAccent,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.place,
+                                        size: height(16),
+                                        color: Colors.red,
+                                      ),
+                                      Text(
+                                          "${UserDetails(snapshot: widget.snapshot).state}, "),
+                                      Text(
+                                          "${UserDetails(snapshot: widget.snapshot).city}"),
+                                    ],
+                                  ),
+                                  Text(
+                                    "${UserDetails(snapshot: widget.snapshot).aboutYou}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black54, fontSize: 12),
+                                  ),
+                                  Text(
+                                    "${widget.userId!.userEmail}",
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.deepOrangeAccent,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                        fontSize: 12),
                                   ),
-                                  UserDetails(snapshot: widget.snapshot)
-                                          .verified!
-                                      ? Icon(
-                                          Icons.verified,
-                                          color: Colors.deepOrangeAccent,
-                                        )
-                                      : SizedBox(),
                                 ],
                               ),
-                              Text(
-                                "${UserDetails(snapshot: widget.snapshot).type}",
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height:
+                          MagicScreen(height: 10, context: context).getHeight,
+                    ),
+                    Container(
+                      // color: Colors.black54,
+                      height: MagicScreen(context: context, height: 250).height,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            AccountTile(
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Gallery ",
+                                    "गेलरी ",
+                                    "গ্যালারী ",
+                                    "கேலரி ",
+                                    "గ్యాలరీ "
+                                  ]).getText,
+                              icon: Icons.photo_camera,
+                              child: GalleryPage(
+                                language: UserDetails(snapshot: widget.snapshot)
+                                    .language,
+                                uid: widget.userId!.uid,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "${UserDetails(snapshot: widget.snapshot).swastik}  ",
-                                    style: TextStyle(
-                                        color: Colors.deepOrangeAccent),
-                                  ),
-                                  Icon(
-                                    Icons.star_border,
-                                    color: Colors.deepOrangeAccent,
-                                  )
-                                ],
+                            ),
+                            SizedBox(
+                              height: MagicScreen(height: 12, context: context)
+                                  .getHeight,
+                            ),
+                            AccountTile(
+                              height: widget.bankSnapshot!.data!.data() == null
+                                  ? MagicScreen(height: 500, context: context)
+                                      .getHeight
+                                  : MagicScreen(height: 400, context: context)
+                                      .getHeight,
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Bank Details ",
+                                    "बैंक विवरण ",
+                                    "ব্যাংক বিবরণ ",
+                                    "வங்கி விவரங்கள் ",
+                                    "బ్యాంక్ వివరములు "
+                                  ]).getText,
+                              icon: Icons.home_repair_service,
+                              child: BankDetailsPage(
+                                language: UserDetails(snapshot: widget.snapshot)
+                                    .language,
+                                uid: widget.userId!.uid,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.place,
-                                    size: height(16),
-                                    color: Colors.red,
-                                  ),
-                                  Text(
-                                      "${UserDetails(snapshot: widget.snapshot).state}, "),
-                                  Text(
-                                      "${UserDetails(snapshot: widget.snapshot).city}"),
-                                ],
+                            ),
+                            SizedBox(
+                              height: MagicScreen(height: 12, context: context)
+                                  .getHeight,
+                            ),
+                            AccountTile(
+                              height: widget.adhaarSnapshot!.data!.data() ==
+                                      null
+                                  ? MagicScreen(height: 660, context: context)
+                                      .getHeight
+                                  : MagicScreen(height: 500, context: context)
+                                      .getHeight,
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Adhaar details ",
+                                    "अधार विवरण ",
+                                    "আধার বিবরণ ",
+                                    "ஆதார் விவரங்கள் ",
+                                    "అధార్ వివరాలు "
+                                  ]).getText,
+                              icon: Icons.file_copy_rounded,
+                              child: AdhaarDetailsPage(
+                                language: UserDetails(snapshot: widget.snapshot)
+                                    .language,
+                                uid: widget.userId!.uid,
                               ),
-                              Text(
-                                "${UserDetails(snapshot: widget.snapshot).aboutYou}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12),
+                            ),
+                            SizedBox(
+                              height: MagicScreen(height: 12, context: context)
+                                  .getHeight,
+                            ),
+                            AccountTile(
+                                height:
+                                    MagicScreen(height: 300, context: context)
+                                        .getHeight,
+                                title: Language(
+                                    code: UserDetails(snapshot: widget.snapshot)
+                                        .language,
+                                    text: [
+                                      "Language ",
+                                      "भाषा ",
+                                      "ভাষা ",
+                                      "மொழி ",
+                                      "భాష "
+                                    ]).getText,
+                                icon: Icons.language,
+                                child: ChooseLanguage(
+                                  uid: widget.userId!.uid,
+                                  language:
+                                      UserDetails(snapshot: widget.snapshot)
+                                          .language,
+                                )),
+                            SizedBox(
+                              height: MagicScreen(height: 12, context: context)
+                                  .getHeight,
+                            ),
+                            AccountTile(
+                              icon: Icons.add_location_alt,
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Tap to update location ",
+                                    "स्थान अपडेट करने के लिए टैप करें ",
+                                    "অবস্থান আপডেট করতে আলতো চাপুন ",
+                                    "இருப்பிடத்தைப் புதுப்பிக்க தட்டவும் ",
+                                    "స్థానాన్ని నవీకరించడానికి నొక్కండి "
+                                  ]).getText,
+                              onPress: () {
+                                updateLocation();
+                              },
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            AccountTile(
+                              icon: Icons.verified_outlined,
+                              child: ShareProfile(
+                                userData: widget.snapshot!,
                               ),
-                            ],
-                          ),
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Download E-Certificate ",
+                                    "ई-सर्टिफिकेट डाउनलोड करेंं ",
+                                    "ই-শংসাপত্র ডাউনলোড করুন ",
+                                    "மின் சான்றிதழைப் பதிவிறக்குக ",
+                                    "ఇ-సర్టిఫికెట్‌ను డౌన్‌లోడ్ చేయండి "
+                                  ]).getText,
+                            ),
+                            SizedBox(
+                              height: MagicScreen(height: 12, context: context)
+                                  .getHeight,
+                            ),
+                            AccountTile(
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Logout ",
+                                    "लॉग आउट ",
+                                    "প্রস্থান ",
+                                    "வெளியேறு ",
+                                    "లాగ్ అవుట్ "
+                                  ]).getText,
+                              icon: Icons.logout,
+                              onPress: () {
+                                _confirmSignOut(context);
+                              },
+                            ),
+                            SizedBox(
+                              height: MagicScreen(height: 20, context: context)
+                                  .getHeight,
+                            ),
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 20, context: context).getHeight,
-                ),
-                AccountTile(
-                  title: Language(
-                      code: UserDetails(snapshot: widget.snapshot).language,
-                      text: [
-                        "Gallery ",
-                        "गेलरी ",
-                        "গ্যালারী ",
-                        "கேலரி ",
-                        "గ్యాలరీ "
-                      ]).getText,
-                  icon: Icons.photo_camera,
-                  child: GalleryPage(
-                    language:
-                        UserDetails(snapshot: widget.snapshot).language,
-                    uid: widget.userId!.uid,
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 12, context: context).getHeight,
-                ),
-                AccountTile(
-                  height: widget.bankSnapshot!.data!.data() == null
-                      ? MagicScreen(height: 500, context: context).getHeight
-                      : MagicScreen(height: 400, context: context)
-                          .getHeight,
-                  title: Language(
-                      code: UserDetails(snapshot: widget.snapshot).language,
-                      text: [
-                        "Bank Details ",
-                        "बैंक विवरण ",
-                        "ব্যাংক বিবরণ ",
-                        "வங்கி விவரங்கள் ",
-                        "బ్యాంక్ వివరములు "
-                      ]).getText,
-                  icon: Icons.home_repair_service,
-                  child: BankDetailsPage(
-                    language:
-                        UserDetails(snapshot: widget.snapshot).language,
-                    uid: widget.userId!.uid,
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 12, context: context).getHeight,
-                ),
-                AccountTile(
-                  height: widget.adhaarSnapshot!.data!.data() == null
-                      ? MagicScreen(height: 660, context: context).getHeight
-                      : MagicScreen(height: 500, context: context)
-                          .getHeight,
-                  title: Language(
-                      code: UserDetails(snapshot: widget.snapshot).language,
-                      text: [
-                        "Adhaar details ",
-                        "अधार विवरण ",
-                        "আধার বিবরণ ",
-                        "ஆதார் விவரங்கள் ",
-                        "అధార్ వివరాలు "
-                      ]).getText,
-                  icon: Icons.file_copy_rounded,
-                  child: AdhaarDetailsPage(
-                    language:
-                        UserDetails(snapshot: widget.snapshot).language,
-                    uid: widget.userId!.uid,
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 12, context: context).getHeight,
-                ),
-                AccountTile(
-                    height: MagicScreen(height: 300, context: context)
-                        .getHeight,
-                    title: Language(
-                        code:
-                            UserDetails(snapshot: widget.snapshot).language,
-                        text: [
-                          "Language ",
-                          "भाषा ",
-                          "ভাষা ",
-                          "மொழி ",
-                          "భాష "
-                        ]).getText,
-                    icon: Icons.language,
-                    child: ChooseLanguage(
-                      uid: widget.userId!.uid,
-                      language:
-                          UserDetails(snapshot: widget.snapshot).language,
-                    )),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 12, context: context).getHeight,
-                ),
-                AccountTile(
-                  title: Language(
-                      code: UserDetails(snapshot: widget.snapshot).language,
-                      text: [
-                        "Logout ",
-                        "लॉग आउट ",
-                        "প্রস্থান ",
-                        "வெளியேறு ",
-                        "లాగ్ అవుట్ "
-                      ]).getText,
-                  icon: Icons.logout,
-                  onPress: () {
-                    _confirmSignOut(context);
-                  },
-                ),
-                SizedBox(
-                  height:
-                      MagicScreen(height: 20, context: context).getHeight,
-                ),
-                AccountTile(
-                  icon: Icons.add_location_alt,
-                  title: Language(
-                      code: UserDetails(snapshot: widget.snapshot).language,
-                      text: [
-                        "Tap to update location ",
-                        "स्थान अपडेट करने के लिए टैप करें ",
-                        "অবস্থান আপডেট করতে আলতো চাপুন ",
-                        "இருப்பிடத்தைப் புதுப்பிக்க தட்டவும் ",
-                        "స్థానాన్ని నవీకరించడానికి నొక్కండి "
-                      ]).getText,
-                  onPress: () {
-                    updateLocation();
-                  },
-                )
-              ],
-            ));
+              ));
   }
 }
 
@@ -526,7 +577,7 @@ class AccountTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPress ??
           () {
-             showModalBottomSheet(
+            showModalBottomSheet(
               backgroundColor: Colors.transparent,
               context: context,
               builder: (context) {

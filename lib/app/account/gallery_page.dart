@@ -38,7 +38,7 @@ class GalleryPage extends StatelessWidget {
               ? SizedBox()
               : TextButton(
                   onPressed: () {
-                    FireStoreDatabase(uid: uid).updateData(data: {'index': 3});
+                    FireStoreDatabase(uid: uid).updateData(data: {'index': 2});
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

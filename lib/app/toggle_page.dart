@@ -1,7 +1,4 @@
-import 'package:brahminapp/app/account/user_details.dart';
-import 'package:brahminapp/app/astrology/calls/index.dart';
 import 'package:brahminapp/app/create_profile/create_profile.dart';
-import 'package:brahminapp/app/home/bottom_navigation_bar_page.dart';
 import 'package:brahminapp/app/home/one_more_bottom_navy.dart';
 import 'package:brahminapp/app/select_language_page.dart';
 import 'package:brahminapp/services/auth.dart';
@@ -23,7 +20,6 @@ class TogglePage extends StatefulWidget {
 class _TogglePageState extends State<TogglePage> {
   @override
   void initState()  {
-    // TODO: implement initState
     /*QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("punditUsers/${widget.user!.uid}/tempcall")
         .get();
@@ -65,17 +61,18 @@ class _TogglePageState extends State<TogglePage> {
           bool ready = snapshot.data!.get("ready") ?? true;
           if (!ready) {
             return CreateProfile(
+              userId: widget.user!,
               uid: widget.user!.uid,
               language: lang,
             );
           }
-          if (UserDetails(snapshot: snapshot).astrologer!) {
+      /*    if (UserDetails(snapshot: snapshot).astrologer!) {
             return ExtBotNavBar(
               userDataSnapshot: snapshot,
               user: widget.user,
               language: lang,
             );
-          }
+          }*/
           return Provider<UserId?>.value(
             value: widget.user,
             child: Provider<DatabaseL>(

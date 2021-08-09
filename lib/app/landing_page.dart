@@ -1,9 +1,6 @@
-import 'package:brahminapp/app/testingPage.dart';
 import 'package:brahminapp/app/toggle_page.dart';
-import 'package:brahminapp/services/OnePage.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/sign_in/sign_in_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +40,8 @@ class _LandingPageState extends State<LandingPage> {
               child: Provider<DatabaseL>(
                 create: (BuildContext context) =>
                     FireStoreDatabase(uid: user.uid),
+               // child: SharePuja(),
+                //child: AddNewPuja(uid: user.uid,),
                 child: TogglePage(
                   user: user,
                 ),
