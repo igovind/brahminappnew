@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:brahminapp/services/auth.dart';
-import 'package:flutter/foundation.dart';
 import 'email_sign_in_model.dart';
 
 class EmailSignInBloc {

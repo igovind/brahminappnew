@@ -1,11 +1,9 @@
 import 'package:brahminapp/common_widgets/CustomSearchableDropdown.dart';
 import 'package:brahminapp/common_widgets/custom_text_field.dart';
-import 'package:brahminapp/common_widgets/custom_multi_select_file.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../languages.dart';
 
 class EditAstrologyForm extends StatefulWidget {

@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/astrology/calls/settings.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:brahminapp/services/media_querry.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

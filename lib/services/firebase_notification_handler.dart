@@ -1,29 +1,26 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'OnePage.dart';
-import 'auth.dart';
 import 'notification_handler.dart';
 
 class FirebaseNotificationsA {
-  late FirebaseMessaging _messaging;
+
   late BuildContext context;
 
   void setupFirebase(BuildContext context) {
-    _messaging = FirebaseMessaging.instance;
+   // _messaging = FirebaseMessaging.instance;
     NotificationHandler.initNotification(context);
     firebaseCloudMessageListner(context);
     NotificationHandler.myContext = context;
   }
 
   void firebaseCloudMessageListner(BuildContext context) async {
-    NotificationSettings settings = await _messaging.requestPermission(
+    /*NotificationSettings settings = await _messaging.requestPermission(
       alert: true,
       announcement: true,
       badge: true,
@@ -31,7 +28,7 @@ class FirebaseNotificationsA {
       criticalAlert: false,
       provisional: false,
       sound: true,
-    );
+    );*/
 
 
     //get token
@@ -125,7 +122,6 @@ class FirebaseNotificationsA {
 
   static void showCallNotification(title, body, channel, callType) async {
     print("<<<<<<<<<<[ THIS IS CALL NOTIFICATION ]>>>>>>>>>>>>>");
-    const int insistentFlag = 4;
     var androidChannel = AndroidNotificationDetails(
         "com.pujapurohit.brjnjnkahminapp",
         "channvhvhvhelName",
@@ -149,7 +145,7 @@ class FirebaseNotificationsA {
   static void showBookingNotification(title, body) async {
     print(
         "<<<<<<<<<<[ THIS IS BOOKING NOTIFICATION ]>>>>>>>>>>>>>$title $body");
-    const int insistentFlag = 4;
+   // const int insistentFlag = 4;
     var androidChannel = AndroidNotificationDetails(
         "com.pujapurohit.brjnjnkahminapp",
         "channvhvhvhelName",

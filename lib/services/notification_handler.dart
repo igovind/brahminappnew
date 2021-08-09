@@ -1,20 +1,10 @@
-import 'package:brahminapp/app/account/user_details.dart';
-import 'package:brahminapp/app/astrology/calls/index.dart';
-import 'package:brahminapp/app/bookings/bookings_page.dart';
-import 'package:brahminapp/app/services_given/services_page.dart';
+
 import 'package:brahminapp/main.dart';
-import 'package:brahminapp/services/OnePage.dart';
 import 'package:brahminapp/services/TempMessage.dart';
-import 'package:brahminapp/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'auth.dart';
-
-//final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 class NotificationHandler {
 
   static final flutterLocalNotificationPlugin =

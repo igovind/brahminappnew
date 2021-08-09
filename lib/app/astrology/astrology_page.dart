@@ -4,8 +4,6 @@ import 'package:brahminapp/common_widgets/custom_text_field.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../common_widgets/custom_multi_select_file.dart';
 import '../languages.dart';
 
 class AstrologyPage extends StatefulWidget {

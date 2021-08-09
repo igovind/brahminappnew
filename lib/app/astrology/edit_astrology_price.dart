@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/create_profile/edit_astrology_form.dart';
 import 'package:brahminapp/app/languages.dart';

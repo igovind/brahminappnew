@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/astrology/calls/audio_call.dart';
 import 'package:brahminapp/app/astrology/calls/video_call.dart';
 import 'package:brahminapp/common_widgets/custom_raised_button.dart';
@@ -93,7 +92,6 @@ class IndexState extends State<IndexPage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FireStoreDatabase(uid: widget.userId!.uid).getTempCall,
           builder: (context, snapshot) {
-            if (snapshot == null) {}
             if (snapshot.data == null) {
               return Center(
                 child: CircularProgressIndicator(),

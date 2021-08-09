@@ -321,7 +321,7 @@ class _FloatBoxState extends State<CustomFloatBoxPanel> {
                       },
                       child: _FloatButton(
                         size: widget.size ?? 70.0,
-                        icon: _buttons[index] ?? Icon(Icons.add),
+                        icon: _buttons[index],
                         color: widget.contentColor ?? Colors.white,
                         iconSize: widget.iconSize ?? 24.0,
                       ),

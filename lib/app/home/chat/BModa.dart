@@ -5,6 +5,7 @@ class BModal {
   final int? experience;
   BModal({this.type, this.region, this.name, this.experience,this.searchKey,this.uid,this.photoUrl});
   factory BModal.fromMap(Map<String , dynamic>data){
+    // ignore: unnecessary_null_comparison
     if (data==null){
       //TODO: changed
       return BModal();

@@ -1,4 +1,3 @@
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/media_querry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

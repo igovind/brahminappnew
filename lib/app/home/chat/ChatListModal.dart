@@ -11,6 +11,7 @@ class ChatListModal{
  ChatListModal({this.token,this.photoUrl,this.name,this.lastMessage,this.time,this.hasUnreadMessage,this.newMesssageCount,this.id});
 
   factory ChatListModal.fromMap(Map<String , dynamic>data){
+    // ignore: unnecessary_null_comparison
     if (data==null){
       return ChatListModal();
     }

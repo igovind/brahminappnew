@@ -1,4 +1,3 @@
-import 'package:brahminapp/app/account/okay_button.dart';
 import 'package:brahminapp/app/account/user_details.dart';
 import 'package:brahminapp/app/languages.dart';
 import 'package:brahminapp/services/database.dart';
