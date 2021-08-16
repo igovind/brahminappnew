@@ -226,29 +226,10 @@ class _AccountPageState extends State<AccountPage> {
                               alignment: Alignment.topRight,
                               child: TextButton(
                                 onPressed: () {
-                                  showModalBottomSheet(
-                                    backgroundColor: Colors.transparent,
-                                    context: context,
-                                    builder: (context) {
-                                      return Container(
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  Theme.of(context).canvasColor,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(30),
-                                                  topRight:
-                                                      Radius.circular(30))),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.9,
-                                          child: EditProfile(
-                                            uid: widget.userId!.uid,
-                                            snapshot: widget.snapshot,
-                                          ));
-                                    },
-                                  );
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>EditProfile(
+                                    uid: widget.userId!.uid,
+                                    snapshot: widget.snapshot,
+                                  )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -297,7 +278,6 @@ class _AccountPageState extends State<AccountPage> {
                                   borderRadius: BorderRadius.circular(15)),
                               child: Column(
                                 children: [
-
                                   CircularProfilePic(
                                     imageUrl:
                                         UserDetails(snapshot: widget.snapshot)
@@ -468,26 +448,39 @@ class _AccountPageState extends State<AccountPage> {
                                   .getHeight,
                             ),
                             AccountTile(
-                                height:
-                                    MagicScreen(height: 300, context: context)
-                                        .getHeight,
-                                title: Language(
-                                    code: UserDetails(snapshot: widget.snapshot)
-                                        .language,
-                                    text: [
-                                      "Language ",
-                                      "भाषा ",
-                                      "ভাষা ",
-                                      "மொழி ",
-                                      "భాష "
-                                    ]).getText,
-                                icon: Icons.language,
-                                child: ChooseLanguage(
-                                  uid: widget.userId!.uid,
-                                  language:
-                                      UserDetails(snapshot: widget.snapshot)
-                                          .language,
-                                )),
+                              height: MagicScreen(height: 300, context: context)
+                                  .getHeight,
+                              title: Language(
+                                  code: UserDetails(snapshot: widget.snapshot)
+                                      .language,
+                                  text: [
+                                    "Language ",
+                                    "भाषा ",
+                                    "ভাষা ",
+                                    "மொழி ",
+                                    "భాష "
+                                  ]).getText,
+                              icon: Icons.language,
+                              onPress: () {
+                                showModalBottomSheet(
+
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    height(height(400));
+                                    return Container(
+                                      height: height(400),
+                                      color: Colors.white,
+                                      child: ChooseLanguage(
+                                        uid: widget.userId!.uid,
+                                        language:
+                                            UserDetails(snapshot: widget.snapshot)
+                                                .language,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                             SizedBox(
                               height: MagicScreen(height: 12, context: context)
                                   .getHeight,
@@ -577,22 +570,8 @@ class AccountTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPress ??
           () {
-            showModalBottomSheet(
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (context) {
-                return Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).canvasColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30))),
-                    height: MagicScreen(height: height ?? 660, context: context)
-                        .getHeight,
-                    child: child);
-              },
-            );
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => child!));
           },
       child: Row(
         children: [

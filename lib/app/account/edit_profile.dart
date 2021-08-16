@@ -256,6 +256,8 @@ class _EditProfileState extends State<EditProfile> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          iconTheme: IconThemeData(color: Colors.deepOrangeAccent),
+          centerTitle: true,
           actions: [
             loading
                 ? SizedBox()

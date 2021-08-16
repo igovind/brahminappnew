@@ -21,6 +21,12 @@ class AddNewPuja extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),

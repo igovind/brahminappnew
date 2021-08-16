@@ -44,51 +44,49 @@ class _PanchangSectionState extends State<PanchangSection> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  int k = index;
-                  setState(() {
-                    set = true;
-                    k = k - 1;
-                    k < 0 ? index = 0 : index = k;
-                  });
-                },
-                icon: Icon(Icons.navigate_before),
-              ),
-              IconButton(
-                onPressed: () {
-                  int k = index;
-                  setState(() {
-                    set = true;
-                    k > (listOfPanchang.length - 2)
-                        ? index = (listOfPanchang.length - 2)
-                        : index = k;
-                    index = index + 1;
-                  });
-                },
-                icon: Icon(Icons.navigate_next),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: PanchangCard(
-                  userData: widget.userSnap,
-                  bgImage: widget.bgImg,
-                  text: listOfPanchang[index]["panchang"],
-                  date: listOfPanchang[index]["date"].toDate(),
-                ),
-              )
-            ],
-          ),SizedBox(height: 100,)
-        ],
+    return Scaffold(
+
+      appBar: AppBar(
+    actions: [ IconButton(
+      onPressed: () {
+        int k = index;
+        setState(() {
+          set = true;
+          k > (listOfPanchang.length - 2)
+              ? index = (listOfPanchang.length - 2)
+              : index = k;
+          index = index + 1;
+        });
+      },
+      icon: Icon(Icons.navigate_before),
+    ),
+    IconButton(
+      onPressed: () {
+        int k = index;
+        setState(() {
+          set = true;
+          k = k - 1;
+          k < 0 ? index = 0 : index = k;
+        });
+      },
+
+      icon: Icon(Icons.navigate_next),
+    ),],
+    backgroundColor: Colors.white,
+    elevation: 0,
+    iconTheme: IconThemeData(color: Colors.deepOrangeAccent),
+    centerTitle: true,
       ),
+      body: Column(children: [
+        SizedBox(height: 20,),
+        PanchangCard(
+          userData: widget.userSnap,
+          bgImage: widget.bgImg,
+          text: listOfPanchang[index]["panchang"],
+          date: listOfPanchang[index]["date"].toDate(),
+        ),
+      ],)
+
     );
     // index=
     // print(panchang);

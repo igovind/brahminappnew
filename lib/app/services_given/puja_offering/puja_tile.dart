@@ -1,4 +1,3 @@
-
 import 'package:brahminapp/app/services_given/puja_offering/x_puja_edit_page.dart';
 import 'package:brahminapp/services/media_querry.dart';
 
@@ -135,23 +134,24 @@ class PujaTile extends StatelessWidget {
             height: height(10),
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_)=>PujaEditTile(
-              languageCode: languageCode,
-              uid: uid,
-              edit: false,
-              keyword: keyword,
-              type: type,
-              mainSamagriList: mainSamagriList,
-              samagri: samagri,
-              name: name,
-              description: description,
-              image: image,
-              duration: duration,
-              pjid: pjid,
-              adDes: "",
-              price: "2000",
-              serviceIdL: '',
-            ))),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => PujaEditTile(
+                      languageCode: languageCode,
+                      uid: uid,
+                      edit: false,
+                      keyword: keyword,
+                      type: type,
+                      mainSamagriList: mainSamagriList,
+                      samagri: samagri,
+                      name: name,
+                      description: description,
+                      image: image,
+                      duration: duration,
+                      pjid: pjid,
+                      adDes: "",
+                      price: "2000",
+                      serviceIdL: '',
+                    ))),
             child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(

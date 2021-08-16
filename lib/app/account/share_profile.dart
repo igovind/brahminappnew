@@ -32,6 +32,7 @@ class _ShareProfileState extends State<ShareProfile> {
   String name = "योगी आदित्यनाथ";
   bool loading = false;
   GlobalKey _ssglobalKey = GlobalKey();
+
   _toastInfo(String info) {
     Fluttertoast.showToast(msg: info, toastLength: Toast.LENGTH_LONG);
   }
@@ -103,6 +104,12 @@ class _ShareProfileState extends State<ShareProfile> {
         MagicScreen(context: context, height: h).getHeight;
     double width(double h) => MagicScreen(context: context, width: h).getWidth;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -254,8 +261,10 @@ class _ShareProfileState extends State<ShareProfile> {
                                           SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
-                                              "${userDetails!.contact!.substring(0, 4)}XXXXX"),
+                                          userDetails!.contact!.length < 10
+                                              ? SizedBox()
+                                              : Text(
+                                                  "${userDetails!.contact!.substring(0, 4)}XXXXX"),
                                         ],
                                       ),
                                       Row(
@@ -267,7 +276,9 @@ class _ShareProfileState extends State<ShareProfile> {
                                             size: height(20),
                                             color: Colors.deepPurple,
                                           ),
-                                          SizedBox(width: 10,),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
                                           Text(
                                             "${userDetails!.languageSpoken}",
                                             textAlign: TextAlign.center,
@@ -353,7 +364,9 @@ class _ShareProfileState extends State<ShareProfile> {
                       ),
               ),
             ),
-            SizedBox(height: 100,)
+            SizedBox(
+              height: 100,
+            )
           ],
         ),
       ),

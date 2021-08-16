@@ -46,28 +46,11 @@ class PujaOffering extends StatelessWidget {
           return Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      // height(800);
-                      return Container(
-                          // padding: EdgeInsets.symmetric(horizontal: 10),
-                          /* decoration: BoxDecoration(
-                            color: Theme
-                                .of(context)
-                                .canvasColor,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30))),*/
-                          height: height(700),
-                          child: AddNewPuja(
-                            pujaList: pujaList,
-                            samagriList: samagriList,
-                            userData: userData,
-                          ));
-                    },
-                  );
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>AddNewPuja(
+                    pujaList: pujaList,
+                    samagriList: samagriList,
+                    userData: userData,
+                  )));
                 },
                 child: Icon(
                   Icons.add_sharp,

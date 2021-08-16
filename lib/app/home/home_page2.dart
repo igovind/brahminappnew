@@ -113,24 +113,11 @@ class _HomePageFolderState extends State<HomePageFolder> {
                         ),
                         child: ListTile(
                             onTap: () {
-                              showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).canvasColor,
-                                      ),
-                                      height: MagicScreen(
-                                              height: 660, context: context)
-                                          .getHeight,
-                                      child: NoticeBoard(
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => NoticeBoard(
                                         language: widget.language,
                                         noticeBoardList: noticeBoardList,
-                                      ));
-                                },
-                              );
+                                      )));
                             },
                             trailing: noticeBoardList[index]['important']
                                 ? Icon(
@@ -183,7 +170,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  height: height(220),
+                  height: height(120),
                   // width: 300,
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -195,7 +182,52 @@ class _HomePageFolderState extends State<HomePageFolder> {
                     color: Colors.white, //HexColor("##F4D27A"),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomGridTile(
+                        name: Language(code: widget.language, text: [
+                          "Referal ",
+                          "रेफ़रल ",
+                          "রেফারেল ",
+                          "பரிந்துரை ",
+                          "రెఫరల్ "
+                        ]).getText,
+                        image: icon_4,
+                        child: Referals(
+                          language: widget.language,
+                          refSnap: widget.snapshot,
+                          snapshot: widget.userDataSnapshot,
+                        ),
+                      ),
+                      CustomGridTile(
+                        name: Language(code: widget.language, text: [
+                          "Panchang ",
+                          "पंचांग ",
+                          "পঞ্চং ",
+                          "பஞ்சங் ",
+                          "పంచాంగ్ "
+                        ]).getText,
+                        image: icon_5,
+                        child: StreamBuilder<DocumentSnapshot>(
+                            stream: FireStoreDatabase(uid: "null").getPanchang,
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return PanchangSection(
+                                userSnap: widget.userDataSnapshot!,
+                                bgImg:
+                                    widget.snapshot!.data!.get("panchang_bg"),
+                                snapshot: snapshot,
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                  /*child: Center(
                     child: GridView(
                       scrollDirection: Axis.horizontal,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -205,7 +237,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                           childAspectRatio: 1.0 / 1),
                       shrinkWrap: true,
                       children: [
-                        CustomGridTile(
+                        */ /*CustomGridTile(
                           image: icon_1,
                           name: Language(code: widget.language, text: [
                             "Bhagavad Gita  ",
@@ -215,8 +247,8 @@ class _HomePageFolderState extends State<HomePageFolder> {
                             "భగవద్గీత "
                           ]).getText,
                           child: ComingSoon(),
-                        ),
-                        CustomGridTile(
+                        ),*/ /*
+                        */ /*CustomGridTile(
                           name: Language(code: widget.language, text: [
                             "Dashboard ",
                             "डैशबोर्ड ",
@@ -226,8 +258,8 @@ class _HomePageFolderState extends State<HomePageFolder> {
                           ]).getText,
                           image: icon_2,
                           child: ComingSoon(),
-                        ),
-                        CustomGridTile(
+                        ),*/ /*
+                        */ /*CustomGridTile(
                           name: Language(code: widget.language, text: [
                             "Hindu calender ",
                             "हिंदू कैलेंडर ",
@@ -237,7 +269,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                           ]).getText,
                           image: icon_3,
                           child: ComingSoon(),
-                        ),
+                        ),*/ /*
                         CustomGridTile(
                           name: Language(code: widget.language, text: [
                             "Referal ",
@@ -279,7 +311,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                 );
                               }),
                         ),
-                        CustomGridTile(
+                       */ /* CustomGridTile(
                           name: Language(code: widget.language, text: [
                             "Live Darshan ",
                             "लाइव दर्शन ",
@@ -289,10 +321,10 @@ class _HomePageFolderState extends State<HomePageFolder> {
                           ]).getText,
                           image: icon_6,
                           child: ComingSoon(),
-                        ),
+                        ),*/ /*
                       ],
                     ),
-                  ),
+                  ),*/
                 ),
 
                 // Text("${widget.userId!.userEmail}"),
@@ -586,28 +618,14 @@ class CustomGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
-                height: MagicScreen(height: 660, context: context).getHeight,
-                child: child);
-          },
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>child!));
       },
       child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Column(
             children: [
               Container(
-                height: MagicScreen(height: 75, context: context).getHeight,
+                height: MagicScreen(height: 85, context: context).getHeight,
                 //width: MagicScreen(width: 80, context: context).getWidth,
                 child: Image.network(image),
                 decoration: BoxDecoration(
@@ -628,7 +646,7 @@ class CustomGridTile extends StatelessWidget {
                   overflow: TextOverflow.clip,
                   style: TextStyle(
                       fontSize:
-                          MagicScreen(context: context, height: 10).getHeight,
+                          MagicScreen(context: context, height: 12).getHeight,
                       fontWeight: FontWeight.bold,
                       color: HexColor("#70201C")),
                 ),

@@ -51,9 +51,8 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
         );
 
       case 2:
-      return ServicesPage(
-
-        userData: userDataSnapshot!,
+        return ServicesPage(
+          userData: userDataSnapshot!,
           language: widget.language,
           userId: widget.user,
         );
@@ -147,7 +146,6 @@ class _ExtBotNavBarState extends State<ExtBotNavBar> {
       ),
     ];
   }
-
 
   @override
   Widget build(BuildContext context) {
