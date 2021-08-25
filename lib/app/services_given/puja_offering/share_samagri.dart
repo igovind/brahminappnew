@@ -92,7 +92,7 @@ class _SharePujaCardState extends State<SharePujaCard> {
 
     final info = statuses[Permission.storage].toString();
     print(info);
-    _toastInfo(info);
+   // _toastInfo(info);
   }
 
   @override
@@ -107,200 +107,208 @@ class _SharePujaCardState extends State<SharePujaCard> {
         MagicScreen(context: context, height: h).getHeight;
     double width(double h) => MagicScreen(context: context, width: h).getWidth;
 
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: height(30),
-              ),
-              RepaintBoundary(
-                key: _ssglobalKey,
-                child: Container(
-                    //  padding: EdgeInsets.all(height(10)),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Column(
+              children: [
+                RepaintBoundary(
+                  key: _ssglobalKey,
+                  child: Container(
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(color: Colors.black54, blurRadius: 3)
                       ],
-                      color: Colors.white,
                     ),
-                    child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Stack(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        //  padding: EdgeInsets.all(height(10)),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/swastik13-8242d.appspot.com/o/inventories%2Fimportent%20images%2FUntitled%20design-5.jpg?alt=media&token=535d6e7f-083a-44e8-ab3b-adf03c3532a1"),
+                              fit: BoxFit.fill),
+                          color: Colors.white,
+                        ),
+                        child: Column(
                           children: [
-                            Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/swastik13-8242d.appspot.com/o/inventories%2Fimportent%20images%2FUntitled%20design-5.jpg?alt=media&token=535d6e7f-083a-44e8-ab3b-adf03c3532a1",
-                              // height: height(400),
-                              //width: width(400),
-                              fit: BoxFit.contain,
+                            Container(
+                              color: Colors.white,
+                             // padding: EdgeInsets.all(5),
+                              child: Image.network(
+                                widget.img,
+                                height: height(100),
+                              ),
                             ),
-                            Column(
+                            Text(
+                              "${widget.name}",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  shadows: [
+                                    BoxShadow(
+                                        color: Colors.deepOrangeAccent,
+                                        blurRadius: 1)
+                                  ],
+                                  fontSize: 18),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${widget.description}",
+                                textAlign: TextAlign.center,
+
+                                style: TextStyle(fontSize: 12, background: Paint()..color = Colors.white,),
+
+                              ),
+                            ),
+
+                            /*Text(
+
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 12),
+                            ),*/
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(
-                                  height: height(10),
-                                ),
                                 Container(
-                                  color: Colors.white,
-                                  padding: EdgeInsets.all(5),
-                                  child: Image.network(
-                                    widget.img,
-                                    height: height(100),
-                                  ),
-                                ),
-                                Text(
-                                  "${widget.name}",
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      shadows: [
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
                                         BoxShadow(
                                             color: Colors.deepOrangeAccent,
-                                            blurRadius: 1)
+                                            blurRadius: 2)
                                       ],
-                                      fontSize: 20),
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              "${UserDetails(snapshot: widget.userSnap).profilePhoto}"),
+                                          fit: BoxFit.fitHeight)),
+                                  height: height(45),
+                                  width: width(45),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Text(
-                                  "${widget.description}",
-                                  textAlign: TextAlign.center,
-                                ),
-
-
-                                /*Text(
-
-                                  textAlign: TextAlign.center,
+                                  UserDetails(snapshot: widget.userSnap).name!,
                                   style: TextStyle(
-                                      color: Colors.black54, fontSize: 12),
-                                ),*/
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.deepOrangeAccent,
-                                                blurRadius: 2)
-                                          ],
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  "${UserDetails(snapshot: widget.userSnap).profilePhoto}"),
-                                              fit: BoxFit.fitHeight)),
-                                      height: height(45),
-                                      width: width(45),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      UserDetails(snapshot: widget.userSnap)
-                                          .name!,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 13,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                )
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 13,
+                                      color: Colors.black),
+                                ),
                               ],
                             ),
+                            SizedBox(height: height(30),)
                           ],
-                        ))),
-              ),
-              SizedBox(
-                height: height(10),
-              ),
-              Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(color: Colors.black54, blurRadius: 3)
-                  ]),
-                  child: Column(
-                    children: [
-                      Text(
-                        Language(
-                            code:
-                                UserDetails(snapshot: widget.userSnap).language,
-                            text: [
-                              "Puja samagri ",
-                              "पूजा की सामग्री  ",
-                              "পূজা উপাদান ",
-                              "பூஜை பொருள் ",
-                              "పూజా పదార్థం "
-                            ]).getText,
-                        style: TextStyle(
-                            color: Colors.black54, fontWeight: FontWeight.bold),
-                      ),
-                      Divider(
-                        color: Colors.deepOrangeAccent,
-                        thickness: 1,
-                      ),
-                      Text(
-                        Language(
-                                text: widget.samagri,
-                                code: UserDetails(snapshot: widget.userSnap)
-                                    .language)
-                            .getText,
-                      )
-                    ],
-                  )),
-              SizedBox(
-                height: height(20),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _saveScreen();
-                    /*    Share.shareFiles(
-                    ["file:///storage/emulated/0/Pictures/1627400247935.jpg"],
-                    subject: 'Screenshot + Share',
-                    text: 'Hey, check it out the sharefiles repo!',
-                  );*/
-                  });
-                },
-                child: loadingSharing
-                    ? CircularProgressIndicator()
-                    : Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(color: Colors.black54, blurRadius: 3)
-                            ],
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.indigo),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              Language(
-                                  code: UserDetails(snapshot: widget.userSnap)
-                                      .language,
-                                  text: [
-                                    "Share",
-                                    "शेयर",
-                                    "ভাগ",
-                                    "பகிர்",
-                                    "పంచుకోండి"
-                                  ]).getText,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Icon(
-                              Icons.share_outlined,
-                              color: Colors.white,
-                            ),
-                          ],
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  height: height(10),
+                ),
+                Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                      BoxShadow(color: Colors.black54, blurRadius: 3)
+                    ]),
+                    child: Column(
+                      children: [
+                        Text(
+                          Language(
+                              code: UserDetails(snapshot: widget.userSnap)
+                                  .language,
+                              text: [
+                                "Puja samagri ",
+                                "पूजा की सामग्री  ",
+                                "পূজা উপাদান ",
+                                "பூஜை பொருள் ",
+                                "పూజా పదార్థం "
+                              ]).getText,
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-              ),
-              SizedBox(height: 100,)
-            ],
-          )),
+                        Divider(
+                          color: Colors.deepOrangeAccent,
+                          thickness: 1,
+                        ),
+                        Text(
+                          Language(
+                                  text: widget.samagri,
+                                  code: UserDetails(snapshot: widget.userSnap)
+                                      .language)
+                              .getText,style: TextStyle(fontSize: 12),
+                        )
+                      ],
+                    )),
+                SizedBox(
+                  height: height(20),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _saveScreen();
+                      /*    Share.shareFiles(
+                      ["file:///storage/emulated/0/Pictures/1627400247935.jpg"],
+                      subject: 'Screenshot + Share',
+                      text: 'Hey, check it out the sharefiles repo!',
+                    );*/
+                    });
+                  },
+                  child: loadingSharing
+                      ? CircularProgressIndicator()
+                      : Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(color: Colors.black54, blurRadius: 3)
+                              ],
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.indigo),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                Language(
+                                    code: UserDetails(snapshot: widget.userSnap)
+                                        .language,
+                                    text: [
+                                      "Share",
+                                      "शेयर",
+                                      "ভাগ",
+                                      "பகிர்",
+                                      "పంచుకోండి"
+                                    ]).getText,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Icon(
+                                Icons.share_outlined,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 100,
+                )
+              ],
+            )),
+      ),
     );
   }
 }

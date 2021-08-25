@@ -88,7 +88,7 @@ class _PanchangCardState extends State<PanchangCard> {
 
     final info = statuses[Permission.storage].toString();
     print(info);
-    _toastInfo(info);
+   // _toastInfo(info);
   }
 
   @override
@@ -102,7 +102,6 @@ class _PanchangCardState extends State<PanchangCard> {
   Widget build(BuildContext context) {
     double height(double h) =>
         MagicScreen(context: context, height: h).getHeight;
-
 
     return Container(
       child: Padding(
@@ -119,16 +118,53 @@ class _PanchangCardState extends State<PanchangCard> {
                       ],
                       color: Colors.white,
                     ),
-                    child: Stack(
-                      children: [
-                        Image.network(
-                          widget.bgImage,
-
-                        ),
-                        Positioned(
-                          top: height(40),
-                          left: height(10),
-                          child: Container(
+                    child: Container(
+                      height: height(450),
+                      width: MediaQuery.of(context).size.width*0.9,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(widget.bgImage),
+                              fit: BoxFit.fill)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            Language(
+                                code: UserDetails(snapshot: widget.userData)
+                                    .language,
+                                text: [
+                                  "Today's Panchang",
+                                  "आज का पंचांग ",
+                                  "আজকের পঞ্চং",
+                                  "இன்றைய பஞ்சங்",
+                                  "నేటి పంచాంగ్"
+                                ]).getText,
+                            style: TextStyle(
+                                color: Colors.black54,
+                                shadows: [
+                                  BoxShadow(
+                                      color: Colors.deepOrange, blurRadius: 3)
+                                ],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(3),
+                            color: Colors.white,
+                            child: Text(
+                              "${widget.date.day}-${widget.date.month}-${widget.date.year}",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -144,85 +180,27 @@ class _PanchangCardState extends State<PanchangCard> {
                             height: 50,
                             width: 50,
                           ),
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  Language(
-                                      code: UserDetails(snapshot: widget.userData)
-                                          .language,
-                                      text: [
-                                        "Today's Panchang",
-                                        "आज का पंचांग ",
-                                        "আজকের পঞ্চং",
-                                        "இன்றைய பஞ்சங்",
-                                        "నేటి పంచాంగ్"
-                                      ]).getText,
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      shadows: [
-                                        BoxShadow(
-                                            color: Colors.deepOrange,
-                                            blurRadius: 3)
-                                      ],
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(3),
-                                  color: Colors.white,
-                                  child: Text(
-                                    "${widget.date.day}-${widget.date.month}-${widget.date.year}",
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "${Language(code: UserDetails(snapshot: widget.userData).language, text: widget.text).getText}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  background: Paint()..color = Colors.white,
+                                  color: Colors.black,
+                                  shadows: [
+                                    BoxShadow(
+                                        color: Colors.deepOrange, blurRadius: 1)
+                                  ],
+                                  fontWeight: FontWeight.w500),
 
-                                /*Text("Today is the Chaturdashi Tithi of the Margashirsha Maas, Krishna Paksha (darker phase of the Lunar fortnight), Vikram Samvat 2077, a Raviwar (Sunday). It is a day dedicated to Surya Dev (the Sun God). Worship Surya Dev as well as Lord Vishnu. Donate jaggery and food grains today. Read the Aditya Hridayam Stotram thrice and offer food to a cow. Perform the parikrama of Lord Vishnu's temple. Some people observe a fast. The Surya (the Sun) shall continue to be in Vrischik Rashi (Scorpio), while the Moon will move from Tula Rashi (Libra) to Vrishchik Rashi (Scorpio). Today, the Anuradha Nakshatra shall prevail.",
-
-                                  textAlign: TextAlign.center,style: TextStyle(color: Colors.black,shadows: [BoxShadow(color: Colors.deepOrange,blurRadius: 0.5)],fontWeight: FontWeight.w500),),
-
-                            */
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  /*     child: Text(
-                                    "आज 29 जुलाई 2021, दिन गुरुवार को श्रावण कृष्ण पक्ष षष्ठी, आनन्द संवत्सर विक्रम संवत 2078, शक संवत 1943 (प्लव संवत्सर), आषाढ़। षष्ठी तिथि देर रात 03 बजकर 54 मिनट तक उपरांत सप्तमी। नक्षत्र उत्तरभाद्रपदा दोपहर 12 बजकर 02 मिनट तक उपरांत रेवती। सुकर्मा योग रात 08 बजकर 02 मिनट तक, उसके बाद धृति योग। करण गर दोपहर 03 बजकर 16 मिनट तक, बाद वणिज देर सुबह 03 बजकर 54 मिनट तक, बाद विष्टि। चन्द्रमा मीन राशि पर संचार करेगा। \n आज सप्तमी तिथि 05:40 AM तक उपरांत अष्टमी | नक्षत्र रेवती 02:02 PM तक उपरांत अश्विनी | धृति योग 08:19 PM तक, उसके बाद शूल योग | करण विष्टि 04:43 PM तक, बाद बव 05:41 AM तक, बाद बालव | आज राहु काल का समय 10:55 AM - 12:33 PM है | आज 02:02 PM तक चन्द्रमा मीन उपरांत मेष राशि पर संचार करेगा |",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        shadows: [
-                                          BoxShadow(
-                                              color: Colors.deepOrange,
-                                              blurRadius: 1)
-                                        ],
-                                        fontWeight: FontWeight.w500),
-                                  ),*/
-                                  child: Text(
-                                   "${Language(code: UserDetails(snapshot: widget.userData).language,text: widget.text).getText}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        shadows: [
-                                          BoxShadow(
-                                              color: Colors.deepOrange,
-                                              blurRadius: 1)
-                                        ],
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ],
+                            ),
+                          ),
+                        ],
+                      ),
                     )),
               ),
               SizedBox(

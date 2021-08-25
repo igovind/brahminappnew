@@ -1,4 +1,3 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:brahminapp/app/account/account_page.dart';
 import 'package:brahminapp/app/services_given/puja_offering/add_new_puja.dart';
@@ -46,11 +45,12 @@ class PujaOffering extends StatelessWidget {
           return Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>AddNewPuja(
-                    pujaList: pujaList,
-                    samagriList: samagriList,
-                    userData: userData,
-                  )));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => AddNewPuja(
+                            pujaList: pujaList,
+                            samagriList: samagriList,
+                            userData: userData,
+                          )));
                 },
                 child: Icon(
                   Icons.add_sharp,
@@ -80,27 +80,59 @@ class PujaOffering extends StatelessWidget {
                             height: 100,
                           );
                         }
+                        String? name = "";
+                        List<dynamic> samagri1;
+                        dynamic price;
+                        int? swastik;
+                        int? subscriber;
+                        String? time;
+                        String? image;
+                        String description;
+                        String adDes;
+                        String pjid;
 
+                        String type;
+                        List<dynamic> samList;
+                        String id;
                         DocumentSnapshot documentSnapshot =
                             snapshot!.data!.docs[index];
-                        String? name = documentSnapshot.get("puja");
-                        List<dynamic> samagri1 =
-                            documentSnapshot.get("samagri1") ?? [];
-                        dynamic price = documentSnapshot.get("price");
-                        int? swastik = documentSnapshot.get("swastik");
-                        int? subscriber = documentSnapshot.get("subscriber");
-                        String? time = documentSnapshot.get("time");
-                        String? image = documentSnapshot.get("image");
-                        String description = documentSnapshot.get("PanditD");
-                        String adDes = documentSnapshot.get("Benefit");
-                        String pjid = documentSnapshot.get("pjid");
                         String keyword = documentSnapshot.get("keyword");
-                        String type = documentSnapshot.get("type");
-                        List<dynamic> samList =
-                            documentSnapshot.get("samagri2") == null
-                                ? []
-                                : documentSnapshot.get("samagri2");
-                        String id = documentSnapshot.id;
+                        if (keyword == "#other") {
+                          name = documentSnapshot.get("puja");
+                          samagri1 = [];
+                          price = documentSnapshot.get("price");
+                          swastik = documentSnapshot.get("swastik");
+                          subscriber = documentSnapshot.get("subscriber");
+                          time = documentSnapshot.get("time");
+                          image =
+                              "https://firebasestorage.googleapis.com/v0/b/swastik13-8242d.appspot.com/o/inventories%2Fimportent%20images%2FScreen%20Shot%202021-08-18%20at%2009.21.11.png?alt=media&token=a3f13378-5504-4999-8bc4-daa8949d2a16";
+                          description = documentSnapshot.get("PanditD");
+                          adDes = documentSnapshot.get("Benefit");
+
+                          type = "other";
+                          samList = [];
+                          id = documentSnapshot.id;
+                          pjid = "PJID0000";
+                        } else {
+                          name = documentSnapshot.get("puja");
+                          samagri1 =
+                              documentSnapshot.get("samagri1") ?? [];
+                          price = documentSnapshot.get("price");
+                          swastik = documentSnapshot.get("swastik");
+                          subscriber = documentSnapshot.get("subscriber");
+                          time = documentSnapshot.get("time");
+                          image = documentSnapshot.get("image");
+                          description = documentSnapshot.get("PanditD");
+                          adDes = documentSnapshot.get("Benefit");
+                          pjid = documentSnapshot.get("pjid");
+
+                          type = documentSnapshot.get("type");
+                          samList = documentSnapshot.get("samagri2") == null
+                              ? []
+                              : documentSnapshot.get("samagri2");
+                          id = documentSnapshot.id;
+                        }
+
                         return Dismissible(
                           confirmDismiss: (DismissDirection direction) async {
                             return await showDialog(
@@ -251,6 +283,8 @@ class PujaOffering extends StatelessWidget {
                                         SizedBox(),
                                         Text(
                                           "$name",
+                                          overflow: TextOverflow.fade,
+                                          softWrap: true,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -336,22 +370,13 @@ class PujaOffering extends StatelessWidget {
                                         onPressed: () {},
                                         child: AccountTile(
                                           onPress: () {
-                                            showModalBottomSheet(
-                                              backgroundColor: Colors.white,
-                                              context: context,
-                                              builder: (context) {
-                                                // height(800);
-                                                return Container(
-                                                    height: height(700),
-                                                    child: SharePujaCard(
-                                                      name: name,
-                                                      description: description,
-                                                      img: image,
-                                                      samagri: samagri1,
-                                                      userSnap: userData,
-                                                    ));
-                                              },
-                                            );
+                                           Navigator.of(context).push(MaterialPageRoute(builder: (_)=>SharePujaCard(
+                                             name: name,
+                                             description: description,
+                                             img: image,
+                                             samagri: samagri1,
+                                             userSnap: userData,
+                                           )));
                                           },
                                           title:
                                               Language(code: language, text: [

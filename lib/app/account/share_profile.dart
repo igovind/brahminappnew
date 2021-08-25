@@ -88,7 +88,7 @@ class _ShareProfileState extends State<ShareProfile> {
 
     final info = statuses[Permission.storage].toString();
     print(info);
-    _toastInfo(info);
+    // _toastInfo(info);
   }
 
   @override
@@ -111,15 +111,12 @@ class _ShareProfileState extends State<ShareProfile> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: height(20),
-            ),
-            RepaintBoundary(
-              key: _ssglobalKey,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              RepaintBoundary(
+                key: _ssglobalKey,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(boxShadow: [
@@ -128,195 +125,186 @@ class _ShareProfileState extends State<ShareProfile> {
                       color: Colors.black38,
                     )
                   ], color: Colors.white),
-                  child: Stack(
-                    children: [
-                      Image.network(image),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            Column(
+                  child: Container(
+                    height: height(470),
+                    width: width(320),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(image), fit: BoxFit.fill)),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.deepOrangeAccent,
+                                    blurRadius: 2)
+                              ],
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image:
+                                      NetworkImage(userDetails!.profilePhoto!),
+                                  fit: BoxFit.fitHeight)),
+                          height: height(150),
+                          width: width(150),
+                        ),
+                        SizedBox(
+                          height: height(20),
+                        ),
+                        Container(
+                            padding: EdgeInsets.all(20),
+                            height: height(210),
+                            //width: width(280),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.deepOrangeAccent,
+                                      blurRadius: 1)
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  height: height(20),
-                                ),
                                 Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.deepOrangeAccent,
-                                            blurRadius: 2)
-                                      ],
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              userDetails!.profilePhoto!),
-                                          fit: BoxFit.fitHeight)),
-                                  height: height(150),
-                                  width: width(150),
+                                  child: Center(
+                                    child: Text(
+                                      Language(text: [
+                                        "Puja Purohit Certified Pandit",
+                                        "पूजा पुरोहित प्रमाणित पंडित",
+                                        "পূজা পুরোহিত শংসিত পণ্ডিত",
+                                        "பூஜா புரோஹித் சான்றளிக்கப்பட்ட பண்டிட்",
+                                        "పూజా పురోహిత్ సర్టిఫైడ్ పండిట్"
+                                      ], code: userDetails!.language)
+                                          .getText,
+                                      style: TextStyle(
+                                          color: Colors.deepOrange,
+                                          fontSize: height(18),
+                                          shadows: [
+                                            BoxShadow(
+                                                color: Colors.black38,
+                                                blurRadius: 1)
+                                          ]),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(5),
+                                  color: Colors.orange[50],
+                                  width: width(300),
+                                ),
+                                SizedBox(
+                                  height: height(10),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: width(20),
+                                    ),
+                                    Text(
+                                      "${userDetails!.name!.length <= 20 ? userDetails!.name! : userDetails!.name!.substring(0, 19)} ",
+                                      style: TextStyle(
+                                          color: Colors.deepOrange,
+                                          fontSize: height(18),
+                                          shadows: [
+                                            BoxShadow(
+                                                color: Colors.black38,
+                                                blurRadius: 3)
+                                          ]),
+                                    ),
+                                    Icon(
+                                      Icons.verified,
+                                      color: Colors.blueAccent,
+                                      size: height(27),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: height(18),
+                                      color: Colors.deepOrange,
+                                    ),
+                                    Text(
+                                      "${userDetails!.state}",
+                                      style: TextStyle(fontSize: height(15)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.call,
+                                      size: height(18),
+                                      color: Colors.green,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    userDetails!.contact!.length < 10
+                                        ? SizedBox()
+                                        : Text(
+                                            "${userDetails!.contact!.substring(0, 4)}XXXXX",
+                                            style:
+                                                TextStyle(fontSize: height(15)),
+                                          ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.language,
+                                      size: height(18),
+                                      color: Colors.deepPurple,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "${userDetails!.languageSpoken}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: height(15)),
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      Language(text: [
+                                        "Experience",
+                                        "अनुभव",
+                                        "অভিজ্ঞতা",
+                                        "அனுபவம்",
+                                        "అనుభవం"
+                                      ], code: userDetails!.language)
+                                          .getText,
+                                      style: TextStyle(fontSize: height(15)),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text("${userDetails!.experience}",
+                                        style: TextStyle(fontSize: height(15))),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              SizedBox(height: height(180)),
-                              Container(
-                                  padding: EdgeInsets.all(20),
-                                  // height: height(200),
-                                  width: width(280),
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.deepOrangeAccent,
-                                            blurRadius: 1)
-                                      ],
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        child: Center(
-                                          child: Text(
-                                            Language(text: [
-                                              "Puja Purohit Certified Pandit",
-                                              "पूजा पुरोहित प्रमाणित पंडित",
-                                              "পূজা পুরোহিত শংসিত পণ্ডিত",
-                                              "பூஜா புரோஹித் சான்றளிக்கப்பட்ட பண்டிட்",
-                                              "పూజా పురోహిత్ సర్టిఫైడ్ పండిట్"
-                                            ], code: userDetails!.language)
-                                                .getText,
-                                            style: TextStyle(
-                                                color: Colors.deepOrange,
-                                                shadows: [
-                                                  BoxShadow(
-                                                      color: Colors.black38,
-                                                      blurRadius: 1)
-                                                ]),
-                                          ),
-                                        ),
-                                        padding: EdgeInsets.all(5),
-                                        color: Colors.orange[50],
-                                        width: 300,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: width(20),
-                                          ),
-                                          Text(
-                                            "${userDetails!.name}",
-                                            style: TextStyle(
-                                                color: Colors.deepOrange,
-                                                fontSize: 20,
-                                                shadows: [
-                                                  BoxShadow(
-                                                      color: Colors.black38,
-                                                      blurRadius: 3)
-                                                ]),
-                                          ),
-                                          SizedBox(
-                                            width: width(8),
-                                          ),
-                                          userDetails!.verified!
-                                              ? Icon(
-                                                  Icons.verified,
-                                                  color: Colors.blueAccent,
-                                                  size: 30,
-                                                )
-                                              : SizedBox()
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.location_on,
-                                            size: 20,
-                                            color: Colors.deepOrange,
-                                          ),
-                                          Text("${userDetails!.state}"),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.call,
-                                            size: 20,
-                                            color: Colors.green,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          userDetails!.contact!.length < 10
-                                              ? SizedBox()
-                                              : Text(
-                                                  "${userDetails!.contact!.substring(0, 4)}XXXXX"),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.language,
-                                            size: height(20),
-                                            color: Colors.deepPurple,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "${userDetails!.languageSpoken}",
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.clip,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(Language(text: [
-                                            "Experience",
-                                            "अनुभव",
-                                            "অভিজ্ঞতা",
-                                            "அனுபவம்",
-                                            "అనుభవం"
-                                          ], code: userDetails!.language)
-                                              .getText),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text("${userDetails!.experience}"),
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                            ],
-                          ))
-                    ],
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            // Image.file(File("file:///storage/emulated/0/Pictures/1627400247935.jpg")),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
+              // Image.file(File("file:///storage/emulated/0/Pictures/1627400247935.jpg")),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
                 onTap: () {
                   setState(() {
                     _saveScreen();
@@ -363,11 +351,11 @@ class _ShareProfileState extends State<ShareProfile> {
                         ),
                       ),
               ),
-            ),
-            SizedBox(
-              height: 100,
-            )
-          ],
+              SizedBox(
+                height: 100,
+              )
+            ],
+          ),
         ),
       ),
     );

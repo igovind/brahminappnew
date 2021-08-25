@@ -128,7 +128,8 @@ class _HomePageFolderState extends State<HomePageFolder> {
                             title: Text(
                               "${Language(code: widget.language, text: noticeBoardList[index]['title']).getText}",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(fontWeight: FontWeight.w600,fontSize: height(15)),
+                              
                             ),
                             subtitle: Column(
                               children: [
@@ -136,13 +137,13 @@ class _HomePageFolderState extends State<HomePageFolder> {
                                     "${Language(code: widget.language, text: noticeBoardList[index]['subtitle']).getText}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: height(12),
                                         fontWeight: FontWeight.w400)),
                                 Text(
                                   "${noticeBoardList[index]['date'].toDate().day}/${noticeBoardList[index]['date'].toDate().month}/${noticeBoardList[index]['date'].toDate().year}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: height(10),
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -170,7 +171,7 @@ class _HomePageFolderState extends State<HomePageFolder> {
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  height: height(120),
+                  height: height(130),
                   // width: 300,
                   decoration: BoxDecoration(
                     boxShadow: [

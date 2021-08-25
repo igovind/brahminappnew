@@ -2,7 +2,6 @@ import 'package:brahminapp/common_widgets/custom_raised_button.dart';
 import 'package:brahminapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:scratcher/scratcher.dart';
 class ClaimReward extends StatefulWidget {
   final realOTP;
   final String uid;
@@ -140,82 +139,6 @@ class _ClaimRewardState extends State<ClaimReward> {
   }
 }
 
-Future<void> scratchCardDialog(BuildContext context, double won) {
-  double _opacity = 0.0;
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        title: Align(
-          alignment: Alignment.center,
-          child: Text(
-            'You\'ve won a scratch card',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        ),
-        content: StatefulBuilder(builder: (context, StateSetter setState) {
-          return Scratcher(
-            accuracy: ScratchAccuracy.low,
-            threshold: 25,
-            brushSize: 50,
-            onThreshold: () {
-              setState(() {
-                _opacity = 1;
-              });
-            },
-            image: Image.asset(
-              "images/new_coin.png",
-              fit: BoxFit.fill,
-            ),
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 500),
-              opacity: _opacity,
-              child: Container(
-                  height: 300,
-                  width: 300,
-                  alignment: Alignment.center,
-                  child: Stack(
-                    children: [
-                      Image.asset('images/paisa.jpg'),
-                      Positioned(
-                        top: 50,
-                        left: 30,
-                        child: Column(
-                          children: [
-                            Text(
-                              'You Won',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  color: Colors.deepPurple,
-                                  fontWeight: FontWeight.w700,
-                                  backgroundColor: Colors.white),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '\₹$won',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.green,
-                                  backgroundColor: Colors.white,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-          );
-        }),
-      );
-    },
-  );
-}
 
 sevenPujaClaimReward(String uid, double price) async {
   double net = (price * 15) / 100;

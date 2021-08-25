@@ -26,6 +26,9 @@ class Language {
   }
 
   String get getText {
+    if(text!.isEmpty){
+      return "";
+    }
     switch (code) {
       case "ENG":
         return "${text![0]}";

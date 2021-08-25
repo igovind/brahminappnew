@@ -1,6 +1,4 @@
 
-import 'package:brahminapp/main.dart';
-import 'package:brahminapp/services/TempMessage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -25,9 +23,7 @@ static final notificationAppLaunchDetails=NotificationAppLaunchDetails(true, "pa
 
   static Future onSelectNotification(String? payload) async {
     //List<String> data = payload!.split("*");
-   Navigator.of(navigationKey.currentState!.context).push(MaterialPageRoute(
-        builder: (context) => HandleNotificationRouting(payload: payload,))
-    );
+
     //  Navigator.of(navigationKey.currentState!.context).push(MaterialPageRoute(builder: (context)=>IndexPage(userId: userId,)));
   }
 

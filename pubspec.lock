@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "22.0.0"
-  agora_rtc_engine:
-    dependency: "direct main"
-    description:
-      name: agora_rtc_engine
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -736,7 +729,7 @@ packages:
     source: hosted
     version: "2.0.0"
   quiver:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: quiver
       url: "https://pub.dartlang.org"
@@ -763,20 +756,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0-nullsafety.0"
-  scratcher:
-    dependency: "direct main"
-    description:
-      name: scratcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  screenshot:
-    dependency: "direct main"
-    description:
-      name: screenshot
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.3"
   share:
     dependency: "direct main"
     description:

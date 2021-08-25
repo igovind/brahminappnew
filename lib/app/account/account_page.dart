@@ -585,7 +585,7 @@ class AccountTile extends StatelessWidget {
           Text(
             "  $title",
             style:
-                TextStyle(color: Colors.black54, fontWeight: FontWeight.w700),
+                TextStyle(color: Colors.black54, fontWeight: FontWeight.w700,fontSize: MagicScreen(context: context,height: 15).getHeight),
           )
         ],
       ),
