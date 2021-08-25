@@ -50,7 +50,7 @@ class AddNewPuja extends StatelessWidget {
                   image: puja.image,
                   duration: puja.duration,
                   pjid: puja.id,
-                  price: "2000",
+                  price: "11.0",
                 );
               },
               separatorBuilder: (context, index) => SizedBox(

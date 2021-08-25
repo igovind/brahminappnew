@@ -149,7 +149,7 @@ class PujaTile extends StatelessWidget {
                       duration: duration,
                       pjid: pjid,
                       adDes: "",
-                      price: "2000",
+                      price: "11.0",
                       serviceIdL: '',
                     ))),
             child: Container(
