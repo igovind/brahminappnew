@@ -1,62 +1,13 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:brahminapp/services/auth.dart';
-import 'package:brahminapp/services/firebase_notification_handler.dart';
-import 'app/landing_page.dart';
 
-final GlobalKey<NavigatorState> navigationKey =
-    GlobalKey(debugLabel: "Main Navigator");
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("<<<<<<<<<<[ THIS IS BACKGROUND NOTIFICATION ]>>>>>>>>>>>>>");
-  await Firebase.initializeApp();
-  print("${message.notification} |||||||||||| ${message.data}");
-  switch (message.data['type']) {
-    case 'Booking':
-      print("<<<<<<<<<<[ THIS IS BOOKING  ]>>>>>>>>>>>>>");
-      FirebaseNotificationsA.showBookingNotification(
-          message.notification!.title, message.notification!.body);
-
-      break;
-    case 'Message':
-      print("<<<<<<<<<<[ THIS IS MESSAGE  ]>>>>>>>>>>>>>");
-      FirebaseNotificationsA.showMessageNotification(
-          message.notification!.title, message.notification!.body);
-      break;
-    case 'VCall':
-      print("<<<<<<<<<<[ THIS IS VCALL  ]>>>>>>>>>>>>>");
-      // Navigator.of(navigationKey.currentState!.context).push(MaterialPageRoute(builder: (context)=>OnePage()));
-      FirebaseNotificationsA.showCallNotification(
-          message.notification!.title,
-          message.notification!.body,
-          message.data['call_type'],
-          message.data['channel']);
-      break;
-    default:
-      print("<<<<<<<<<<[ THIS IS DEFAULT NOTIFICATION ]>>>>>>>>>>>>>");
-      FirebaseNotificationsA.showNotification(
-          message.notification!.title, message.notification!.body);
-  }
-}
+import 'landing_page.dart';
 
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(MyApp());
-  });
-  /*runApp( DevicePreview(
-    enabled: true,
-    builder: (context) => MyApp(),
-  ),);*/
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -65,42 +16,47 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FirebaseNotificationsA firebaseNotificationsA = FirebaseNotificationsA();
-
-  @override
-  void initState() {
-
-    firebaseNotificationsA.setupFirebase(context);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    Map<int, Color> colorCodes = {
+      50: Color.fromRGBO(197, 205, 72, .1),
+      100: Color.fromRGBO(147, 205, 72, .2),
+      200: Color.fromRGBO(147, 205, 72, .3),
+      300: Color.fromRGBO(147, 205, 72, .4),
+      400: Color.fromRGBO(147, 205, 72, .5),
+      500: Color.fromRGBO(147, 205, 72, .6),
+      600: Color.fromRGBO(147, 25, 72, .7),
+      700: Color.fromRGBO(147, 205, 72, .8),
+      800: Color.fromRGBO(147, 205, 72, .9),
+      900: Color.fromRGBO(255, 153, 51, 1),
+    };
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        builder: BotToastInit(),
-        navigatorObservers: [BotToastNavigatorObserver()],
-        //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
-        // builder: DevicePreview.appBuilder,
-        title: 'Purohit dashboard',
-        navigatorKey: navigationKey,
-        theme: ThemeData(
-          primaryColor: Colors.deepOrangeAccent, //Color(0xFFffbd59),
-
-          fontFamily: 'Montserrat',
-        ),
-        routes: {'/home': (_) => LandingPage()},
-        home: FutureBuilder<Object>(
-          future: Firebase.initializeApp(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Provider<AuthBase>(
-                  create: (context) => Auth(), child: LandingPage());
-            }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ));
+      debugShowCheckedModeBanner: false,
+      color: Colors.green,
+      title: 'iPurohit',
+      home: LandingPage(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.yellow.shade50,
+        colorScheme: ColorScheme(
+          background: Colors.teal,
+          brightness: Brightness.light,
+          onBackground: Colors.orangeAccent,
+          onPrimary: Colors.black,
+          //Color.fromRGBO(255, 190, 48, 1),
+          onError: Colors.green,
+          onSecondary: Colors.black,
+          error: Colors.black12,
+          onSurface: Colors.purple,
+          secondary: Color.fromRGBO(255, 190, 48, 1),
+          surface: Colors.deepPurple,
+          primary: Colors.yellow.shade50,
+        ).copyWith(
+            //secondary: Colors.pink,
+            ),
+        /*textTheme: TextTheme(
+            bodyText2: TextStyle(color: Colors.purple),
+            titleLarge: TextStyle(color: Colors.black54)),*/
+      ),
+    );
   }
 }

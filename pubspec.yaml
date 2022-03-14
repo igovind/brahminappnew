@@ -28,50 +28,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   #agora_rtc_engine: ^4.0.1
-  bot_toast: ^4.0.1
-  bottom_navy_bar: ^6.0.0
-  bubble_tab_indicator: ^0.1.6
-  bottom_sheet: ^1.0.0
-  circle_bottom_navigation_bar: ^1.0.0
-  carousel_slider: ^4.0.0-nullsafety.0
-  cloud_firestore: ^2.2.0
-  device_info: ^2.0.2
-  confetti: ^0.6.0-nullsafety
   cupertino_icons: ^1.0.3
-  custom_image_crop: ^0.0.2
-  datetime_picker_formfield: ^2.0.0
-  device_preview: ^0.7.1
-  dotted_border: ^2.0.0
-  dots_indicator: ^2.0.0
-  flutter_local_notifications: ^6.0.0
-  firebase_auth: ^1.2.0
-  firebase_core: ^1.2.0
-  firebase_core_web: ^1.1.0
-  firebase_messaging: ^10.0.0
-  firebase_storage: ^8.1.0
-  flare_flutter: ^3.0.0
-  flutter_slidable: ^0.6.0
-  flutter_native_timezone: ^1.1.0
-  geoflutterfire: ^3.0.0-nullsafety.3
-  geolocator: ^7.0.3
-  google_fonts: ^2.1.0
-  google_sign_in: ^5.0.3
-  image_picker: ^0.7.5+2
-  image_cropper: ^1.4.0
-  intl: ^0.17.0
-  location: ^4.1.1
-  permission_handler: ^8.0.0+1
-  rxdart: ^0.27.0
-  scoped_model: ^2.0.0-nullsafety.0
-  share: ^2.0.1
-  wc_flutter_share: ^0.4.0
-  shared_preferences: ^2.0.5
-  url_launcher: ^6.0.4
-  youtube_player_flutter: ^8.0.0
-  image_gallery_saver: ^1.6.9
-  fluttertoast: ^8.0.7
-
-
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -89,34 +47,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - images/facebook-logo.png
-    - images/google-logo.png
-    - images/placeholder.jpg
-    - images/temp.png
-    - images/chat-background-1.jpg
-    - images/newimage.png
-    - images/outerimage.png
-    - images/diamond_bw.png
-    - images/newback.jpg
-    - images/gold_coin.png
-    - images/gold_coin2.png
-    - images/paisa.jpg
-    - images/new_coin.png
-    - images/bkg.jpg
-    - images/back.png
-    - images/6705.jpg
-    - images/dlogo.png
-    - images/no_reward.png
-    - images/no_message.png
-    - images/empty_payment.png
-    - images/empty_dashboard.png
-    - images/tab/geeta.jpg
-    - images/cover_image.jpg
-    - 0.png
+
     # - images/namaste.png
-    - images/chakra.png
-    - assets/flare/Background.flr
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -128,18 +61,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Oswald
-      fonts:
-        - asset: assets/Oswald-Regular.ttf
-    #       - asset: fonts/Schyler-Italic.ttf
-    #         style: italic
-    - family: Montserrat
-      fonts:
-        - asset: assets/Montserrat-Regular.ttf
-    - family: LohitNepali
-      fonts:
-        - asset: assets/LohitNepali/Lohit-Nepali.ttf
+
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf

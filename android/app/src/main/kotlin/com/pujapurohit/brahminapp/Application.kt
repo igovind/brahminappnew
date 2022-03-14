@@ -1,3 +1,4 @@
+/*
 package com.pujapurohit.brahminapp
 
 import io.flutter.app.FlutterApplication
@@ -13,4 +14,4 @@ class Application:FlutterApplication(),PluginRegistry.PluginRegistrantCallback {
         FirebaseCloudMessagingPlugin.registerWith(registry!!)
     }
 
-}
+}*/
